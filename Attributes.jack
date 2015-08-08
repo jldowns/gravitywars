@@ -1,0 +1,50 @@
+// Attributes Class
+
+// Containter for shared attributes of objects that have a physical presence.
+// These are shared among everyone, unlike things like gravity which only
+// special objects have.
+
+class Attributes {
+
+  field int Px, Py;   // position
+  field int Vx, Vy;   // velocity
+  field int rotation; // in degrees
+  field int radius;   // in pixels
+
+  constructor Attributes new(int startPx, int startPy,
+                             int startVx, int startVy,
+                             int startRotation,
+                             int startRadius) {
+    let Px = startPx;
+    let Py = startPy;
+    let Vx = startVx;
+    let Vy = startVy;
+    let rotation = startRotation;
+    let radius = startRadius;
+
+    return this;
+  }
+
+  method int getPx() {
+    return Px; }
+
+  method int getPy() {
+    return Py; }
+
+  method int getVx() {
+    return Vx; }
+
+  method int getVy() {
+    return Vy; }
+
+  method int getRotation() {
+    return rotation; }
+
+  method int getRadius() {
+    return radius; }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return; }
+
+}

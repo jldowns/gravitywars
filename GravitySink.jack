@@ -1,0 +1,25 @@
+// Class GravitySink
+
+
+class GravitySink {
+
+  field Attributes attributes;
+  field int gravitationalForce;
+
+  constructor GravitySink new(int startX, int startY,
+                              int startRadius, int startGravity) {
+
+    let attributes = Attributes.new(startX, startY, 0, 0, 0, startRadius);
+    let gravitationalForce = startGravity;
+
+    return this;
+  }
+
+  method Attributes getAttributes() {
+    return attributes; }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return; }
+
+}

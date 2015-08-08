@@ -1,0 +1,46 @@
+// Game Settings
+
+// Container for game settings, to avoid global variables
+
+class Settings {
+
+  field int maxObjects;
+  field int maxGravitySinks;
+  field int maxPlayers;
+
+  constructor Settings new() {
+
+    let maxObjects = 20;
+    let maxGravitySinks = 5;
+    let maxPlayers = 2;
+    return this;
+
+  }
+
+  method int getMaxObjects() {
+    return maxObjects; }
+
+  method void setMaxObjects(int newMax) {
+    let maxObjects = newMax;
+    return; }
+
+  method int getMaxGravitySinks() {
+    return maxGravitySinks; }
+
+  method void setMaxGravitySinks(int newMax) {
+    let maxGravitySinks = newMax;
+    return; }
+
+  method int getMaxPlayers() {
+    return maxPlayers; }
+
+  method void setMaxPlayers(int newMax) {
+    let maxPlayers = newMax;
+    return; }
+
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return; }
+
+}

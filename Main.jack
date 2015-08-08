@@ -1,0 +1,25 @@
+// Welcome to Gravity Wars!
+
+class Main {
+
+  function void main() {
+
+    var Settings settings;
+    var GXEngine gx;
+    var GravitySink gs1, gs2, gs3;
+
+    let settings = Settings.new();
+    let gx = GXEngine.new(settings);
+    let gs1 = GravitySink.new(100, 30, 20, 20);
+    let gs2 = GravitySink.new(20, 100, 10, 20);
+    let gs3 = GravitySink.new(200, 200, 15, 20);
+
+    do gx.registerGravitySink(gs1);
+    do gx.registerGravitySink(gs2);
+    do gx.registerGravitySink(gs3);
+
+    do gx.drawAllObjects();
+
+    return;
+  }
+}

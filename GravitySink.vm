@@ -1,0 +1,29 @@
+function GravitySink.new 0
+push constant 2
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+push argument 1
+push constant 0
+push constant 0
+push constant 0
+push argument 2
+call Attributes.new 6
+pop this 0
+push argument 3
+pop this 1
+push pointer 0
+return
+function GravitySink.getAttributes 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function GravitySink.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
