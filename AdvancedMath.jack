@@ -1,0 +1,196 @@
+// Advanced Math function class
+// adds some trigonometry
+
+
+class AdvancedMath {
+
+  field Array sineLookup;
+  field Array cosineLookup;
+
+  constructor AdvancedMath new(){
+    let sineLookup = Array.new(72);
+    let cosineLookup = Array.new(72);
+
+    // sin(x) = sineLookup[x/5]/100
+    let sineLookup[0]=0;
+    let sineLookup[1]=9;
+    let sineLookup[2]=17;
+    let sineLookup[3]=26;
+    let sineLookup[4]=34;
+    let sineLookup[5]=42;
+    let sineLookup[6]=50;
+    let sineLookup[7]=57;
+    let sineLookup[8]=64;
+    let sineLookup[9]=71;
+    let sineLookup[10]=77;
+    let sineLookup[11]=82;
+    let sineLookup[12]=87;
+    let sineLookup[13]=91;
+    let sineLookup[14]=94;
+    let sineLookup[15]=97;
+    let sineLookup[16]=98;
+    let sineLookup[17]=100;
+    let sineLookup[18]=100;
+    let sineLookup[19]=100;
+    let sineLookup[20]=98;
+    let sineLookup[21]=97;
+    let sineLookup[22]=94;
+    let sineLookup[23]=91;
+    let sineLookup[24]=87;
+    let sineLookup[25]=82;
+    let sineLookup[26]=77;
+    let sineLookup[27]=71;
+    let sineLookup[28]=64;
+    let sineLookup[29]=57;
+    let sineLookup[30]=50;
+    let sineLookup[31]=42;
+    let sineLookup[32]=34;
+    let sineLookup[33]=26;
+    let sineLookup[34]=17;
+    let sineLookup[35]=9;
+    let sineLookup[36]=0;
+    let sineLookup[37]=-9;
+    let sineLookup[38]=-17;
+    let sineLookup[39]=-26;
+    let sineLookup[40]=-34;
+    let sineLookup[41]=-42;
+    let sineLookup[42]=-50;
+    let sineLookup[43]=-57;
+    let sineLookup[44]=-64;
+    let sineLookup[45]=-71;
+    let sineLookup[46]=-77;
+    let sineLookup[47]=-82;
+    let sineLookup[48]=-87;
+    let sineLookup[49]=-91;
+    let sineLookup[50]=-94;
+    let sineLookup[51]=-97;
+    let sineLookup[52]=-98;
+    let sineLookup[53]=-100;
+    let sineLookup[54]=-100;
+    let sineLookup[55]=-100;
+    let sineLookup[56]=-98;
+    let sineLookup[57]=-97;
+    let sineLookup[58]=-94;
+    let sineLookup[59]=-91;
+    let sineLookup[60]=-87;
+    let sineLookup[61]=-82;
+    let sineLookup[62]=-77;
+    let sineLookup[63]=-71;
+    let sineLookup[64]=-64;
+    let sineLookup[65]=-57;
+    let sineLookup[66]=-50;
+    let sineLookup[67]=-42;
+    let sineLookup[68]=-34;
+    let sineLookup[69]=-26;
+    let sineLookup[70]=-17;
+    let sineLookup[71]=-9;
+
+    // cos(x) = cosineLookup[x/5]/100
+    let cosineLookup[0]=100;
+    let cosineLookup[1]=100;
+    let cosineLookup[2]=98;
+    let cosineLookup[3]=97;
+    let cosineLookup[4]=94;
+    let cosineLookup[5]=91;
+    let cosineLookup[6]=87;
+    let cosineLookup[7]=82;
+    let cosineLookup[8]=77;
+    let cosineLookup[9]=71;
+    let cosineLookup[10]=64;
+    let cosineLookup[11]=57;
+    let cosineLookup[12]=50;
+    let cosineLookup[13]=42;
+    let cosineLookup[14]=34;
+    let cosineLookup[15]=26;
+    let cosineLookup[16]=17;
+    let cosineLookup[17]=9;
+    let cosineLookup[18]=0;
+    let cosineLookup[19]=-9;
+    let cosineLookup[20]=-17;
+    let cosineLookup[21]=-26;
+    let cosineLookup[22]=-34;
+    let cosineLookup[23]=-42;
+    let cosineLookup[24]=-50;
+    let cosineLookup[25]=-57;
+    let cosineLookup[26]=-64;
+    let cosineLookup[27]=-71;
+    let cosineLookup[28]=-77;
+    let cosineLookup[29]=-82;
+    let cosineLookup[30]=-87;
+    let cosineLookup[31]=-91;
+    let cosineLookup[32]=-94;
+    let cosineLookup[33]=-97;
+    let cosineLookup[34]=-98;
+    let cosineLookup[35]=-100;
+    let cosineLookup[36]=-100;
+    let cosineLookup[37]=-100;
+    let cosineLookup[38]=-98;
+    let cosineLookup[39]=-97;
+    let cosineLookup[40]=-94;
+    let cosineLookup[41]=-91;
+    let cosineLookup[42]=-87;
+    let cosineLookup[43]=-82;
+    let cosineLookup[44]=-77;
+    let cosineLookup[45]=-71;
+    let cosineLookup[46]=-64;
+    let cosineLookup[47]=-57;
+    let cosineLookup[48]=-50;
+    let cosineLookup[49]=-42;
+    let cosineLookup[50]=-34;
+    let cosineLookup[51]=-26;
+    let cosineLookup[52]=-17;
+    let cosineLookup[53]=-9;
+    let cosineLookup[54]=0;
+    let cosineLookup[55]=9;
+    let cosineLookup[56]=17;
+    let cosineLookup[57]=26;
+    let cosineLookup[58]=34;
+    let cosineLookup[59]=42;
+    let cosineLookup[60]=50;
+    let cosineLookup[61]=57;
+    let cosineLookup[62]=64;
+    let cosineLookup[63]=71;
+    let cosineLookup[64]=77;
+    let cosineLookup[65]=82;
+    let cosineLookup[66]=87;
+    let cosineLookup[67]=91;
+    let cosineLookup[68]=94;
+    let cosineLookup[69]=97;
+    let cosineLookup[70]=98;
+    let cosineLookup[71]=100;
+
+    return this;}
+
+  method int sin100(int angle){
+    // returns an approximation of a sine using
+    // lookup tables. The answer is in the form
+    // sin(x)*100 so I can return an int
+
+    // make sure 0 < angle < 360
+    while (angle>360) {
+      let angle = angle-360;
+    }
+    while (angle<0) {
+      let angle = angle+360;
+    }
+    return sineLookup[angle/5];
+  }
+
+  method int cos100(int angle){
+    // same as above
+
+    // make sure 0 < angle < 360
+    while (angle>360) {
+      let angle = angle-360;
+    }
+    while (angle<0) {
+      let angle = angle+360;
+    }
+    return cosineLookup[angle/5];
+  }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return; }
+
+}
