@@ -1,0 +1,22 @@
+// Player Class
+// An object that describes an actual player of the game.
+// Contains things like player stats and score and his
+// sprite
+
+
+class Player {
+
+  field PlayerSprite mySprite;
+
+  constructor Player new(int startX, int startY,
+                         int startRotation) {
+
+    let mySprite = PlayerSprite.new(startX, startY, startRotation);
+    return this;
+  }
+
+  method Attributes getSpriteAttributes(){ return mySprite.getAttributes(); }
+  method PlayerSprite getSprite(){ return mySprite; }
+
+
+}

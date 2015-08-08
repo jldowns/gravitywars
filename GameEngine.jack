@@ -1,0 +1,79 @@
+// Game Engine
+// Handles game mechanics
+
+class GameEngine {
+
+  field Settings settings;
+  field PXEngine px;
+  field GXEngine gx;
+
+  // working variables for methods. Defined here
+  // to only make one copy
+  field Attributes fooAttributes;
+
+  constructor GameEngine new(Settings gameSettings,
+                             GXEngine myGXEngine,
+                             PXEngine myPXEngine) {
+
+    let settings = gameSettings;
+    let gx = myGXEngine;
+    let px = myPXEngine;
+    return this;
+  }
+
+
+  method void takeTurn(Player player) {
+    // Allows a player to take a turn.
+    // Returns when either dead or next turn
+      var int action;
+      var int foo, bar;
+
+      let fooAttributes = player.getSpriteAttributes();
+
+      while (true) {
+        let action = __getInput__();
+
+        if (action=1) {
+          let foo = fooAttributes.getRotation();
+          let bar = settings.getthrusterAcceleration();
+          do px.applyAcceleration(fooAttributes,
+                               bar, foo);
+        }
+        if (action=2) {
+          let foo = fooAttributes.getRotation() + 180;
+          let bar = settings.getthrusterAcceleration();
+          do px.applyAcceleration(fooAttributes,
+                                  bar, foo);
+        }
+        if (action=3) {
+          let foo=settings.getRotationSensativity()*-1;
+          do px.applyRotation(fooAttributes, foo);
+        }
+        if (action=4) {
+          let foo=settings.getRotationSensativity();
+          do px.applyRotation(fooAttributes, foo);
+        }
+
+        let foo = settings.getTimeStep();
+        do px.stepForward(foo);
+        do gx.drawAllObjects();
+        do Sys.wait(foo);
+      }
+
+      return;
+    }
+
+
+    method int __getInput__() {
+      // Polls the keyboard for input and look up
+      // the action in the keybinds. Returns an
+      // int coresponding with that action.
+      var char inputKey;
+      var char action;
+
+      let inputKey = Keyboard.keyPressed();
+      let action = settings.getDesiredAction(inputKey);
+      return action;
+    }
+
+}

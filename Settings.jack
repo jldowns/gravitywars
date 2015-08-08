@@ -4,39 +4,114 @@
 
 class Settings {
 
+  field int screenSizeX, screenSizeY;
+
+  field int timeStep; // time in milliseconds between frames
+  field int physicsTimeStepModifier; // One physics timeDelta will be timeStep/physicsTimeStepModifier
+  field int worldResolutionX, worldResolutionY; // resolution of the world in meters/pixel
+
   field int maxObjects;
   field int maxGravitySinks;
   field int maxPlayers;
+  field int maxBullets;
+
+  field int playerSpritePointAngle; // 1/2 angle of the point in degrees
+  field int playerSpriteSideLength; // length of each side in pixels
+  field int bulletRadius;
+
+  field int thrusterAcceleration; // Force applied to player sprite when moved
+  field int rotationSensativity;
+  field int spaceFriction; // the friction of deep space
+
+  // Keybindings
+  field char moveForward, moveBack, moveLeft, moveRight;
+  field char shoot, quit;
 
   constructor Settings new() {
+    // Set all global game settings here!
+    let screenSizeX = 300;
+    let screenSizeY = 200;
+    let worldResolutionX = 100;
+    let worldResolutionY = 100;
+
+    let timeStep = 10;
+    let physicsTimeStepModifier = 10;
 
     let maxObjects = 20;
     let maxGravitySinks = 5;
     let maxPlayers = 2;
-    return this;
+    let maxBullets = 1;
 
+    let playerSpritePointAngle = 15; // the point of the player sprite will be twice this, or 30 degrees
+    let playerSpriteSideLength = 10;
+    let bulletRadius = 3;
+
+    let thrusterAcceleration = 25;
+    let rotationSensativity = 2;
+    let spaceFriction = 9; // never let this equal zero!
+
+    // Keybindings
+    let moveForward = 87; // W
+    let moveBack    = 83; // S
+    let moveLeft    = 65; // A
+    let moveRight   = 68; // D
+    let shoot       = 32; // space
+    let quit        = 81; // Q
+    return this;
   }
 
-  method int getMaxObjects() {
-    return maxObjects; }
+  method int getscreenSizeX() { return screenSizeX; }
+  method int getscreenSizeY() { return screenSizeY; }
+  method int getworldResolutionX() { return worldResolutionX; }
+  method int getworldResolutionY() { return worldResolutionY; }
 
+  method int getTimeStep() { return timeStep; }
+  method int getphysicsTimeStepModifier() { return physicsTimeStepModifier; }
+
+  method int getMaxObjects() { return maxObjects; }
   method void setMaxObjects(int newMax) {
     let maxObjects = newMax;
     return; }
 
-  method int getMaxGravitySinks() {
-    return maxGravitySinks; }
-
+  method int getMaxGravitySinks() { return maxGravitySinks; }
   method void setMaxGravitySinks(int newMax) {
     let maxGravitySinks = newMax;
     return; }
 
-  method int getMaxPlayers() {
-    return maxPlayers; }
-
+  method int getMaxPlayers() { return maxPlayers; }
   method void setMaxPlayers(int newMax) {
     let maxPlayers = newMax;
     return; }
+
+  method int getMaxBullets() { return maxBullets; }
+  method void setMaxBullets(int newMax) {
+    let maxBullets = newMax;
+    return; }
+
+  method int getPlayerSpritePointAngle() { return playerSpritePointAngle; }
+  method int getPlayerSpriteSideLength() { return playerSpriteSideLength; }
+
+  method int getthrusterAcceleration() { return thrusterAcceleration; }
+  method int getRotationSensativity() { return rotationSensativity; }
+  method int getSpaceFriction() { return spaceFriction; }
+
+
+  method int getDesiredAction (char key) {
+    // Returns the action bound to a keypress.
+    // 0 - No binding/No key pressed
+    // 1 - Move Forward   2 - Move Backwards
+    // 3 - Move Left      4 - Move Right
+    // 5 - Shoot          6 - Quit
+    var int action;
+    if (key=moveForward){ let action = 1; }
+    if (key=moveBack){ let action = 2; }
+    if (key=moveLeft){ let action = 3; }
+    if (key=moveRight){ let action = 4; }
+    if (key=shoot){ let action = 5; }
+    if (key=quit){ let action = 6; }
+
+    return action;
+  }
 
 
   method void dispose() {

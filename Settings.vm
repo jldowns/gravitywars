@@ -1,50 +1,214 @@
 function Settings.new 0
-push constant 3
+push constant 22
 call Memory.alloc 1
 pop pointer 0
-push constant 20
+push constant 300
 pop this 0
-push constant 5
+push constant 200
 pop this 1
-push constant 2
+push constant 100
+pop this 4
+push constant 100
+pop this 5
+push constant 10
 pop this 2
+push constant 10
+pop this 3
+push constant 20
+pop this 6
+push constant 5
+pop this 7
+push constant 2
+pop this 8
+push constant 1
+pop this 9
+push constant 15
+pop this 10
+push constant 10
+pop this 11
+push constant 3
+pop this 12
+push constant 25
+pop this 13
+push constant 2
+pop this 14
+push constant 9
+pop this 15
+push constant 87
+pop this 16
+push constant 83
+pop this 17
+push constant 65
+pop this 18
+push constant 68
+pop this 19
+push constant 32
+pop this 20
+push constant 81
+pop this 21
 push pointer 0
+return
+function Settings.getscreenSizeX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Settings.getscreenSizeY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Settings.getworldResolutionX 0
+push argument 0
+pop pointer 0
+push this 4
+return
+function Settings.getworldResolutionY 0
+push argument 0
+pop pointer 0
+push this 5
+return
+function Settings.getTimeStep 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Settings.getphysicsTimeStepModifier 0
+push argument 0
+pop pointer 0
+push this 3
 return
 function Settings.getMaxObjects 0
 push argument 0
 pop pointer 0
-push this 0
+push this 6
 return
 function Settings.setMaxObjects 0
 push argument 0
 pop pointer 0
 push argument 1
-pop this 0
+pop this 6
 push constant 0
 return
 function Settings.getMaxGravitySinks 0
 push argument 0
 pop pointer 0
-push this 1
+push this 7
 return
 function Settings.setMaxGravitySinks 0
 push argument 0
 pop pointer 0
 push argument 1
-pop this 1
+pop this 7
 push constant 0
 return
 function Settings.getMaxPlayers 0
 push argument 0
 pop pointer 0
-push this 2
+push this 8
 return
 function Settings.setMaxPlayers 0
 push argument 0
 pop pointer 0
 push argument 1
-pop this 2
+pop this 8
 push constant 0
+return
+function Settings.getMaxBullets 0
+push argument 0
+pop pointer 0
+push this 9
+return
+function Settings.setMaxBullets 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 9
+push constant 0
+return
+function Settings.getPlayerSpritePointAngle 0
+push argument 0
+pop pointer 0
+push this 10
+return
+function Settings.getPlayerSpriteSideLength 0
+push argument 0
+pop pointer 0
+push this 11
+return
+function Settings.getthrusterAcceleration 0
+push argument 0
+pop pointer 0
+push this 13
+return
+function Settings.getRotationSensativity 0
+push argument 0
+pop pointer 0
+push this 14
+return
+function Settings.getSpaceFriction 0
+push argument 0
+pop pointer 0
+push this 15
+return
+function Settings.getDesiredAction 1
+push argument 0
+pop pointer 0
+push argument 1
+push this 16
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 1
+pop local 0
+label IF_FALSE0
+push argument 1
+push this 17
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 2
+pop local 0
+label IF_FALSE1
+push argument 1
+push this 18
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 3
+pop local 0
+label IF_FALSE2
+push argument 1
+push this 19
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push constant 4
+pop local 0
+label IF_FALSE3
+push argument 1
+push this 20
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 5
+pop local 0
+label IF_FALSE4
+push argument 1
+push this 21
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push constant 6
+pop local 0
+label IF_FALSE5
+push local 0
 return
 function Settings.dispose 0
 push argument 0

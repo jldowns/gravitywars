@@ -6,10 +6,19 @@
 
 class Attributes {
 
+  // Coordinates are stored in real-world units.
+  // The GX Engine is responsible for translating these
+  // into pixelspace
   field int Px, Py;   // position
   field int Vx, Vy;   // velocity
+  field int Ax, Ay;   // acceleration
   field int rotation; // in degrees
   field int radius;   // in pixels
+
+  // these are for saving the old location so the gx engine can erase
+  // the object's old image
+  field int oldPx, oldPy, oldRotation, oldRadius;
+  field bool needsUpdate;
 
   constructor Attributes new(int startPx, int startPy,
                              int startVx, int startVy,
@@ -22,26 +31,67 @@ class Attributes {
     let rotation = startRotation;
     let radius = startRadius;
 
+    let oldPx = startPx;
+    let oldPy = startPy;
+    let oldRotation = startRotation;
+    let oldRadius = startRadius;
+
+    let needsUpdate = true;
+
     return this;
   }
 
-  method int getPx() {
-    return Px; }
+  method int getPx() { return Px; }
+  method int getPy() { return Py; }
+  method void setCoordinates(int x, int y) {
+    let Px = x;
+    let Py = y;
+    return; }
+  method int getVx() { return Vx; }
+  method int getVy() { return Vy; }
+  method void setVelocity(int x, int y) {
+    let Vx = x;
+    let Vy = y;
+    return; }
 
-  method int getPy() {
-    return Py; }
+  method int getAx() { return Ax; }
+  method int getAy() { return Ay; }
+  method void setAcceleration(int x, int y) {
+    let Ax = x;
+    let Ay = y;
+    return; }
 
-  method int getVx() {
-    return Vx; }
+  method int getRotation() { return rotation; }
+  method void setRotation(int newValue) {
+    let rotation = newValue;
+    return; }
 
-  method int getVy() {
-    return Vy; }
+  method int getRadius() { return radius; }
+  method void setRadius(int newValue) {
+    let radius = newValue;
+    return; }
 
-  method int getRotation() {
-    return rotation; }
+  method void backup() {
+    // backs up current attributes into savings containers
+    // unless the needsUpdate flag is already set.
+    if (~needsUpdate) {
+      let oldPx = Px;
+      let oldPy = Py;
+      let oldRotation = rotation;
+      let oldRadius=radius;
+    }
+    return;
+  }
 
-  method int getRadius() {
-    return radius; }
+  method bool getNeedsUpdate(){ return needsUpdate; }
+  method void setNeedsUpdate(bool nu){ let needsUpdate=nu; return; }
+
+  // returning the before-update values:
+  method int getOldPx() { return oldPx; }
+  method int getOldPy() { return oldPy; }
+  method int getOldRotation() { return oldRotation; }
+  method int getOldRadius() { return oldRadius; }
+
 
   method void dispose() {
     do Memory.deAlloc(this);

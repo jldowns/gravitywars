@@ -5,20 +5,46 @@ class GXEngine {
 
   field Settings settings;
   field Array gravitySinkList;
+  field Array playerSpriteList;
+  field AdvancedMath mathEngine;
+
+  field int resX, resY, screenSizeX, screenSizeY;
+  field int screenLeftX, screenRightX;
+  field int screenTopY, screenBottomY;
+
+  field PlayerSprite fooPS;
+  field GravitySink fooGS;
+  field Bullet fooBullet;
+  field Attributes fooAttributes;
 
   constructor GXEngine new(Settings gameSettings) {
     var int i;
 
     let settings=gameSettings;
+    let mathEngine=AdvancedMath.new();
     let gravitySinkList = Array.new(settings.getMaxGravitySinks());
+    let playerSpriteList = Array.new(settings.getMaxPlayers());
+    let resX = settings.getworldResolutionX();
+    let resY = settings.getworldResolutionY();
+    let screenSizeX = settings.getscreenSizeX();
+    let screenSizeY = settings.getscreenSizeY();
 
-    // initialize the objectList Array with zeros. This list terminates
-    // with a zero.
+    let screenLeftX = 0;
+    let screenRightX = screenSizeX;
+    let screenTopY=0;
+    let screenBottomY=screenSizeY;
+
+    // initialize the gravitySinkList Array with zeros.
+    // All lists terminate with a zero.
     let i=0;
     while (i<settings.getMaxGravitySinks()) {
       let gravitySinkList[i] = 0;
-      let i=i+1;
-    }
+      let i=i+1; }
+    // initialize playerSpriteList
+    let i=0;
+    while (i<settings.getMaxPlayers()) {
+      let playerSpriteList[i] = 0;
+      let i=i+1; }
 
     return this;
   }
@@ -28,10 +54,23 @@ class GXEngine {
 
     var int i;
     let i = 0;
-    while(~(gravitySinkList[i] = 0) & (i < settings.getMaxGravitySinks()) ) {
+    while(~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
       let i=i+1;
     }
     let gravitySinkList[i] = newGravitySink;
+
+    return;
+  }
+
+  method void registerPlayerSprite(PlayerSprite newPlayerSprite) {
+    // adds a player sprite to the list
+
+    var int i;
+    let i = 0;
+    while(~(playerSpriteList[i]=0) & (i<settings.getMaxPlayers()) ) {
+      let i=i+1;
+    }
+    let playerSpriteList[i] = newPlayerSprite;
 
     return;
   }
@@ -43,42 +82,90 @@ class GXEngine {
     // draw gravitySinks
     let i = 0;
     while(~(gravitySinkList[i] = 0) & (i < settings.getMaxGravitySinks()) ) {
-      do drawGravitySink(gravitySinkList[i]);
+      do drawGravitySink(gravitySinkList[i], true);
+      let i=i+1;
+    }
+    // draw playerSprites
+    let i = 0;
+    while(~(playerSpriteList[i]=0) & (i<settings.getMaxPlayers()) ) {
+      let fooPS=playerSpriteList[i];
+      let fooAttributes = fooPS.getAttributes();
+      if (fooAttributes.getNeedsUpdate()){ // redraw sprite if it needs to be redrawn.
+        do drawPlayerSprite(playerSpriteList[i], false); // erase
+        do drawPlayerSprite(playerSpriteList[i], true); // then draw
+        do fooAttributes.setNeedsUpdate(false);
+      }
       let i=i+1;
     }
 
     return;
   }
 
+  method void drawPlayerSprite(PlayerSprite gs, bool drawOrErase) {
+    // draws a single PlayerSprite
+    var int x,y,rot;
+    var int angle, length;
+    var int x1,y1, x2,y2, x3,y3; // 1-front, 2-back left, 3-back right
 
-  method void drawGravitySink(GravitySink gs) {
+    let fooAttributes = gs.getAttributes();
+    let angle = settings.getPlayerSpritePointAngle();
+    let length = settings.getPlayerSpriteSideLength();
+
+    if (drawOrErase) {
+      let x = fooAttributes.getPx()/resX; // we're dividing by resolution to
+      let y = fooAttributes.getPy()/resY; // convert from real space to pixel space
+      let rot = fooAttributes.getRotation();
+    } else {
+      // if we're erasing we need to use the old attributes
+      let x = fooAttributes.getOldPx()/resX;
+      let y = fooAttributes.getOldPy()/resY;
+      let rot = fooAttributes.getOldRotation();
+    }
+
+    let x1=x;
+    let y1=y;
+
+    let x2=x-((mathEngine.sin100(rot-angle)*length)/100);
+    let y2=y+((mathEngine.cos100(rot-angle)*length)/100);
+
+    let x3=x-((mathEngine.sin100(rot+angle)*length)/100);
+    let y3=y+((mathEngine.cos100(rot+angle)*length)/100);
+
+    do Screen.setColor(drawOrErase);
+    do Screen.drawLine(x1, y1, x2, y2);
+    do Screen.drawLine(x2, y2, x3, y3);
+    do Screen.drawLine(x3, y3, x1, y1);
+   return;
+  }
+
+  method void drawGravitySink(GravitySink gs, bool drawOrErase) {
     // draws a single gravitySink
     var int x,y,r;
-    var Attributes gsAttributes;
 
-    let gsAttributes = gs.getAttributes();
-    let x = gsAttributes.getPx();
-    let y = gsAttributes.getPy();
-    let r = gsAttributes.getRadius();
+    let fooAttributes = gs.getAttributes();
+    let x = fooAttributes.getPx()/resX; // convert from real space to
+    let y = fooAttributes.getPy()/resY; // pixel space
+    let r = fooAttributes.getRadius();
 
-    do Screen.setColor(true);
+    //do Output.printString("drawing ");
+    //do Output.printInt(x);
+    //do Output.printString(",");
+    //do Output.printInt(y);
+    //do Output.printString(",");
+    //do Output.printInt(r);
+    //do Output.printString(" ");
+
+    do Screen.setColor(drawOrErase);
     do Screen.drawCircle(x, y, r);
    return;
   }
 
-  method void eraseGravitySink(GravitySink gs) {
-    // erases a single gravitySink
-    var int x,y,r;
-    var Attributes gsAttributes;
-
-    let gsAttributes = gs.getAttributes();
-    let x = gsAttributes.getPx();
-    let y = gsAttributes.getPy();
-    let r = gsAttributes.getRadius();
-
-    do Screen.setColor(false);
-    do Screen.drawCircle(x, y, r);
-   return;
+  method void drawScreenEdges() {
+    do Screen.drawLine(screenLeftX, screenTopY, screenRightX, screenTopY);
+    do Screen.drawLine(screenRightX, screenTopY, screenRightX, screenBottomY);
+    do Screen.drawLine(screenRightX, screenBottomY, screenLeftX, screenBottomY);
+    do Screen.drawLine(screenLeftX, screenBottomY, screenLeftX, screenTopY);
+    return;
   }
 
 

@@ -1,0 +1,30 @@
+// Bullet Class
+class Bullet {
+
+  field Attributes attributes;
+
+
+  constructor Bullet new(int startPx, int startPy,
+                              int startVx, int startVy,
+                              int startRadius) {
+
+    let attributes = Attributes.new(startPx, startPy, startVx, startVy, 0, startRadius);
+
+    return this;
+  }
+
+  method Attributes getAttributes() {
+    return attributes; }
+
+  method void setCoordinates(int x, int y) {
+    do attributes.setCoordinates(x,y);
+    return; }
+  method void setVelocity(int x, int y) {
+    do attributes.setVelocity(x,y);
+    return; }
+
+  method void dispose() {
+    do Memory.deAlloc(this);
+    return; }
+
+}
