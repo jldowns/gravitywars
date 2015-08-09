@@ -1,14 +1,14 @@
 function Settings.new 0
-push constant 26
+push constant 29
 call Memory.alloc 1
 pop pointer 0
-push constant 0
+push constant 20
 pop this 2
-push constant 200
+push constant 220
 pop this 3
-push constant 0
+push constant 50
 pop this 0
-push constant 300
+push constant 350
 pop this 1
 push constant 100
 pop this 6
@@ -36,24 +36,30 @@ push constant 25
 pop this 15
 push constant 2
 pop this 16
-push constant 9
+push constant 2
 pop this 17
-push constant 100
+push constant 9
 pop this 18
-push constant 10
+push constant 100
 pop this 19
-push constant 87
+push constant 10
 pop this 20
-push constant 83
+push constant 87
 pop this 21
-push constant 65
+push constant 83
 pop this 22
-push constant 68
+push constant 65
 pop this 23
-push constant 32
+push constant 68
 pop this 24
-push constant 81
+push constant 131
 pop this 25
+push constant 133
+pop this 26
+push constant 32
+pop this 27
+push constant 81
+pop this 28
 push pointer 0
 return
 function Settings.getScreenBoundTop 0
@@ -178,10 +184,15 @@ push argument 0
 pop pointer 0
 push this 16
 return
-function Settings.getSpaceFriction 0
+function Settings.getPowerSensativity 0
 push argument 0
 pop pointer 0
 push this 17
+return
+function Settings.getSpaceFriction 0
+push argument 0
+pop pointer 0
+push this 18
 return
 function Settings.getBulletRadius 0
 push argument 0
@@ -191,12 +202,12 @@ return
 function Settings.getBulletActivationAge 0
 push argument 0
 pop pointer 0
-push this 18
+push this 19
 return
 function Settings.getBulletMass 0
 push argument 0
 pop pointer 0
-push this 19
+push this 20
 return
 function Settings.getDesiredAction 1
 push argument 0
@@ -204,7 +215,7 @@ pop pointer 0
 push constant 0
 pop local 0
 push argument 1
-push this 20
+push this 21
 eq
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -213,7 +224,7 @@ push constant 1
 pop local 0
 label IF_FALSE0
 push argument 1
-push this 21
+push this 22
 eq
 if-goto IF_TRUE1
 goto IF_FALSE1
@@ -222,7 +233,7 @@ push constant 2
 pop local 0
 label IF_FALSE1
 push argument 1
-push this 22
+push this 23
 eq
 if-goto IF_TRUE2
 goto IF_FALSE2
@@ -231,7 +242,7 @@ push constant 3
 pop local 0
 label IF_FALSE2
 push argument 1
-push this 23
+push this 24
 eq
 if-goto IF_TRUE3
 goto IF_FALSE3
@@ -240,7 +251,7 @@ push constant 4
 pop local 0
 label IF_FALSE3
 push argument 1
-push this 24
+push this 25
 eq
 if-goto IF_TRUE4
 goto IF_FALSE4
@@ -249,7 +260,7 @@ push constant 5
 pop local 0
 label IF_FALSE4
 push argument 1
-push this 25
+push this 26
 eq
 if-goto IF_TRUE5
 goto IF_FALSE5
@@ -257,6 +268,24 @@ label IF_TRUE5
 push constant 6
 pop local 0
 label IF_FALSE5
+push argument 1
+push this 27
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push constant 7
+pop local 0
+label IF_FALSE6
+push argument 1
+push this 28
+eq
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push constant 8
+pop local 0
+label IF_FALSE7
 push local 0
 return
 function Settings.dispose 0

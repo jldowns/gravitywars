@@ -295,16 +295,16 @@ class PXEngine {
     let i=settings.getworldResolutionY();
     let y1=y1/i;
 
-    let x2 = settings.getScreenBoundLeft();
+    let x2 = 0;
     if ((x1-r1)<x2){ let collisionCondition=2; }
 
-    let x2 = settings.getScreenBoundRight();
+    let x2 = settings.getscreenSizeX();
     if ((x1+r1)>x2){ let collisionCondition=2; }
 
-    let y2 = settings.getScreenBoundTop();
+    let y2 = 0;
     if ((y1-r1)<y2){ let collisionCondition=2; }
 
-    let y2 = settings.getScreenBoundBottom();
+    let y2 = settings.getscreenSizeY();
     if ((y1+r1)>y2){ let collisionCondition=2; }
 
     return collisionCondition;

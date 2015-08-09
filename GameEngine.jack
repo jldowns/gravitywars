@@ -7,6 +7,7 @@ class GameEngine {
   field PXEngine px;
   field GXEngine gx;
   field Array bulletList;
+  field int powerSetting;
 
   // working variables for methods. Defined here
   // to only make one copy
@@ -26,6 +27,7 @@ class GameEngine {
 
     let gx = myGXEngine;
     let px = myPXEngine;
+    let powerSetting = 0;
     return this;
   }
 
@@ -64,8 +66,15 @@ class GameEngine {
           let foo=settings.getRotationSensativity();
           do px.applyRotation(currentAttributes, foo);
         }
-        if (action=5) {
-          do Output.printString("shoot!");
+        if (action=5) { // increase power
+          let foo=settings.getPowerSensativity();
+          do changePower(foo);
+        }
+        if (action=6) { // decrease power
+          let foo=settings.getPowerSensativity();
+          do changePower(foo*-1);
+        }
+        if (action=7) {
           do __shoot__(currentAttributes);
         }
 
@@ -92,7 +101,7 @@ class GameEngine {
       var int Px,Py,radius, accel, rotation,mass;
 
       let radius=settings.getBulletRadius();
-      let accel=20;
+      let accel=powerSetting;
       let Px = playerAttributes.getPx();
       let Py = playerAttributes.getPy();
       let mass=settings.getBulletMass();
@@ -112,6 +121,14 @@ class GameEngine {
       return;
     }
 
+    method void changePower(int powerDelta) {
+      let powerSetting = powerSetting + powerDelta;
+      do Output.moveCursor(20,0);
+      do Output.printInt(powerSetting);
+      do Output.printString("   ");
+      return;
+    }
+
 
     method int __getInput__() {
       // Polls the keyboard for input and look up
@@ -121,6 +138,8 @@ class GameEngine {
       var char action;
 
       let inputKey = Keyboard.keyPressed();
+      //do Output.moveCursor(0,0);
+      //do Output.printInt(inputKey);
       let action = settings.getDesiredAction(inputKey);
       return action;
     }
@@ -137,6 +156,7 @@ class GameEngine {
     var int i, collisionCode, activationAge;
     var Bullet fooBullet;
     var Attributes currentAttributes;
+
     // check bullet collisions
     let i = 0;
     while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {

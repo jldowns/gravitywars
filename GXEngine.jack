@@ -27,10 +27,10 @@ class GXEngine {
     let screenSizeX = settings.getscreenSizeX();
     let screenSizeY = settings.getscreenSizeY();
 
-    let screenLeftX = 0;
-    let screenRightX = screenSizeX;
-    let screenTopY=0;
-    let screenBottomY=screenSizeY;
+    let screenLeftX = settings.getScreenBoundLeft();
+    let screenRightX = settings.getScreenBoundRight();
+    let screenTopY=settings.getScreenBoundTop();
+    let screenBottomY=settings.getScreenBoundBottom();
 
     // initialize the gravitySinkList Array with zeros.
     // All lists terminate with a zero.
@@ -158,13 +158,13 @@ class GXEngine {
     let length = settings.getPlayerSpriteSideLength();
 
     if (drawOrErase) {
-      let x = currentAttributes.getPx()/resX; // we're dividing by resolution to
-      let y = currentAttributes.getPy()/resY; // convert from real space to pixel space
+      let x = currentAttributes.getPx()/resX + settings.getScreenBoundLeft(); // we're dividing by resolution to
+      let y = currentAttributes.getPy()/resY + settings.getScreenBoundTop(); // convert from real space to pixel space
       let rot = currentAttributes.getRotation();
     } else {
       // if we're erasing we need to use the old attributes
-      let x = currentAttributes.getOldPx()/resX;
-      let y = currentAttributes.getOldPy()/resY;
+      let x = currentAttributes.getOldPx()/resX + settings.getScreenBoundLeft();
+      let y = currentAttributes.getOldPy()/resY + settings.getScreenBoundTop();
       let rot = currentAttributes.getOldRotation();
     }
 
@@ -190,8 +190,8 @@ class GXEngine {
     var Attributes currentAttributes;
 
     let currentAttributes = gs.getAttributes();
-    let x = currentAttributes.getPx()/resX; // convert from real space to
-    let y = currentAttributes.getPy()/resY; // pixel space
+    let x = currentAttributes.getPx()/resX + settings.getScreenBoundLeft(); // convert from real space to
+    let y = currentAttributes.getPy()/resY + settings.getScreenBoundTop(); // pixel space
     let r = currentAttributes.getRadius();
 
     do Screen.setColor(drawOrErase);
@@ -207,13 +207,13 @@ class GXEngine {
 
     let currentAttributes = gs.getAttributes();
     if (drawOrErase) {
-      let x = currentAttributes.getPx()/resX; // we're dividing by resolution to
-      let y = currentAttributes.getPy()/resY; // convert from real space to pixel space
+      let x = currentAttributes.getPx()/resX + settings.getScreenBoundLeft(); // we're dividing by resolution to
+      let y = currentAttributes.getPy()/resY + settings.getScreenBoundTop(); // convert from real space to pixel space
       let r = currentAttributes.getRadius();
     } else {
       // if we're erasing we need to use the old attributes
-      let x = currentAttributes.getOldPx()/resX;
-      let y = currentAttributes.getOldPy()/resY;
+      let x = currentAttributes.getOldPx()/resX + settings.getScreenBoundLeft();
+      let y = currentAttributes.getOldPy()/resY + settings.getScreenBoundTop();
       let r = currentAttributes.getOldRadius();
     }
 

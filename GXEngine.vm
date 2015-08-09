@@ -30,13 +30,17 @@ pop this 7
 push this 0
 call Settings.getscreenSizeY 1
 pop this 8
-push constant 0
+push this 0
+call Settings.getScreenBoundLeft 1
 pop this 9
-push this 7
+push this 0
+call Settings.getScreenBoundRight 1
 pop this 10
-push constant 0
+push this 0
+call Settings.getScreenBoundTop 1
 pop this 11
-push this 8
+push this 0
+call Settings.getScreenBoundBottom 1
 pop this 12
 push constant 0
 pop local 0
@@ -471,11 +475,17 @@ push local 11
 call Attributes.getPx 1
 push this 5
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
 pop local 0
 push local 11
 call Attributes.getPy 1
 push this 6
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
 pop local 1
 push local 11
 call Attributes.getRotation 1
@@ -486,11 +496,17 @@ push local 11
 call Attributes.getOldPx 1
 push this 5
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
 pop local 0
 push local 11
 call Attributes.getOldPy 1
 push this 6
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
 pop local 1
 push local 11
 call Attributes.getOldRotation 1
@@ -581,11 +597,17 @@ push local 3
 call Attributes.getPx 1
 push this 5
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
 pop local 0
 push local 3
 call Attributes.getPy 1
 push this 6
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
 pop local 1
 push local 3
 call Attributes.getRadius 1
@@ -614,11 +636,17 @@ push local 3
 call Attributes.getPx 1
 push this 5
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
 pop local 0
 push local 3
 call Attributes.getPy 1
 push this 6
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
 pop local 1
 push local 3
 call Attributes.getRadius 1
@@ -629,11 +657,17 @@ push local 3
 call Attributes.getOldPx 1
 push this 5
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
 pop local 0
 push local 3
 call Attributes.getOldPy 1
 push this 6
 call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
 pop local 1
 push local 3
 call Attributes.getOldRadius 1

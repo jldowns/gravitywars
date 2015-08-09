@@ -22,20 +22,22 @@ class Settings {
 
   field int thrusterAcceleration; // Force applied to player sprite when moved
   field int rotationSensativity;
+  field int powerSensativity;
   field int spaceFriction; // the friction of deep space
   field int bulletActivationAge;
   field int bulletMass;
 
   // Keybindings
   field char moveForward, moveBack, moveLeft, moveRight;
+  field char increasePower, decreasePower;
   field char shoot, quit;
 
   constructor Settings new() {
     // Set all global game settings here!
-    let screenBoundTop=0;
-    let screenBoundBottom=200;
-    let screenBoundLeft=0;
-    let screenBoundRight=300;
+    let screenBoundTop=20;
+    let screenBoundBottom=220;
+    let screenBoundLeft=50;
+    let screenBoundRight=350;
 
     let worldResolutionX = 100;
     let worldResolutionY = 100;
@@ -54,6 +56,7 @@ class Settings {
 
     let thrusterAcceleration = 25;
     let rotationSensativity = 2;
+    let powerSensativity = 2;
     let spaceFriction = 9; // never let this equal zero!
     let bulletActivationAge = 100;
     let bulletMass=10;
@@ -63,6 +66,8 @@ class Settings {
     let moveBack    = 83; // S
     let moveLeft    = 65; // A
     let moveRight   = 68; // D
+    let increasePower = 131; // up arrow
+    let decreasePower = 133; // down arrow
     let shoot       = 32; // space
     let quit        = 81; // Q
     return this;
@@ -106,6 +111,7 @@ class Settings {
 
   method int getthrusterAcceleration() { return thrusterAcceleration; }
   method int getRotationSensativity() { return rotationSensativity; }
+  method int getPowerSensativity() { return powerSensativity; }
   method int getSpaceFriction() { return spaceFriction; }
   method int getBulletRadius() { return bulletRadius; }
 
@@ -118,7 +124,8 @@ class Settings {
     // 0 - No binding/No key pressed
     // 1 - Move Forward   2 - Move Backwards
     // 3 - Move Left      4 - Move Right
-    // 5 - Shoot          6 - Quit
+    // 5 - Increase pwr   6 - Decrease pwr
+    // 7 - Shoot          8 - Quit
     var int action;
 
     let action = 0;
@@ -127,8 +134,10 @@ class Settings {
     if (key=moveBack){ let action = 2; }
     if (key=moveLeft){ let action = 3; }
     if (key=moveRight){ let action = 4; }
-    if (key=shoot){ let action = 5; }
-    if (key=quit){ let action = 6; }
+    if (key=increasePower){ let action = 5; }
+    if (key=decreasePower){ let action = 6; }
+    if (key=shoot){ let action = 7; }
+    if (key=quit){ let action = 8; }
 
     return action;
   }
