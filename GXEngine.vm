@@ -702,6 +702,10 @@ return
 function GXEngine.drawScreenEdges 0
 push argument 0
 pop pointer 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
 push this 9
 push this 11
 push this 10
@@ -728,9 +732,23 @@ call Screen.drawLine 4
 pop temp 0
 push constant 0
 return
-function GXEngine.drawPowerIndicator 0
+function GXEngine.drawPowerIndicator 6
 push argument 0
 pop pointer 0
+push constant 1
+pop local 0
+push constant 20
+pop local 1
+push constant 100
+pop local 2
+push constant 10
+pop local 3
+push constant 3
+pop local 4
+push argument 1
+push local 2
+call Math.divide 2
+pop local 5
 push constant 20
 push constant 0
 call Output.moveCursor 2
@@ -747,7 +765,7 @@ push constant 58
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
-push argument 1
+push argument 3
 call Output.printInt 1
 pop temp 0
 push constant 3
@@ -759,6 +777,69 @@ call String.appendChar 2
 push constant 32
 call String.appendChar 2
 call Output.printString 1
+pop temp 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push local 0
+push local 3
+add
+push local 4
+add
+push local 1
+push local 2
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push constant 2
+add
+push local 1
+push argument 1
+push argument 2
+sub
+push local 5
+call Math.divide 2
+add
+push local 0
+push local 3
+add
+push constant 4
+sub
+push local 1
+push local 2
+add
+call Screen.drawRectangle 4
+pop temp 0
+push local 0
+push local 3
+add
+push local 1
+push local 2
+add
+push argument 3
+push local 5
+call Math.divide 2
+sub
+push local 0
+push local 3
+add
+push local 4
+add
+push local 1
+push local 2
+add
+push argument 3
+push local 5
+call Math.divide 2
+sub
+call Screen.drawLine 4
 pop temp 0
 push constant 0
 return

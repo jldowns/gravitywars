@@ -9,6 +9,7 @@ class GameEngine {
   field Array bulletList;
   field int powerSetting;
   field int deBounce; // counts how many frames since the last keystroke
+  field Array forceNextRedraw;
 
   // working variables for methods. Defined here
   // to only make one copy
@@ -30,6 +31,12 @@ class GameEngine {
     let px = myPXEngine;
     let powerSetting = 20;
     let deBounce = 0;
+    // forceNextRedraw Array is a series of flags that
+    // indicate what needs to be redrawn at the next refresh.
+    // 0 - refreshscreen    1 - all players
+    // 2 - power indicator  3 - borders
+    let forceNextRedraw=Array.new(3);
+    let forceNextRedraw[0]=false; let forceNextRedraw[1]=false; let forceNextRedraw[2]=false;
     return this;
   }
 
@@ -44,17 +51,22 @@ class GameEngine {
       let currentAttributes = player.getSpriteAttributes();
       let foo = settings.getPlayerStartingPower();
       do player.setPowerRemaining(foo);
-      do updateScreen(true);
+      do updateScreen(player);
 
       while (~player.getIsDead() &
-             (player.getPowerRemaining()>0) ){
+             (player.getPowerRemaining()>0) |
+             ~(bulletList[0]=0)  ){
         let action = __getInput__();
 
         if ( (action=1) & (deBounce<1) ) {
+          // Jump action
           let foo = currentAttributes.getRotation();
           let bar = settings.getthrusterAcceleration();
           do px.applyAcceleration(currentAttributes,
                                powerSetting*bar, foo);
+          let foo=player.getPowerRemaining();
+          do player.setPowerRemaining(foo-powerSetting);
+          let forceNextRedraw[2]=true;
         }
         if (action=3) {
           let foo=settings.getRotationSensativity()*-1;
@@ -66,14 +78,16 @@ class GameEngine {
         }
         if (action=5) { // increase power
           let foo=settings.getPowerSensativity();
-          do changePower(foo);
+          do changePower(foo, player.getPowerRemaining());
         }
         if (action=6) { // decrease power
           let foo=settings.getPowerSensativity();
-          do changePower(foo*-1);
+          do changePower(foo*-1, player.getPowerRemaining());
         }
         if ( (action=7) & (deBounce<1) ) { //shoot
           do __shoot__(currentAttributes);
+          let foo=player.getPowerRemaining();
+          do player.setPowerRemaining(foo-powerSetting);
         }
         // reset the debounce counter.
         if (~(action=0)) {let deBounce=settings.getDebounceSetting();}
@@ -81,7 +95,7 @@ class GameEngine {
 
         let foo = settings.getTimeStep();
         do px.stepForward(foo);
-        do updateScreen(false);
+        do updateScreen(player);
         do Sys.wait(foo);
 
         // detect collisions
@@ -121,12 +135,15 @@ class GameEngine {
 
         do px.applyAcceleration(currentAttributes,accel, rotation);
       }
+      let forceNextRedraw[2]=true;
       return;
     }
 
-    method void changePower(int powerDelta) {
+    method void changePower(int powerDelta, int powerRemaining) {
       let powerSetting = powerSetting + powerDelta;
-      do gx.drawPowerIndicator(powerSetting);
+      if (powerSetting>powerRemaining) { let powerSetting=powerRemaining;}
+      if (powerSetting<0) { let powerSetting=0;}
+      let forceNextRedraw[2]=true;
       return;
     }
 
@@ -146,15 +163,28 @@ class GameEngine {
       return action;
     }
 
-    method void updateScreen(bool forceRedraw) {
-    // if force redraw is true, it'll blank the screen and
-    // redraw everything
-      if (forceRedraw) {
+    method void updateScreen(Player currentPlayer) {
+      // if force redraw is true, it'll blank the screen and
+      // redraw everything
+      var int powerRemaining;
+      var int maxPower;
+
+      if (forceNextRedraw[0]) {
         do Screen.clearScreen();
-        do gx.drawScreenEdges();
-        do gx.drawPowerIndicator(powerSetting);
       }
-      do gx.drawAllObjects(forceRedraw);
+      if (forceNextRedraw[3]|forceNextRedraw[0]) {
+        do gx.drawScreenEdges();
+      }
+      if (forceNextRedraw[2]|forceNextRedraw[0]) {
+        let powerRemaining=currentPlayer.getPowerRemaining();
+        let maxPower = settings.getPlayerStartingPower();
+        do gx.drawPowerIndicator(maxPower,powerRemaining, powerSetting);
+      }
+      do gx.drawAllObjects(forceNextRedraw[1]|forceNextRedraw[0]);
+      let forceNextRedraw[0]=false;
+      let forceNextRedraw[1]=false;
+      let forceNextRedraw[2]=false;
+      let forceNextRedraw[3]=false;
       return;
     }
 
@@ -163,7 +193,7 @@ class GameEngine {
       do gx.unregisterBullet(killBullet);
       do px.unregisterBullet(killBullet);
       do killBullet.dispose();
-      do updateScreen(true);
+      let forceNextRedraw[0]=true;
       return;
   }
 

@@ -231,6 +231,7 @@ class GXEngine {
   }
 
   method void drawScreenEdges() {
+    do Screen.setColor(true);
     do Screen.drawLine(screenLeftX, screenTopY, screenRightX, screenTopY);
     do Screen.drawLine(screenRightX, screenTopY, screenRightX, screenBottomY);
     do Screen.drawLine(screenRightX, screenBottomY, screenLeftX, screenBottomY);
@@ -238,11 +239,37 @@ class GXEngine {
     return;
   }
 
-  method void drawPowerIndicator(int powerSetting) {
+  method void drawPowerIndicator(int maxPower, int powerRemaining,int powerSetting) {
+    var int x,y,height, width, carrotWidth;
+    var int powerIndicatorRatio; // ratio between the power indicator height
+                             // and the max amount of power
+    let x=1;
+    let y=20;
+    let height=100;
+    let width=10;
+    let carrotWidth=3;
+
+    let powerIndicatorRatio = maxPower/height;
+
     do Output.moveCursor(20,0);
     do Output.printString("PWR:");
     do Output.printInt(powerSetting);
     do Output.printString("   ");
+
+    // erase previous power indicator
+    do Screen.setColor(false);
+    do Screen.drawRectangle(x,y, x+width+carrotWidth,y+height);
+
+    do Screen.setColor(true);
+    // draw power remaining indicator
+    do Screen.drawRectangle(x+2,y+((maxPower - powerRemaining)/powerIndicatorRatio),
+                            x+width-4,y+height);
+
+    // draw power setting carrot
+    do Screen.drawLine(x+width,  y+height-(powerSetting/powerIndicatorRatio),
+                    x+width+carrotWidth, y+height-(powerSetting/powerIndicatorRatio) );
+
+
     return;
   }
 
