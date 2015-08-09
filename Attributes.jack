@@ -14,6 +14,8 @@ class Attributes {
   field int Ax, Ay;   // acceleration
   field int rotation; // in degrees
   field int radius;   // in pixels
+  field int mass;
+  field bool isDead;
 
   // these are for saving the old location so the gx engine can erase
   // the object's old image
@@ -36,6 +38,7 @@ class Attributes {
     let oldRotation = startRotation;
     let oldRadius = startRadius;
 
+    let isDead=false;
     let needsUpdate = true;
 
     return this;
@@ -71,6 +74,8 @@ class Attributes {
     let radius = newValue;
     return; }
 
+  method int getMass() { return mass; }
+
   method void backup() {
     // backs up current attributes into savings containers
     // unless the needsUpdate flag is already set.
@@ -85,6 +90,8 @@ class Attributes {
 
   method bool getNeedsUpdate(){ return needsUpdate; }
   method void setNeedsUpdate(bool nu){ let needsUpdate=nu; return; }
+  method bool getIsDead(){ return isDead; }
+  method void setIsDead(bool nu){ let isDead=nu; return; }
 
   // returning the before-update values:
   method int getOldPx() { return oldPx; }

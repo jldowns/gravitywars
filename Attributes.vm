@@ -1,5 +1,5 @@
 function Attributes.new 0
-push constant 13
+push constant 14
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -15,16 +15,18 @@ pop this 6
 push argument 5
 pop this 7
 push argument 0
-pop this 8
-push argument 1
 pop this 9
-push argument 4
+push argument 1
 pop this 10
-push argument 5
+push argument 4
 pop this 11
+push argument 5
+pop this 12
+push constant 0
+pop this 8
 push constant 0
 not
-pop this 12
+pop this 13
 push pointer 0
 return
 function Attributes.getPx 0
@@ -111,53 +113,65 @@ return
 function Attributes.backup 0
 push argument 0
 pop pointer 0
-push this 12
+push this 13
 not
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push this 0
-pop this 8
-push this 1
 pop this 9
-push this 6
+push this 1
 pop this 10
-push this 7
+push this 6
 pop this 11
+push this 7
+pop this 12
 label IF_FALSE0
 push constant 0
 return
 function Attributes.getNeedsUpdate 0
 push argument 0
 pop pointer 0
-push this 12
+push this 13
 return
 function Attributes.setNeedsUpdate 0
 push argument 0
 pop pointer 0
 push argument 1
-pop this 12
+pop this 13
+push constant 0
+return
+function Attributes.getIsDead 0
+push argument 0
+pop pointer 0
+push this 8
+return
+function Attributes.setIsDead 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 8
 push constant 0
 return
 function Attributes.getOldPx 0
 push argument 0
 pop pointer 0
-push this 8
+push this 9
 return
 function Attributes.getOldPy 0
 push argument 0
 pop pointer 0
-push this 9
+push this 10
 return
 function Attributes.getOldRotation 0
 push argument 0
 pop pointer 0
-push this 10
+push this 11
 return
 function Attributes.getOldRadius 0
 push argument 0
 pop pointer 0
-push this 11
+push this 12
 return
 function Attributes.dispose 0
 push argument 0

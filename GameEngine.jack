@@ -6,16 +6,27 @@ class GameEngine {
   field Settings settings;
   field PXEngine px;
   field GXEngine gx;
+  field Bullet newBullet;
+  field Array bulletList;
 
   // working variables for methods. Defined here
   // to only make one copy
   field Attributes fooAttributes;
+  field Bullet fooBullet;
 
   constructor GameEngine new(Settings gameSettings,
                              GXEngine myGXEngine,
                              PXEngine myPXEngine) {
 
+    var int i;
     let settings = gameSettings;
+    let bulletList = Array.new(settings.getMaxBullets());
+    // initialize bulletList
+    let i=0;
+    while (i<settings.getMaxBullets()) {
+      let bulletList[i] = 0;
+      let i=i+1; }
+
     let gx = myGXEngine;
     let px = myPXEngine;
     return this;
@@ -27,10 +38,12 @@ class GameEngine {
     // Returns when either dead or next turn
       var int action;
       var int foo, bar;
+      var bool isDead;
 
       let fooAttributes = player.getSpriteAttributes();
+      let isDead=false;
 
-      while (true) {
+      while (~isDead) {
         let action = __getInput__();
 
         if (action=1) {
@@ -53,13 +66,49 @@ class GameEngine {
           let foo=settings.getRotationSensativity();
           do px.applyRotation(fooAttributes, foo);
         }
+        if (action=5) {
+          do Output.printString("shoot!");
+          do __shoot__(fooAttributes);
+        }
 
         let foo = settings.getTimeStep();
         do px.stepForward(foo);
         do gx.drawAllObjects();
         do Sys.wait(foo);
+        // detect collisions
+        do checkForCollisions();
+        // detect player colision
+        let fooAttributes = player.getSpriteAttributes();
+        let foo = px.detectCollision(fooAttributes);
+        if ( ~(foo=0) ) { let isDead=true; do Output.printInt(foo);}
       }
 
+      return;
+    }
+
+    method void __shoot__(Attributes playerAttributes) {
+      // shoots a bullet from player. playerAttributes
+      // is the attributes object from the shooting player
+      var Bullet newBullet;
+      var int Px,Py,radius, accel, rotation;
+
+      let radius=settings.getBulletRadius();
+      let accel=20;
+      let Px = playerAttributes.getPx();
+      let Py = playerAttributes.getPy();
+
+      let newBullet = Bullet.new(Px,Py,0,0,radius);
+      do registerBullet(newBullet);
+      do gx.registerBullet(newBullet);
+      do px.registerBullet(newBullet);
+      if ( newBullet.getIsDead() ) {
+        do newBullet.dispose();
+      } else {
+        let fooAttributes = newBullet.getAttributes();
+        let rotation = playerAttributes.getRotation();
+
+        do px.applyAcceleration(fooAttributes,accel, rotation);
+      }
       return;
     }
 
@@ -75,5 +124,58 @@ class GameEngine {
       let action = settings.getDesiredAction(inputKey);
       return action;
     }
+
+    method void killBullet(Bullet killBullet) {
+      do unregisterBullet(killBullet);
+      do gx.unregisterBullet(killBullet);
+      do px.unregisterBullet(killBullet);
+      do killBullet.dispose();
+      return;
+  }
+
+  method void checkForCollisions() {
+    var int i, collisionCode, activationAge;
+    // check bullet collisions
+    let i = 0;
+    while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
+      let fooBullet = bulletList[i];
+      do fooBullet.agePlusOne();
+      let activationAge = settings.getBulletActivationAge();
+      if (fooBullet.getAge()>activationAge) { // only check for collisions if the bullet is active
+        let fooAttributes = fooBullet.getAttributes();
+        let collisionCode = px.detectCollision(fooAttributes);
+        if (~(collisionCode=0)) {do killBullet(fooBullet);}
+      }
+      let i=i+1;
+    }
+    return;
+  }
+
+
+  method void registerBullet(Bullet newBullet) {
+    // adds an gravitySink to the list
+    var int i;
+    let i = 0;
+    while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
+      let i=i+1;
+    }
+    // if we've reached the max number if bullets, go ahead and kill this one.
+    if (i > (settings.getMaxBullets()-1)) {
+      do newBullet.setIsDead(true);
+    } else {
+    let bulletList[i] = newBullet;
+    }
+    return;
+  }
+
+  method void unregisterBullet(Bullet killBullet) {
+    var int i;
+    let i = 0;
+    while(~(bulletList[i]=killBullet) & ~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
+      let i=i+1;
+    }
+    if (bulletList[i]=killBullet) { let bulletList[i]=0;}
+    return;
+  }
 
 }

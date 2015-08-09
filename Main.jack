@@ -15,20 +15,27 @@ class Main {
 
     var int i;
 
+    // load engines
     let settings = Settings.new();
     let gx = GXEngine.new(settings);
     let px = PXEngine.new(settings);
     let myGame = GameEngine.new(settings, gx, px);
 
+    let i = settings.getPlayerSpriteSideLength()+1;
+    // create game objects
     let gs1 = GravitySink.new(10000, 3000, 20, 20);
     let gs2 = GravitySink.new(2000, 10000, 10, 20);
     let gs3 = GravitySink.new(20000, 20000, 15, 20);
-    let ps1 = Player.new(3000, 3000, 0);
-    let ps2 = Player.new(15000, 15000, 60);
+    let ps1 = Player.new(3000, 3000, 0, i);
+    let ps2 = Player.new(15000, 15000, 60, i);
 
+    // register game objects
     do gx.registerGravitySink(gs1);
+    do px.registerGravitySink(gs1);
     do gx.registerGravitySink(gs2);
+    do px.registerGravitySink(gs2);
     do gx.registerGravitySink(gs3);
+    do px.registerGravitySink(gs3);
     let fooSprite = ps1.getSprite();
     do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
@@ -36,12 +43,10 @@ class Main {
     do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
 
-    let i=0;
-    while (true)
-    {
-      do gx.drawScreenEdges();
-      do myGame.takeTurn(ps1);
-    }
+    do gx.drawScreenEdges();
+    do myGame.takeTurn(ps1);
+
+    do Output.printString("you lose.");
 
 
     return;

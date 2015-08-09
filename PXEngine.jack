@@ -6,9 +6,12 @@ class PXEngine {
   field Settings settings;
   field Array bulletList;
   field Array playerSpriteList;
+  field Array gravitySinkList;
   field AdvancedMath mathEngine;
 
   field Attributes fooAttributes;
+  field PlayerSprite fooPS;
+  field GravitySink fooGS;
 
   constructor PXEngine new(Settings gameSettings) {
     var int i;
@@ -17,6 +20,7 @@ class PXEngine {
     let mathEngine=AdvancedMath.new();
     let bulletList = Array.new(settings.getMaxBullets());
     let playerSpriteList = Array.new(settings.getMaxPlayers());
+    let gravitySinkList = Array.new(settings.getMaxGravitySinks());
 
     // initialize the bulletList Array with zeros.
     // All lists terminate with a zero.
@@ -29,6 +33,11 @@ class PXEngine {
     while (i<settings.getMaxPlayers()) {
       let playerSpriteList[i] = 0;
       let i=i+1; }
+    // initialize bulletList
+    let i=0;
+    while (i<settings.getMaxBullets()) {
+      let bulletList[i] = 0;
+      let i=i+1; }
 
     return this;
   }
@@ -40,8 +49,23 @@ class PXEngine {
     while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
       let i=i+1;
     }
+    // if we've reached the max number if bullets, go ahead and kill this one.
+    if (i > (settings.getMaxBullets()-1)) {
+      do newBullet.setIsDead(true);
+    } else {
     let bulletList[i] = newBullet;
+    }
 
+    return;
+  }
+
+  method void unregisterBullet(Bullet killBullet) {
+    var int i;
+    let i = 0;
+    while(~(bulletList[i]=killBullet) & ~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
+      let i=i+1;
+    }
+    if (bulletList[i]=killBullet) { let bulletList[i]=0;}
     return;
   }
 
@@ -53,6 +77,18 @@ class PXEngine {
       let i=i+1;
     }
     let playerSpriteList[i] = newPlayerSprite;
+
+    return;
+  }
+
+  method void registerGravitySink(GravitySink newGravitySink) {
+    // adds an gravitySink to the list
+    var int i;
+    let i = 0;
+    while(~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
+      let i=i+1;
+    }
+    let gravitySinkList[i] = newGravitySink;
 
     return;
   }
@@ -89,6 +125,7 @@ class PXEngine {
     // over a period of timeDelta
     var int i, x1, y1, x2, y2;
     var PlayerSprite thisPlayerSprite;
+    var Bullet thisBullet;
     var int friction10;
 
     // we're going to divide by a modifier here because a 10 millisecond
@@ -96,6 +133,7 @@ class PXEngine {
     let timeDelta = timeDelta / settings.getphysicsTimeStepModifier();
     let friction10=settings.getSpaceFriction() *timeDelta;
 
+    // do the players
     let i = 0;
     while( ~(playerSpriteList[i]=0) & (i<settings.getMaxPlayers()) ) {
       let thisPlayerSprite = playerSpriteList[i];
@@ -133,13 +171,180 @@ class PXEngine {
       let i=i+1;
     }
 
+    // now do the bullets
+    let i = 0;
+    while( ~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
+      let thisBullet = bulletList[i];
+      let fooAttributes = thisBullet.getAttributes();
+
+
+      // Apply accelerations
+      let x1 = fooAttributes.getAx();
+      let y1 = fooAttributes.getAy();
+      let x2 = fooAttributes.getVx();
+      let y2 = fooAttributes.getVy();
+
+      // but only apply them if there is something to apply
+      if ( ~(x1=0) | ~(x2=0) | ~(y1=0) | ~(y2=0) ){
+
+        // no space friction for bullets!
+
+        do fooAttributes.backup();
+        do fooAttributes.setNeedsUpdate(true); // redraw on next frame
+
+        do fooAttributes.setVelocity( (x1*timeDelta) + x2,
+                            (y1*timeDelta) + y2 );
+        // and reset accelerations now that we've applied them.
+        do fooAttributes.setAcceleration(0,0);
+
+        // Apply velocitys
+        let x1 = fooAttributes.getPx();
+        let y1 = fooAttributes.getPy();
+        // x2 and y2 already have velocitys assigned
+        do fooAttributes.setCoordinates( (x2*timeDelta) + x1,
+                               (y2*timeDelta) + y1 );
+      }
+      let i=i+1;
+    }
+
+
+    return;
+  }
+
+
+  method int detectCollision(Attributes att) {
+    // Detects whether or not a certain object has hit either
+    // a gravity sink, a player sprite, or has fallen off the edge
+    // of reality.
+    // 0-no collision   1-gravitySink
+    // 2-fallenOffEdge  4+ - hit player x-3 (a return value of 5 means you hit player 2)
+    var int i,dist;
+    var int x1, y1, x2, y2;
+    var int r1, r2;
+    var int collisionCondition;
+
+    let collisionCondition = 0;
+    let x1=att.getPx();
+    let y1=att.getPy();
+    let r1=att.getRadius();
+
+
+    // === Check for player collisions ===
+    let i = 0;
+    while(~(playerSpriteList[i]=0) & (i<settings.getMaxPlayers()) ) {
+
+      let fooPS = playerSpriteList[i];
+      let fooAttributes=fooPS.getAttributes();
+
+      if (~(att=fooAttributes)) {
+        let x2=fooAttributes.getPx();
+        let y2=fooAttributes.getPy();
+        let r2 =fooAttributes.getRadius();
+        let dist = __getDistance__(x1,y1,x2,y2,r1+r2);
+        if (dist < (r1+r2)) {
+            let collisionCondition = i+3+1; // this means you hit a player.
+        }                                   // since arrays start at 0 and players start at 1, we add one.
+      }
+      let i=i+1;
+    }
+
+    // === Check for Gravity Sink collisions ===
+    let i = 0;
+    while(~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
+
+      let fooGS = gravitySinkList[i];
+      let fooAttributes=fooGS.getAttributes();
+
+      if (~(att=fooAttributes)) {
+        let x2=fooAttributes.getPx();
+        let y2=fooAttributes.getPy();
+        let r2 =fooAttributes.getRadius();
+        //do Output.moveCursor(0,0);
+        //do Output.printInt(x1-x2);
+        let dist = __getDistance__(x1,y1,x2,y2,r1+r2);
+        if (dist < (r1+r2)) {
+            let collisionCondition = 1; // this means you hit a gravity sink.
+        }
+      }
+      let i=i+1;
+    }
+
+    // === Check to see if you've exited the universe ===
+    let i=settings.getworldResolutionX();
+    let x1=x1/i;
+    let i=settings.getworldResolutionY();
+    let y1=y1/i;
+
+    let x2 = settings.getScreenBoundLeft();
+    if ((x1-r1)<x2){ let collisionCondition=2; }
+
+    let x2 = settings.getScreenBoundRight();
+    if ((x1+r1)>x2){ let collisionCondition=2; }
+
+    let y2 = settings.getScreenBoundTop();
+    if ((y1-r1)<y2){ let collisionCondition=2; }
+
+    let y2 = settings.getScreenBoundBottom();
+    if ((y1+r1)>y2){ let collisionCondition=2; }
+
+    return collisionCondition;
+  }
+
+  method int __getDistance__(int x1,int y1,int x2,int y2, int envelope) {
+    // gets the distance between two cartesian coordinates.
+    // To prevent overflows when squaring large numbers, we only
+    // calculate the actual distance if the two points are close to the
+    // envelope
+    let x1 = Math.abs(x1-x2);
+    let y1 = Math.abs(y1-y2);
+
+    //do Output.moveCursor(0,0);
+    //do Output.printInt(x1);
+    //do Output.printString(",");
+    //do Output.printInt(y1);
+    //do Output.printString("(");
+    //do Output.printInt(envelope);
+    //
+    //do Output.printString(")");
+    //do Output.printString("=");
+
+    // to avoid arithmetic overflows
+    let x1 = x1 / settings.getworldResolutionX();
+    let y1 = y1 / settings.getworldResolutionY();
+
+    if ( ((x1+y1)>envelope) | (x1+y1<0) ) { return envelope+3; }
+
+    let x1 = Math.sqrt( (x1*x1) + (y1*y1) );
+    do Output.printInt(x1);
+    do Output.printString(" ");
+
+    return x1;
+  }
+
+  method void applyGravitationalField(Attributes att) {
+    // Applies acceleration to a specific object based on the
+    // proximity to gravitational sinks
+    var int i, g1, g2;
+    let i = 0;
+    while(~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
+      // F=(m1*m2)/d
+
+
+      let i=i+1;
+    }
+
 
     return;
   }
 
 
 
+
+
   method void dispose() {
+    do Memory.deAlloc(bulletList);
+    do Memory.deAlloc(playerSpriteList);
+    do Memory.deAlloc(mathEngine);
     do Memory.deAlloc(this);
     return; }
 
