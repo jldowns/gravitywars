@@ -24,8 +24,8 @@ class Main {
     let i = settings.getPlayerSpriteSideLength()+1;
     // create game objects
     let gs1 = GravitySink.new(10000, 3000, 20, 20);
-    let gs2 = GravitySink.new(2000, 10000, 10, 10);
-    let gs3 = GravitySink.new(20000, 20000, 15, 15);
+    let gs2 = GravitySink.new(2000, 10000, 10, 20);
+    let gs3 = GravitySink.new(20000, 20000, 15, 20);
     let ps1 = Player.new(3000, 3000, 180, i,0);
     let ps2 = Player.new(15000, 15000, 60, i,0);
 

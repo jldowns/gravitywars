@@ -26,13 +26,13 @@ pop local 4
 push constant 2000
 push constant 10000
 push constant 10
-push constant 10
+push constant 20
 call GravitySink.new 4
 pop local 5
 push constant 20000
 push constant 20000
 push constant 15
-push constant 15
+push constant 20
 call GravitySink.new 4
 pop local 6
 push constant 3000

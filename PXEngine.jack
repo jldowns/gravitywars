@@ -363,6 +363,9 @@ class PXEngine {
     // proximity to gravitational sinks
     var int i, m1, m2,d,f;
     var int x1,y1,x2,y2;
+    var int xComp, yComp;
+    var Attributes currentAttributes;
+    var GravitySink currentGS;
 
     let m1 = att.getMass();
     let x1=att.getPx();
@@ -370,13 +373,13 @@ class PXEngine {
 
     let i = 0;
     while(~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
-      let fooGS = gravitySinkList[i];
-      let fooAttributes = fooGS.getAttributes();
-      let x2=fooAttributes.getPx();
-      let y2=fooAttributes.getPy();
-      let m2 = fooAttributes.getMass();
-      //do Output.printInt(x1);
-      //do Output.printString(",");
+      let currentGS = gravitySinkList[i];
+      let currentAttributes = currentGS.getAttributes();
+      let x2=currentAttributes.getPx();
+      let y2=currentAttributes.getPy();
+      let m2 = currentAttributes.getMass();
+      //do Output.printInt(i);
+      //do Output.printString(":");
       //do Output.printInt(y1);
       //do Output.printString(",");
       //do Output.printInt(x2);
@@ -385,24 +388,24 @@ class PXEngine {
       //do Output.printString(" - ");
       // if the distance between two objects is > 10000 then it's negligable
       let d= __getDistance__(x1,y1,x2,y2,1000);
+      //do Output.printInt(m1);
+      //do Output.printString("   ");
 
       // Universal gravitational formula: F=(m1*m2)/d
       let f = (m1*m2)/d;
       // now we're going to skip a few sine calculations by realizing that
       // Fx=F*sin(theta) and sin(theta) = Dx/D, which are two values we know.
-      // and we're going to use m1 and m2 to store the x and y components of
-      // the force to conserve memory.
-      let m1 = f*(Math.abs(x1-x2)/settings.getworldResolutionX()/d); // x component
-      let m2 = f*(Math.abs(y1-y2)/settings.getworldResolutionY()/d); // y component
+      let xComp = f*( (x2-x1)/settings.getworldResolutionX()/d); // x component
+      let yComp = f*( (y2-y1)/settings.getworldResolutionY()/d); // y component
       //do Output.printString("    (");
-      //do Output.printInt(d);
-      //do Output.printString(")(");
+      //do Output.printInt(f);
+      //do Output.printString("   ");
       //do Output.printInt(m1);
       //do Output.printString(",");
       //do Output.printInt(m2);
       //do Output.printString(")=");
       // now apply this gravitational pull to our object
-      do applyCartesianAcceleration(att, m1,m2);
+      do applyCartesianAcceleration(att, xComp,yComp);
       let x2=att.getAx();
       let y2 = att.getAy();
 

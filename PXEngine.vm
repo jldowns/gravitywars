@@ -941,7 +941,7 @@ call Math.multiply 2
 pop argument 1
 push argument 1
 return
-function PXEngine.applyGravitationalField 9
+function PXEngine.applyGravitationalField 13
 push argument 0
 pop pointer 0
 push argument 1
@@ -976,17 +976,17 @@ push this 3
 add
 pop pointer 1
 push that 0
-pop this 7
-push this 7
+pop local 12
+push local 12
 call GravitySink.getAttributes 1
-pop this 5
-push this 5
+pop local 11
+push local 11
 call Attributes.getPx 1
 pop local 7
-push this 5
+push local 11
 call Attributes.getPy 1
 pop local 8
-push this 5
+push local 11
 call Attributes.getMass 1
 pop local 2
 push pointer 0
@@ -1004,33 +1004,31 @@ push local 3
 call Math.divide 2
 pop local 4
 push local 4
-push local 5
 push local 7
+push local 5
 sub
-call Math.abs 1
 push this 0
 call Settings.getworldResolutionX 1
 call Math.divide 2
 push local 3
 call Math.divide 2
 call Math.multiply 2
-pop local 1
+pop local 9
 push local 4
-push local 6
 push local 8
+push local 6
 sub
-call Math.abs 1
 push this 0
 call Settings.getworldResolutionY 1
 call Math.divide 2
 push local 3
 call Math.divide 2
 call Math.multiply 2
-pop local 2
+pop local 10
 push pointer 0
 push argument 1
-push local 1
-push local 2
+push local 9
+push local 10
 call PXEngine.applyCartesianAcceleration 4
 pop temp 0
 push argument 1
