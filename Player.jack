@@ -7,16 +7,30 @@
 class Player {
 
   field PlayerSprite mySprite;
+  field int powerRemaining;
+  field int bulletsRemaing;
+  field bool isDead;
 
   constructor Player new(int startX, int startY,
                          int startRotation, int startRadius, int startMass) {
 
     let mySprite = PlayerSprite.new(startX, startY, startRotation, startRadius, startMass);
+    let powerRemaining = 0;
+    let bulletsRemaing=0;
+    let isDead=false;
     return this;
   }
 
   method Attributes getSpriteAttributes(){ return mySprite.getAttributes(); }
   method PlayerSprite getSprite(){ return mySprite; }
+
+  method int getPowerRemaining() { return powerRemaining; }
+  method void setPowerRemaining(int newValue) { let powerRemaining=newValue; return; }
+  method int getBulletsRemaing() { return bulletsRemaing; }
+  method void setBulletsRemaing(int newValue) { let bulletsRemaing=newValue; return; }
+
+  method void kill() {let isDead=true; return; }
+  method bool getIsDead(){return isDead;}
 
 
 }

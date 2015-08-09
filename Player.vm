@@ -1,5 +1,5 @@
 function Player.new 0
-push constant 1
+push constant 4
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -9,6 +9,12 @@ push argument 3
 push argument 4
 call PlayerSprite.new 5
 pop this 0
+push constant 0
+pop this 1
+push constant 0
+pop this 2
+push constant 0
+pop this 3
 push pointer 0
 return
 function Player.getSpriteAttributes 0
@@ -21,4 +27,41 @@ function Player.getSprite 0
 push argument 0
 pop pointer 0
 push this 0
+return
+function Player.getPowerRemaining 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Player.setPowerRemaining 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 1
+push constant 0
+return
+function Player.getBulletsRemaing 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Player.setBulletsRemaing 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 2
+push constant 0
+return
+function Player.kill 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+pop this 3
+push constant 0
+return
+function Player.getIsDead 0
+push argument 0
+pop pointer 0
+push this 3
 return

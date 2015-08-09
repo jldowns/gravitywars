@@ -98,8 +98,8 @@ class PXEngine {
     do att.backup();
     do att.setNeedsUpdate(true);
 
-    let xComp = (mathEngine.sin100(direction) * accelerationValue) /100;
-    let yComp = (mathEngine.cos100(direction) * accelerationValue*-1) /100;
+    let xComp = (mathEngine.sin100(direction)/10 * accelerationValue) /10;
+    let yComp = (mathEngine.cos100(direction)/10 * accelerationValue*-1) /10;
 
     let previousX = att.getAx();
     let previousY = att.getAy();
@@ -167,10 +167,20 @@ class PXEngine {
 
       // but only apply them if there is something to apply
       if ( ~(x1=0) | ~(x2=0) | ~(y1=0) | ~(y2=0) ){
-
+        //do Output.printInt(x1);
+        //do Output.printString(",");
+        //do Output.printInt(y1);
+        //do Output.printString("-");
         // first, apply space friction
-        let x2= ((x2*10*friction10)/100);
-        let y2= ((y2*10*friction10)/100);
+        let x2= ((x2*1*friction10)/10);
+        let y2= ((y2*1*friction10)/10);
+
+        //do Output.moveCursor(0,0);
+        //do Output.printInt(x2);
+        //do Output.printString(",");
+        //do Output.printInt(y2);
+        //do Output.printString(" | ");
+
 
         do currentAttributes.backup();
         do currentAttributes.setNeedsUpdate(true); // redraw on next frame

@@ -8,6 +8,7 @@ class GameEngine {
   field GXEngine gx;
   field Array bulletList;
   field int powerSetting;
+  field int deBounce; // counts how many frames since the last keystroke
 
   // working variables for methods. Defined here
   // to only make one copy
@@ -28,6 +29,7 @@ class GameEngine {
     let gx = myGXEngine;
     let px = myPXEngine;
     let powerSetting = 20;
+    let deBounce = 0;
     return this;
   }
 
@@ -37,28 +39,22 @@ class GameEngine {
     // Returns when either dead or next turn
       var int action;
       var int foo, bar;
-      var bool isDead;
       var Attributes currentAttributes;
 
       let currentAttributes = player.getSpriteAttributes();
-      let isDead=false;
-
+      let foo = settings.getPlayerStartingPower();
+      do player.setPowerRemaining(foo);
       do updateScreen(true);
 
-      while (~isDead) {
+      while (~player.getIsDead() &
+             (player.getPowerRemaining()>0) ){
         let action = __getInput__();
 
-        if (action=1) {
+        if ( (action=1) & (deBounce<1) ) {
           let foo = currentAttributes.getRotation();
           let bar = settings.getthrusterAcceleration();
           do px.applyAcceleration(currentAttributes,
-                               bar, foo);
-        }
-        if (action=2) {
-          let foo = currentAttributes.getRotation() + 180;
-          let bar = settings.getthrusterAcceleration();
-          do px.applyAcceleration(currentAttributes,
-                                  bar, foo);
+                               powerSetting*bar, foo);
         }
         if (action=3) {
           let foo=settings.getRotationSensativity()*-1;
@@ -76,20 +72,25 @@ class GameEngine {
           let foo=settings.getPowerSensativity();
           do changePower(foo*-1);
         }
-        if (action=7) {
+        if ( (action=7) & (deBounce<1) ) { //shoot
           do __shoot__(currentAttributes);
         }
+        // reset the debounce counter.
+        if (~(action=0)) {let deBounce=settings.getDebounceSetting();}
+        if (deBounce > 0){ let deBounce = deBounce-1; }
 
         let foo = settings.getTimeStep();
         do px.stepForward(foo);
         do updateScreen(false);
         do Sys.wait(foo);
+
         // detect collisions
         do checkForCollisions();
+
         // detect player colision
         let currentAttributes = player.getSpriteAttributes();
         let foo = px.detectCollision(currentAttributes);
-        if ( ~(foo=0) ) { let isDead=true; do Output.printInt(foo);}
+        if ( ~(foo=0) ) { do player.kill(); do Output.printInt(foo);}
       }
 
       return;
@@ -140,14 +141,14 @@ class GameEngine {
       let inputKey = Keyboard.keyPressed();
       //do Output.moveCursor(0,0);
       //do Output.printInt(inputKey);
+      // don't register inputs if a recent input was made.
       let action = settings.getDesiredAction(inputKey);
       return action;
     }
 
-    method void updateScreen(bool forceRedraw)
+    method void updateScreen(bool forceRedraw) {
     // if force redraw is true, it'll blank the screen and
     // redraw everything
-    {
       if (forceRedraw) {
         do Screen.clearScreen();
         do gx.drawScreenEdges();
