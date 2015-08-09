@@ -27,7 +27,7 @@ class GameEngine {
 
     let gx = myGXEngine;
     let px = myPXEngine;
-    let powerSetting = 0;
+    let powerSetting = 20;
     return this;
   }
 
@@ -42,6 +42,8 @@ class GameEngine {
 
       let currentAttributes = player.getSpriteAttributes();
       let isDead=false;
+
+      do updateScreen(true);
 
       while (~isDead) {
         let action = __getInput__();
@@ -80,7 +82,7 @@ class GameEngine {
 
         let foo = settings.getTimeStep();
         do px.stepForward(foo);
-        do gx.drawAllObjects();
+        do updateScreen(false);
         do Sys.wait(foo);
         // detect collisions
         do checkForCollisions();
@@ -123,9 +125,7 @@ class GameEngine {
 
     method void changePower(int powerDelta) {
       let powerSetting = powerSetting + powerDelta;
-      do Output.moveCursor(20,0);
-      do Output.printInt(powerSetting);
-      do Output.printString("   ");
+      do gx.drawPowerIndicator(powerSetting);
       return;
     }
 
@@ -144,11 +144,25 @@ class GameEngine {
       return action;
     }
 
+    method void updateScreen(bool forceRedraw)
+    // if force redraw is true, it'll blank the screen and
+    // redraw everything
+    {
+      if (forceRedraw) {
+        do Screen.clearScreen();
+        do gx.drawScreenEdges();
+        do gx.drawPowerIndicator(powerSetting);
+      }
+      do gx.drawAllObjects(forceRedraw);
+      return;
+    }
+
     method void killBullet(Bullet killBullet) {
       do unregisterBullet(killBullet);
       do gx.unregisterBullet(killBullet);
       do px.unregisterBullet(killBullet);
       do killBullet.dispose();
+      do updateScreen(true);
       return;
   }
 

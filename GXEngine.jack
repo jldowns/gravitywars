@@ -104,17 +104,25 @@ class GXEngine {
     return;
   }
 
-  method void drawAllObjects() {
-    // draws everything in its object lists
+  method void drawAllObjects(bool forceDraw) {
+    // draws everything in its object lists that needs updating.
+    // if forceDraw=true, it'll draw everything regardless.
     var int i;
     var Attributes fooatt;
     var Bullet fooBull;
     var PlayerSprite fooPS;
+    var GravitySink fooGS;
 
     // draw gravitySinks
     let i = 0;
     while(~(gravitySinkList[i] = 0) & (i < settings.getMaxGravitySinks()) ) {
-      do drawGravitySink(gravitySinkList[i], true);
+      let fooGS=gravitySinkList[i];
+      let fooatt = fooGS.getAttributes();
+      if (fooatt.getNeedsUpdate() | forceDraw){ // redraw sprite if it needs to be redrawn.
+        do drawGravitySink(fooGS, false); // erase
+        do drawGravitySink(fooGS, true); // then draw
+        do fooatt.setNeedsUpdate(false);
+      }
       let i=i+1;
     }
     // draw bullets
@@ -122,8 +130,6 @@ class GXEngine {
     while(~(bulletList[i] = 0) & (i < settings.getMaxBullets()) ) {
       let fooBull = bulletList[i];
       let fooatt = fooBull.getAttributes();
-      //do Output.printInt(fooatt.getPx());
-      //do Output.printString("  ");
       do drawBullet(bulletList[i], false);
       do drawBullet(bulletList[i], true);
       do fooatt.setNeedsUpdate(false);
@@ -135,9 +141,9 @@ class GXEngine {
     while(~(playerSpriteList[i]=0) & (i<settings.getMaxPlayers()) ) {
       let fooPS=playerSpriteList[i];
       let fooatt = fooPS.getAttributes();
-      if (fooatt.getNeedsUpdate()){ // redraw sprite if it needs to be redrawn.
-        do drawPlayerSprite(playerSpriteList[i], false); // erase
-        do drawPlayerSprite(playerSpriteList[i], true); // then draw
+      if (fooatt.getNeedsUpdate() | forceDraw){ // redraw sprite if it needs to be redrawn.
+        do drawPlayerSprite(fooPS, false); // erase
+        do drawPlayerSprite(fooPS, true); // then draw
         do fooatt.setNeedsUpdate(false);
       }
       let i=i+1;
@@ -229,6 +235,14 @@ class GXEngine {
     do Screen.drawLine(screenRightX, screenTopY, screenRightX, screenBottomY);
     do Screen.drawLine(screenRightX, screenBottomY, screenLeftX, screenBottomY);
     do Screen.drawLine(screenLeftX, screenBottomY, screenLeftX, screenTopY);
+    return;
+  }
+
+  method void drawPowerIndicator(int powerSetting) {
+    do Output.moveCursor(20,0);
+    do Output.printString("PWR:");
+    do Output.printInt(powerSetting);
+    do Output.printString("   ");
     return;
   }
 
