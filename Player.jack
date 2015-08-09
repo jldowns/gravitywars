@@ -9,9 +9,9 @@ class Player {
   field PlayerSprite mySprite;
 
   constructor Player new(int startX, int startY,
-                         int startRotation, int startRadius) {
+                         int startRotation, int startRadius, int startMass) {
 
-    let mySprite = PlayerSprite.new(startX, startY, startRotation, startRadius);
+    let mySprite = PlayerSprite.new(startX, startY, startRotation, startRadius, startMass);
     return this;
   }
 

@@ -8,7 +8,8 @@ push constant 0
 push constant 0
 push argument 2
 push argument 3
-call Attributes.new 6
+push argument 4
+call Attributes.new 7
 pop this 0
 push pointer 0
 return

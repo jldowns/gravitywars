@@ -24,6 +24,7 @@ class Settings {
   field int rotationSensativity;
   field int spaceFriction; // the friction of deep space
   field int bulletActivationAge;
+  field int bulletMass;
 
   // Keybindings
   field char moveForward, moveBack, moveLeft, moveRight;
@@ -55,6 +56,7 @@ class Settings {
     let rotationSensativity = 2;
     let spaceFriction = 9; // never let this equal zero!
     let bulletActivationAge = 100;
+    let bulletMass=10;
 
     // Keybindings
     let moveForward = 87; // W
@@ -108,6 +110,7 @@ class Settings {
   method int getBulletRadius() { return bulletRadius; }
 
   method int getBulletActivationAge(){return bulletActivationAge;}
+  method int getBulletMass(){ return bulletMass; }
 
 
   method int getDesiredAction (char key) {

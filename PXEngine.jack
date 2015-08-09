@@ -112,6 +112,27 @@ class PXEngine {
     return;
   }
 
+  method void applyCartesianAcceleration(Attributes att, int xComp, int yComp) {
+    // Adds an acceleration to the existing acceleration, using x and y components to
+    // skip the sine lookup
+    var int previousX, previousY;
+
+
+    do att.backup();
+    do att.setNeedsUpdate(true);
+
+    let previousX = att.getAx();
+    let previousY = att.getAy();
+
+    //do Output.printInt(previousX+xComp);
+    //do Output.printString(",");
+    //do Output.printInt(previousY+yComp);
+    //do Output.printString("  ");
+
+    do att.setAcceleration(previousX+xComp, previousY+yComp);
+    return;
+  }
+
   method void applyRotation(Attributes att, int rotation) {
     do att.backup();
     do att.setNeedsUpdate(true);
@@ -127,6 +148,7 @@ class PXEngine {
     var PlayerSprite thisPlayerSprite;
     var Bullet thisBullet;
     var int friction10;
+    var Attributes currentAttributes;
 
     // we're going to divide by a modifier here because a 10 millisecond
     // frame delay might not be what we want for a physics time delta.
@@ -175,35 +197,33 @@ class PXEngine {
     let i = 0;
     while( ~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
       let thisBullet = bulletList[i];
-      let fooAttributes = thisBullet.getAttributes();
+      let currentAttributes = thisBullet.getAttributes();
 
+      // apply gravitation field accelerations
+      do applyGravitationalField(currentAttributes);
 
-      // Apply accelerations
-      let x1 = fooAttributes.getAx();
-      let y1 = fooAttributes.getAy();
-      let x2 = fooAttributes.getVx();
-      let y2 = fooAttributes.getVy();
+      // Apply accelerations to velocities
+      let x1 = currentAttributes.getAx();
+      let y1 = currentAttributes.getAy();
+      let x2 = currentAttributes.getVx();
+      let y2 = currentAttributes.getVy();
 
-      // but only apply them if there is something to apply
-      if ( ~(x1=0) | ~(x2=0) | ~(y1=0) | ~(y2=0) ){
+      // no space friction for bullets!
 
-        // no space friction for bullets!
+      do currentAttributes.backup();
+      do currentAttributes.setNeedsUpdate(true); // redraw on next frame
 
-        do fooAttributes.backup();
-        do fooAttributes.setNeedsUpdate(true); // redraw on next frame
+      do currentAttributes.setVelocity( (x1*timeDelta) + x2,
+                          (y1*timeDelta) + y2 );
+      // and reset accelerations now that we've applied them.
+      do currentAttributes.setAcceleration(0,0);
 
-        do fooAttributes.setVelocity( (x1*timeDelta) + x2,
-                            (y1*timeDelta) + y2 );
-        // and reset accelerations now that we've applied them.
-        do fooAttributes.setAcceleration(0,0);
-
-        // Apply velocitys
-        let x1 = fooAttributes.getPx();
-        let y1 = fooAttributes.getPy();
-        // x2 and y2 already have velocitys assigned
-        do fooAttributes.setCoordinates( (x2*timeDelta) + x1,
-                               (y2*timeDelta) + y1 );
-      }
+      // Apply velocitys
+      let x1 = currentAttributes.getPx();
+      let y1 = currentAttributes.getPy();
+      // x2 and y2 already have velocitys assigned
+      do currentAttributes.setCoordinates( (x2*timeDelta) + x1,
+                             (y2*timeDelta) + y1 );
       let i=i+1;
     }
 
@@ -295,6 +315,7 @@ class PXEngine {
     // To prevent overflows when squaring large numbers, we only
     // calculate the actual distance if the two points are close to the
     // envelope
+    var int i;
     let x1 = Math.abs(x1-x2);
     let y1 = Math.abs(y1-y2);
 
@@ -312,11 +333,27 @@ class PXEngine {
     let x1 = x1 / settings.getworldResolutionX();
     let y1 = y1 / settings.getworldResolutionY();
 
-    if ( ((x1+y1)>envelope) | (x1+y1<0) ) { return envelope+3; }
+    // To avoid overflow, we divide by ten until our calculations
+    // can be done in 15 bits and then remultiply after the calculation
+    let i=1;
+    while ( ((x1*x1)>10000) | ((x1*x1)<0) |
+            ((y1*y1)>10000) | ((y1*y1)<0) |
+            ((x1*x1+y1*y1)>10000) | ((x1*x1+y1*y1)<0) ){
+      let x1 = x1/10;
+      let y1 = y1/10;
+      let i=i+10;
+    }
 
+    //if ( ((x1+y1)>envelope) | (x1+y1<0) ) { return envelope+3; }
+    //do Output.printString(" x1:");
+    //do Output.printInt(x1);
+    //do Output.printString(" y1:");
+    //do Output.printInt(y1);
     let x1 = Math.sqrt( (x1*x1) + (y1*y1) );
-    do Output.printInt(x1);
-    do Output.printString(" ");
+    let x1=x1*i;
+    //do Output.printString(":");
+    //do Output.printInt(x1);
+    //do Output.printString(":");
 
     return x1;
   }
@@ -324,22 +361,55 @@ class PXEngine {
   method void applyGravitationalField(Attributes att) {
     // Applies acceleration to a specific object based on the
     // proximity to gravitational sinks
-    var int i, g1, g2;
+    var int i, m1, m2,d,f;
+    var int x1,y1,x2,y2;
+
+    let m1 = att.getMass();
+    let x1=att.getPx();
+    let y1 = att.getPy();
+
     let i = 0;
     while(~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
-      // F=(m1*m2)/d
+      let fooGS = gravitySinkList[i];
+      let fooAttributes = fooGS.getAttributes();
+      let x2=fooAttributes.getPx();
+      let y2=fooAttributes.getPy();
+      let m2 = fooAttributes.getMass();
+      //do Output.printInt(x1);
+      //do Output.printString(",");
+      //do Output.printInt(y1);
+      //do Output.printString(",");
+      //do Output.printInt(x2);
+      //do Output.printString(",");
+      //do Output.printInt(y2);
+      //do Output.printString(" - ");
+      // if the distance between two objects is > 10000 then it's negligable
+      let d= __getDistance__(x1,y1,x2,y2,1000);
 
+      // Universal gravitational formula: F=(m1*m2)/d
+      let f = (m1*m2)/d;
+      // now we're going to skip a few sine calculations by realizing that
+      // Fx=F*sin(theta) and sin(theta) = Dx/D, which are two values we know.
+      // and we're going to use m1 and m2 to store the x and y components of
+      // the force to conserve memory.
+      let m1 = f*(Math.abs(x1-x2)/settings.getworldResolutionX()/d); // x component
+      let m2 = f*(Math.abs(y1-y2)/settings.getworldResolutionY()/d); // y component
+      //do Output.printString("    (");
+      //do Output.printInt(d);
+      //do Output.printString(")(");
+      //do Output.printInt(m1);
+      //do Output.printString(",");
+      //do Output.printInt(m2);
+      //do Output.printString(")=");
+      // now apply this gravitational pull to our object
+      do applyCartesianAcceleration(att, m1,m2);
+      let x2=att.getAx();
+      let y2 = att.getAy();
 
       let i=i+1;
     }
-
-
     return;
   }
-
-
-
-
 
   method void dispose() {
     do Memory.deAlloc(bulletList);

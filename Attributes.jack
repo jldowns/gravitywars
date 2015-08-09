@@ -25,13 +25,15 @@ class Attributes {
   constructor Attributes new(int startPx, int startPy,
                              int startVx, int startVy,
                              int startRotation,
-                             int startRadius) {
+                             int startRadius,
+                             int startMass) {
     let Px = startPx;
     let Py = startPy;
     let Vx = startVx;
     let Vy = startVy;
     let rotation = startRotation;
     let radius = startRadius;
+    let mass = startMass;
 
     let oldPx = startPx;
     let oldPy = startPy;

@@ -7,10 +7,9 @@ class GravitySink {
   field int gravitationalForce;
 
   constructor GravitySink new(int startX, int startY,
-                              int startRadius, int startGravity) {
+                              int startRadius, int startMass) {
 
-    let attributes = Attributes.new(startX, startY, 0, 0, 0, startRadius);
-    let gravitationalForce = startGravity;
+    let attributes = Attributes.new(startX, startY, 0, 0, 0, startRadius, startMass);
 
     return this;
   }

@@ -194,7 +194,7 @@ goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function GameEngine.__shoot__ 6
+function GameEngine.__shoot__ 7
 push argument 0
 pop pointer 0
 push this 0
@@ -208,12 +208,16 @@ pop local 1
 push argument 1
 call Attributes.getPy 1
 pop local 2
+push this 0
+call Settings.getBulletMass 1
+pop local 6
 push local 1
 push local 2
 push constant 0
 push constant 0
 push local 3
-call Bullet.new 5
+push local 6
+call Bullet.new 6
 pop local 0
 push pointer 0
 push local 0

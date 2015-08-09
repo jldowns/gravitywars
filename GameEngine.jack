@@ -90,14 +90,15 @@ class GameEngine {
       // shoots a bullet from player. playerAttributes
       // is the attributes object from the shooting player
       var Bullet newBullet;
-      var int Px,Py,radius, accel, rotation;
+      var int Px,Py,radius, accel, rotation,mass;
 
       let radius=settings.getBulletRadius();
       let accel=20;
       let Px = playerAttributes.getPx();
       let Py = playerAttributes.getPy();
+      let mass=settings.getBulletMass();
 
-      let newBullet = Bullet.new(Px,Py,0,0,radius);
+      let newBullet = Bullet.new(Px,Py,0,0,radius, mass);
       do registerBullet(newBullet);
       do gx.registerBullet(newBullet);
       do px.registerBullet(newBullet);
