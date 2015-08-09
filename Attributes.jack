@@ -31,6 +31,8 @@ class Attributes {
     let Py = startPy;
     let Vx = startVx;
     let Vy = startVy;
+    let Ax = 0;
+    let Ay = 0;
     let rotation = startRotation;
     let radius = startRadius;
     let mass = startMass;

@@ -6,13 +6,10 @@ class GameEngine {
   field Settings settings;
   field PXEngine px;
   field GXEngine gx;
-  field Bullet newBullet;
   field Array bulletList;
 
   // working variables for methods. Defined here
   // to only make one copy
-  field Attributes fooAttributes;
-  field Bullet fooBullet;
 
   constructor GameEngine new(Settings gameSettings,
                              GXEngine myGXEngine,
@@ -39,36 +36,37 @@ class GameEngine {
       var int action;
       var int foo, bar;
       var bool isDead;
+      var Attributes currentAttributes;
 
-      let fooAttributes = player.getSpriteAttributes();
+      let currentAttributes = player.getSpriteAttributes();
       let isDead=false;
 
       while (~isDead) {
         let action = __getInput__();
 
         if (action=1) {
-          let foo = fooAttributes.getRotation();
+          let foo = currentAttributes.getRotation();
           let bar = settings.getthrusterAcceleration();
-          do px.applyAcceleration(fooAttributes,
+          do px.applyAcceleration(currentAttributes,
                                bar, foo);
         }
         if (action=2) {
-          let foo = fooAttributes.getRotation() + 180;
+          let foo = currentAttributes.getRotation() + 180;
           let bar = settings.getthrusterAcceleration();
-          do px.applyAcceleration(fooAttributes,
+          do px.applyAcceleration(currentAttributes,
                                   bar, foo);
         }
         if (action=3) {
           let foo=settings.getRotationSensativity()*-1;
-          do px.applyRotation(fooAttributes, foo);
+          do px.applyRotation(currentAttributes, foo);
         }
         if (action=4) {
           let foo=settings.getRotationSensativity();
-          do px.applyRotation(fooAttributes, foo);
+          do px.applyRotation(currentAttributes, foo);
         }
         if (action=5) {
           do Output.printString("shoot!");
-          do __shoot__(fooAttributes);
+          do __shoot__(currentAttributes);
         }
 
         let foo = settings.getTimeStep();
@@ -78,8 +76,8 @@ class GameEngine {
         // detect collisions
         do checkForCollisions();
         // detect player colision
-        let fooAttributes = player.getSpriteAttributes();
-        let foo = px.detectCollision(fooAttributes);
+        let currentAttributes = player.getSpriteAttributes();
+        let foo = px.detectCollision(currentAttributes);
         if ( ~(foo=0) ) { let isDead=true; do Output.printInt(foo);}
       }
 
@@ -90,6 +88,7 @@ class GameEngine {
       // shoots a bullet from player. playerAttributes
       // is the attributes object from the shooting player
       var Bullet newBullet;
+      var Attributes currentAttributes;
       var int Px,Py,radius, accel, rotation,mass;
 
       let radius=settings.getBulletRadius();
@@ -105,10 +104,10 @@ class GameEngine {
       if ( newBullet.getIsDead() ) {
         do newBullet.dispose();
       } else {
-        let fooAttributes = newBullet.getAttributes();
+        let currentAttributes = newBullet.getAttributes();
         let rotation = playerAttributes.getRotation();
 
-        do px.applyAcceleration(fooAttributes,accel, rotation);
+        do px.applyAcceleration(currentAttributes,accel, rotation);
       }
       return;
     }
@@ -136,6 +135,8 @@ class GameEngine {
 
   method void checkForCollisions() {
     var int i, collisionCode, activationAge;
+    var Bullet fooBullet;
+    var Attributes currentAttributes;
     // check bullet collisions
     let i = 0;
     while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
@@ -143,8 +144,8 @@ class GameEngine {
       do fooBullet.agePlusOne();
       let activationAge = settings.getBulletActivationAge();
       if (fooBullet.getAge()>activationAge) { // only check for collisions if the bullet is active
-        let fooAttributes = fooBullet.getAttributes();
-        let collisionCode = px.detectCollision(fooAttributes);
+        let currentAttributes = fooBullet.getAttributes();
+        let collisionCode = px.detectCollision(currentAttributes);
         if (~(collisionCode=0)) {do killBullet(fooBullet);}
       }
       let i=i+1;

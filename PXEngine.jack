@@ -9,9 +9,6 @@ class PXEngine {
   field Array gravitySinkList;
   field AdvancedMath mathEngine;
 
-  field Attributes fooAttributes;
-  field PlayerSprite fooPS;
-  field GravitySink fooGS;
 
   constructor PXEngine new(Settings gameSettings) {
     var int i;
@@ -159,14 +156,14 @@ class PXEngine {
     let i = 0;
     while( ~(playerSpriteList[i]=0) & (i<settings.getMaxPlayers()) ) {
       let thisPlayerSprite = playerSpriteList[i];
-      let fooAttributes = thisPlayerSprite.getAttributes();
+      let currentAttributes = thisPlayerSprite.getAttributes();
 
 
       // Apply accelerations
-      let x1 = fooAttributes.getAx();
-      let y1 = fooAttributes.getAy();
-      let x2 = fooAttributes.getVx();
-      let y2 = fooAttributes.getVy();
+      let x1 = currentAttributes.getAx();
+      let y1 = currentAttributes.getAy();
+      let x2 = currentAttributes.getVx();
+      let y2 = currentAttributes.getVy();
 
       // but only apply them if there is something to apply
       if ( ~(x1=0) | ~(x2=0) | ~(y1=0) | ~(y2=0) ){
@@ -175,19 +172,19 @@ class PXEngine {
         let x2= ((x2*10*friction10)/100);
         let y2= ((y2*10*friction10)/100);
 
-        do fooAttributes.backup();
-        do fooAttributes.setNeedsUpdate(true); // redraw on next frame
+        do currentAttributes.backup();
+        do currentAttributes.setNeedsUpdate(true); // redraw on next frame
 
-        do fooAttributes.setVelocity( (x1*timeDelta) + x2,
+        do currentAttributes.setVelocity( (x1*timeDelta) + x2,
                             (y1*timeDelta) + y2 );
         // and reset accelerations now that we've applied them.
-        do fooAttributes.setAcceleration(0,0);
+        do currentAttributes.setAcceleration(0,0);
 
         // Apply velocitys
-        let x1 = fooAttributes.getPx();
-        let y1 = fooAttributes.getPy();
+        let x1 = currentAttributes.getPx();
+        let y1 = currentAttributes.getPy();
         // x2 and y2 already have velocitys assigned
-        do fooAttributes.setCoordinates( (x2*timeDelta) + x1,
+        do currentAttributes.setCoordinates( (x2*timeDelta) + x1,
                                (y2*timeDelta) + y1 );
       }
       let i=i+1;
@@ -242,6 +239,9 @@ class PXEngine {
     var int x1, y1, x2, y2;
     var int r1, r2;
     var int collisionCondition;
+    var Attributes currentAttributes;
+    var PlayerSprite fooPS;
+    var GravitySink fooGS;
 
     let collisionCondition = 0;
     let x1=att.getPx();
@@ -254,12 +254,12 @@ class PXEngine {
     while(~(playerSpriteList[i]=0) & (i<settings.getMaxPlayers()) ) {
 
       let fooPS = playerSpriteList[i];
-      let fooAttributes=fooPS.getAttributes();
+      let currentAttributes=fooPS.getAttributes();
 
-      if (~(att=fooAttributes)) {
-        let x2=fooAttributes.getPx();
-        let y2=fooAttributes.getPy();
-        let r2 =fooAttributes.getRadius();
+      if (~(att=currentAttributes)) {
+        let x2=currentAttributes.getPx();
+        let y2=currentAttributes.getPy();
+        let r2 =currentAttributes.getRadius();
         let dist = __getDistance__(x1,y1,x2,y2,r1+r2);
         if (dist < (r1+r2)) {
             let collisionCondition = i+3+1; // this means you hit a player.
@@ -273,12 +273,12 @@ class PXEngine {
     while(~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
 
       let fooGS = gravitySinkList[i];
-      let fooAttributes=fooGS.getAttributes();
+      let currentAttributes=fooGS.getAttributes();
 
-      if (~(att=fooAttributes)) {
-        let x2=fooAttributes.getPx();
-        let y2=fooAttributes.getPy();
-        let r2 =fooAttributes.getRadius();
+      if (~(att=currentAttributes)) {
+        let x2=currentAttributes.getPx();
+        let y2=currentAttributes.getPy();
+        let r2 =currentAttributes.getRadius();
         //do Output.moveCursor(0,0);
         //do Output.printInt(x1-x2);
         let dist = __getDistance__(x1,y1,x2,y2,r1+r2);

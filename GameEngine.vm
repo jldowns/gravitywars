@@ -1,5 +1,5 @@
 function GameEngine.new 1
-push constant 7
+push constant 4
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -7,7 +7,7 @@ pop this 0
 push this 0
 call Settings.getMaxBullets 1
 call Array.new 1
-pop this 4
+pop this 3
 push constant 0
 pop local 0
 label WHILE_EXP0
@@ -18,7 +18,7 @@ lt
 not
 if-goto WHILE_END0
 push local 0
-push this 4
+push this 3
 add
 push constant 0
 pop temp 0
@@ -37,12 +37,12 @@ push argument 2
 pop this 1
 push pointer 0
 return
-function GameEngine.takeTurn 4
+function GameEngine.takeTurn 5
 push argument 0
 pop pointer 0
 push argument 1
 call Player.getSpriteAttributes 1
-pop this 5
+pop local 4
 push constant 0
 pop local 3
 label WHILE_EXP0
@@ -59,14 +59,14 @@ eq
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 5
+push local 4
 call Attributes.getRotation 1
 pop local 1
 push this 0
 call Settings.getthrusterAcceleration 1
 pop local 2
 push this 1
-push this 5
+push local 4
 push local 2
 push local 1
 call PXEngine.applyAcceleration 4
@@ -78,7 +78,7 @@ eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push this 5
+push local 4
 call Attributes.getRotation 1
 push constant 180
 add
@@ -87,7 +87,7 @@ push this 0
 call Settings.getthrusterAcceleration 1
 pop local 2
 push this 1
-push this 5
+push local 4
 push local 2
 push local 1
 call PXEngine.applyAcceleration 4
@@ -106,7 +106,7 @@ neg
 call Math.multiply 2
 pop local 1
 push this 1
-push this 5
+push local 4
 push local 1
 call PXEngine.applyRotation 3
 pop temp 0
@@ -121,7 +121,7 @@ push this 0
 call Settings.getRotationSensativity 1
 pop local 1
 push this 1
-push this 5
+push local 4
 push local 1
 call PXEngine.applyRotation 3
 pop temp 0
@@ -149,7 +149,7 @@ call String.appendChar 2
 call Output.printString 1
 pop temp 0
 push pointer 0
-push this 5
+push local 4
 call GameEngine.__shoot__ 2
 pop temp 0
 label IF_FALSE4
@@ -171,9 +171,9 @@ call GameEngine.checkForCollisions 1
 pop temp 0
 push argument 1
 call Player.getSpriteAttributes 1
-pop this 5
+pop local 4
 push this 1
-push this 5
+push local 4
 call PXEngine.detectCollision 2
 pop local 1
 push local 1
@@ -194,29 +194,29 @@ goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function GameEngine.__shoot__ 7
+function GameEngine.__shoot__ 8
 push argument 0
 pop pointer 0
 push this 0
 call Settings.getBulletRadius 1
-pop local 3
-push constant 20
 pop local 4
+push constant 20
+pop local 5
 push argument 1
 call Attributes.getPx 1
-pop local 1
+pop local 2
 push argument 1
 call Attributes.getPy 1
-pop local 2
+pop local 3
 push this 0
 call Settings.getBulletMass 1
-pop local 6
-push local 1
+pop local 7
 push local 2
-push constant 0
-push constant 0
 push local 3
-push local 6
+push constant 0
+push constant 0
+push local 4
+push local 7
 call Bullet.new 6
 pop local 0
 push pointer 0
@@ -243,14 +243,14 @@ goto IF_END0
 label IF_FALSE0
 push local 0
 call Bullet.getAttributes 1
-pop this 5
+pop local 1
 push argument 1
 call Attributes.getRotation 1
-pop local 5
+pop local 6
 push this 1
-push this 5
-push local 4
+push local 1
 push local 5
+push local 6
 call PXEngine.applyAcceleration 4
 pop temp 0
 label IF_END0
@@ -287,14 +287,14 @@ call Bullet.dispose 1
 pop temp 0
 push constant 0
 return
-function GameEngine.checkForCollisions 3
+function GameEngine.checkForCollisions 5
 push argument 0
 pop pointer 0
 push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 4
+push this 3
 add
 pop pointer 1
 push that 0
@@ -309,29 +309,29 @@ and
 not
 if-goto WHILE_END0
 push local 0
-push this 4
+push this 3
 add
 pop pointer 1
 push that 0
-pop this 6
-push this 6
+pop local 3
+push local 3
 call Bullet.agePlusOne 1
 pop temp 0
 push this 0
 call Settings.getBulletActivationAge 1
 pop local 2
-push this 6
+push local 3
 call Bullet.getAge 1
 push local 2
 gt
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 6
+push local 3
 call Bullet.getAttributes 1
-pop this 5
+pop local 4
 push this 1
-push this 5
+push local 4
 call PXEngine.detectCollision 2
 pop local 1
 push local 1
@@ -342,7 +342,7 @@ if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push pointer 0
-push this 6
+push local 3
 call GameEngine.killBullet 2
 pop temp 0
 label IF_FALSE1
@@ -362,7 +362,7 @@ push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 4
+push this 3
 add
 pop pointer 1
 push that 0
@@ -399,7 +399,7 @@ pop temp 0
 goto IF_END0
 label IF_FALSE0
 push local 0
-push this 4
+push this 3
 add
 push argument 1
 pop temp 0
@@ -416,7 +416,7 @@ push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 4
+push this 3
 add
 pop pointer 1
 push that 0
@@ -424,7 +424,7 @@ push argument 1
 eq
 not
 push local 0
-push this 4
+push this 3
 add
 pop pointer 1
 push that 0
@@ -446,7 +446,7 @@ pop local 0
 goto WHILE_EXP0
 label WHILE_END0
 push local 0
-push this 4
+push this 3
 add
 pop pointer 1
 push that 0
@@ -456,7 +456,7 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push local 0
-push this 4
+push this 3
 add
 push constant 0
 pop temp 0

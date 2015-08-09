@@ -1,5 +1,5 @@
 function PXEngine.new 1
-push constant 8
+push constant 5
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -410,17 +410,17 @@ push that 0
 pop local 5
 push local 5
 call PlayerSprite.getAttributes 1
-pop this 5
-push this 5
+pop local 8
+push local 8
 call Attributes.getAx 1
 pop local 1
-push this 5
+push local 8
 call Attributes.getAy 1
 pop local 2
-push this 5
+push local 8
 call Attributes.getVx 1
 pop local 3
-push this 5
+push local 8
 call Attributes.getVy 1
 pop local 4
 push local 1
@@ -461,15 +461,15 @@ call Math.multiply 2
 push constant 100
 call Math.divide 2
 pop local 4
-push this 5
+push local 8
 call Attributes.backup 1
 pop temp 0
-push this 5
+push local 8
 push constant 0
 not
 call Attributes.setNeedsUpdate 2
 pop temp 0
-push this 5
+push local 8
 push local 1
 push argument 1
 call Math.multiply 2
@@ -482,18 +482,18 @@ push local 4
 add
 call Attributes.setVelocity 3
 pop temp 0
-push this 5
+push local 8
 push constant 0
 push constant 0
 call Attributes.setAcceleration 3
 pop temp 0
-push this 5
+push local 8
 call Attributes.getPx 1
 pop local 1
-push this 5
+push local 8
 call Attributes.getPy 1
 pop local 2
-push this 5
+push local 8
 push local 3
 push argument 1
 call Math.multiply 2
@@ -609,7 +609,7 @@ goto WHILE_EXP1
 label WHILE_END1
 push constant 0
 return
-function PXEngine.detectCollision 9
+function PXEngine.detectCollision 12
 push argument 0
 pop pointer 0
 push constant 0
@@ -646,24 +646,24 @@ push this 2
 add
 pop pointer 1
 push that 0
-pop this 6
-push this 6
+pop local 10
+push local 10
 call PlayerSprite.getAttributes 1
-pop this 5
+pop local 9
 push argument 1
-push this 5
+push local 9
 eq
 not
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 5
+push local 9
 call Attributes.getPx 1
 pop local 4
-push this 5
+push local 9
 call Attributes.getPy 1
 pop local 5
-push this 5
+push local 9
 call Attributes.getRadius 1
 pop local 7
 push pointer 0
@@ -721,24 +721,24 @@ push this 3
 add
 pop pointer 1
 push that 0
-pop this 7
-push this 7
+pop local 11
+push local 11
 call GravitySink.getAttributes 1
-pop this 5
+pop local 9
 push argument 1
-push this 5
+push local 9
 eq
 not
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
-push this 5
+push local 9
 call Attributes.getPx 1
 pop local 4
-push this 5
+push local 9
 call Attributes.getPy 1
 pop local 5
-push this 5
+push local 9
 call Attributes.getRadius 1
 pop local 7
 push pointer 0

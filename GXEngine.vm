@@ -1,5 +1,5 @@
 function GXEngine.new 1
-push constant 17
+push constant 13
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -294,7 +294,7 @@ pop that 0
 label IF_FALSE0
 push constant 0
 return
-function GXEngine.drawAllObjects 1
+function GXEngine.drawAllObjects 4
 push argument 0
 pop pointer 0
 push constant 0
@@ -349,6 +349,15 @@ lt
 and
 not
 if-goto WHILE_END1
+push local 0
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 2
+call Bullet.getAttributes 1
+pop local 1
 push pointer 0
 push local 0
 push this 3
@@ -368,7 +377,7 @@ push constant 0
 not
 call GXEngine.drawBullet 3
 pop temp 0
-push this 16
+push local 1
 push constant 0
 call Attributes.setNeedsUpdate 2
 pop temp 0
@@ -401,11 +410,11 @@ push this 2
 add
 pop pointer 1
 push that 0
-pop this 13
-push this 13
+pop local 3
+push local 3
 call PlayerSprite.getAttributes 1
-pop this 16
-push this 16
+pop local 1
+push local 1
 call Attributes.getNeedsUpdate 1
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -429,7 +438,7 @@ push constant 0
 not
 call GXEngine.drawPlayerSprite 3
 pop temp 0
-push this 16
+push local 1
 push constant 0
 call Attributes.setNeedsUpdate 2
 pop temp 0
@@ -442,12 +451,12 @@ goto WHILE_EXP2
 label WHILE_END2
 push constant 0
 return
-function GXEngine.drawPlayerSprite 11
+function GXEngine.drawPlayerSprite 12
 push argument 0
 pop pointer 0
 push argument 1
 call PlayerSprite.getAttributes 1
-pop this 16
+pop local 11
 push this 0
 call Settings.getPlayerSpritePointAngle 1
 pop local 3
@@ -458,32 +467,32 @@ push argument 2
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 16
+push local 11
 call Attributes.getPx 1
 push this 5
 call Math.divide 2
 pop local 0
-push this 16
+push local 11
 call Attributes.getPy 1
 push this 6
 call Math.divide 2
 pop local 1
-push this 16
+push local 11
 call Attributes.getRotation 1
 pop local 2
 goto IF_END0
 label IF_FALSE0
-push this 16
+push local 11
 call Attributes.getOldPx 1
 push this 5
 call Math.divide 2
 pop local 0
-push this 16
+push local 11
 call Attributes.getOldPy 1
 push this 6
 call Math.divide 2
 pop local 1
-push this 16
+push local 11
 call Attributes.getOldRotation 1
 pop local 2
 label IF_END0
@@ -562,23 +571,23 @@ call Screen.drawLine 4
 pop temp 0
 push constant 0
 return
-function GXEngine.drawGravitySink 3
+function GXEngine.drawGravitySink 4
 push argument 0
 pop pointer 0
 push argument 1
 call GravitySink.getAttributes 1
-pop this 16
-push this 16
+pop local 3
+push local 3
 call Attributes.getPx 1
 push this 5
 call Math.divide 2
 pop local 0
-push this 16
+push local 3
 call Attributes.getPy 1
 push this 6
 call Math.divide 2
 pop local 1
-push this 16
+push local 3
 call Attributes.getRadius 1
 pop local 2
 push argument 2
@@ -591,42 +600,42 @@ call Screen.drawCircle 3
 pop temp 0
 push constant 0
 return
-function GXEngine.drawBullet 3
+function GXEngine.drawBullet 4
 push argument 0
 pop pointer 0
 push argument 1
 call Bullet.getAttributes 1
-pop this 16
+pop local 3
 push argument 2
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 16
+push local 3
 call Attributes.getPx 1
 push this 5
 call Math.divide 2
 pop local 0
-push this 16
+push local 3
 call Attributes.getPy 1
 push this 6
 call Math.divide 2
 pop local 1
-push this 16
+push local 3
 call Attributes.getRadius 1
 pop local 2
 goto IF_END0
 label IF_FALSE0
-push this 16
+push local 3
 call Attributes.getOldPx 1
 push this 5
 call Math.divide 2
 pop local 0
-push this 16
+push local 3
 call Attributes.getOldPy 1
 push this 6
 call Math.divide 2
 pop local 1
-push this 16
+push local 3
 call Attributes.getOldRadius 1
 pop local 2
 label IF_END0

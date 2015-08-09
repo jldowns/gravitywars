@@ -30,7 +30,7 @@ class Bullet {
   method int getAge(){ return age; }
 
   method void dispose() {
-    do Memory.deAlloc(attributes);
+    do attributes.dispose();
     do Memory.deAlloc(this);
     return; }
 
