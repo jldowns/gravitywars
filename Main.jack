@@ -12,8 +12,10 @@ class Main {
     var GravitySink gs1, gs2, gs3;
     var Player ps1, ps2;
     var PlayerSprite fooSprite;
+    var Array playerArray;
 
     var int i;
+    var int playerTurn;
 
     // load engines
     let settings = Settings.new();
@@ -26,8 +28,13 @@ class Main {
     let gs1 = GravitySink.new(10000, 3000, 20, 20);
     let gs2 = GravitySink.new(2000, 10000, 10, 20);
     let gs3 = GravitySink.new(20000, 20000, 15, 20);
-    let ps1 = Player.new(3000, 3000, 180, i,0);
-    let ps2 = Player.new(15000, 15000, 60, i,0);
+    let ps1 = Player.new("1",3000, 3000, 180, i,0);
+    let ps2 = Player.new("2",15000, 15000, 60, i,0);
+
+    // put players in local player array
+    let playerArray = Array.new(settings.getMaxPlayers());
+    let playerArray[0]=ps1;
+    let playerArray[1]=ps2;
 
     // register game objects
     do gx.registerGravitySink(gs1);
@@ -43,10 +50,31 @@ class Main {
     do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
 
-    do gx.drawScreenEdges();
-    do myGame.takeTurn(ps1);
 
-    do Output.printString("you lose.");
+    let playerTurn=0;
+    while (~ps1.getIsDead() & ~ps2.getIsDead())
+    {
+      do myGame.takeTurn(playerArray[playerTurn]);
+      let playerTurn=playerTurn+1;
+      if (playerTurn > (settings.getMaxPlayers()-1)) { let playerTurn=0;}
+    }
+
+
+
+
+
+    if (ps1.getIsDead() & ps2.getIsDead())
+    {
+      do Output.printString("Both players dead. Draw.");
+    }
+    if (ps1.getIsDead() & ~ps2.getIsDead())
+    {
+      do Output.printString("Player 1 is dead.");
+    }
+    if (~ps1.getIsDead() & ps2.getIsDead())
+    {
+      do Output.printString("Player 2 is dead.");
+    }
 
 
     return;

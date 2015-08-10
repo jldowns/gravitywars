@@ -249,12 +249,8 @@ class GXEngine {
     let width=10;
     let carrotWidth=3;
 
-    let powerIndicatorRatio = maxPower/height;
 
-    do Output.moveCursor(20,0);
-    do Output.printString("PWR:");
-    do Output.printInt(powerSetting);
-    do Output.printString("   ");
+    let powerIndicatorRatio = maxPower/height;
 
     // erase previous power indicator
     do Screen.setColor(false);
@@ -268,7 +264,6 @@ class GXEngine {
     // draw power setting carrot
     do Screen.drawLine(x+width,  y+height-(powerSetting/powerIndicatorRatio),
                     x+width+carrotWidth, y+height-(powerSetting/powerIndicatorRatio) );
-
 
     return;
   }
@@ -292,5 +287,7 @@ class GXEngine {
     do Memory.deAlloc(this);
     return;
   }
+
+  method AdvancedMath borrowMathEngine() { return mathEngine;}
 
 }

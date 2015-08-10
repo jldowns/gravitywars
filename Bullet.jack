@@ -2,14 +2,11 @@
 class Bullet {
 
   field Attributes attributes;
-  field int age; // to avoid acidentally killing the shooting player, bullets have a delyed activation
-
 
   constructor Bullet new(int startPx, int startPy,
                               int startVx, int startVy,
                               int startRadius, int startMass) {
     let attributes = Attributes.new(startPx, startPy, startVx, startVy, 0, startRadius, startMass);
-    let age=0;
     return this;
   }
 
@@ -25,9 +22,6 @@ class Bullet {
 
   method void setIsDead(bool id) {do attributes.setIsDead(id); return; }
   method bool getIsDead() {return attributes.getIsDead(); }
-
-  method void agePlusOne(){let age=age+1; return;}
-  method int getAge(){ return age; }
 
   method void dispose() {
     do attributes.dispose();

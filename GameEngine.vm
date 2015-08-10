@@ -81,10 +81,15 @@ push argument 1
 push local 1
 call Player.setPowerRemaining 2
 pop temp 0
-push pointer 0
-push argument 1
-call GameEngine.updateScreen 2
+push constant 0
+push this 6
+add
+push constant 0
+not
 pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
 label WHILE_EXP0
 push argument 1
 call Player.getIsDead 1
@@ -244,27 +249,42 @@ call Player.setPowerRemaining 2
 pop temp 0
 label IF_FALSE5
 push local 0
-push constant 0
+push constant 8
 eq
-not
+push this 5
+push constant 1
+lt
+and
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
-push this 0
-call Settings.getDebounceSetting 1
-pop this 5
-label IF_FALSE6
-push this 5
+push argument 1
 push constant 0
-gt
+call Player.setPowerRemaining 2
+pop temp 0
+label IF_FALSE6
+push local 0
+push constant 0
+eq
+not
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
+push this 0
+call Settings.getDebounceSetting 1
+pop this 5
+label IF_FALSE7
+push this 5
+push constant 0
+gt
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
 push this 5
 push constant 1
 sub
 pop this 5
-label IF_FALSE7
+label IF_FALSE8
 push this 0
 call Settings.getTimeStep 1
 pop local 1
@@ -293,21 +313,21 @@ push local 1
 push constant 0
 eq
 not
-if-goto IF_TRUE8
-goto IF_FALSE8
-label IF_TRUE8
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
 push argument 1
 call Player.kill 1
 pop temp 0
 push local 1
 call Output.printInt 1
 pop temp 0
-label IF_FALSE8
+label IF_FALSE9
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function GameEngine.__shoot__ 8
+function GameEngine.__shoot__ 10
 push argument 0
 pop pointer 0
 push this 0
@@ -324,6 +344,45 @@ pop local 3
 push this 0
 call Settings.getBulletMass 1
 pop local 7
+push argument 1
+call Attributes.getRotation 1
+pop local 6
+push local 4
+push argument 1
+call Attributes.getRadius 1
+add
+push constant 1
+add
+pop local 8
+push this 2
+call GXEngine.borrowMathEngine 1
+pop local 9
+push local 2
+push local 9
+push local 6
+call AdvancedMath.sin100 2
+push local 8
+call Math.multiply 2
+push constant 100
+call Math.divide 2
+push this 0
+call Settings.getworldResolutionX 1
+call Math.multiply 2
+add
+pop local 2
+push local 3
+push local 9
+push local 6
+call AdvancedMath.cos100 2
+push local 8
+call Math.multiply 2
+push constant 100
+call Math.divide 2
+push this 0
+call Settings.getworldResolutionX 1
+call Math.multiply 2
+sub
+pop local 3
 push local 2
 push local 3
 push constant 0
@@ -357,9 +416,6 @@ label IF_FALSE0
 push local 0
 call Bullet.getAttributes 1
 pop local 1
-push argument 1
-call Attributes.getRotation 1
-pop local 6
 push this 1
 push local 1
 push local 5
@@ -484,6 +540,14 @@ push this 4
 call GXEngine.drawPowerIndicator 4
 pop temp 0
 label IF_FALSE2
+push constant 0
+push constant 0
+call Output.moveCursor 2
+pop temp 0
+push argument 1
+call Player.getName 1
+call Output.printString 1
+pop temp 0
 push this 2
 push constant 1
 push this 6
@@ -588,19 +652,9 @@ add
 pop pointer 1
 push that 0
 pop local 3
-push local 3
-call Bullet.agePlusOne 1
-pop temp 0
 push this 0
 call Settings.getBulletActivationAge 1
 pop local 2
-push local 3
-call Bullet.getAge 1
-push local 2
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
 push local 3
 call Bullet.getAttributes 1
 pop local 4
@@ -612,14 +666,13 @@ push local 1
 push constant 0
 eq
 not
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
 push pointer 0
 push local 3
 call GameEngine.killBullet 2
 pop temp 0
-label IF_FALSE1
 label IF_FALSE0
 push local 0
 push constant 1

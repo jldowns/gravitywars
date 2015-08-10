@@ -51,11 +51,13 @@ class GameEngine {
       let currentAttributes = player.getSpriteAttributes();
       let foo = settings.getPlayerStartingPower();
       do player.setPowerRemaining(foo);
-      do updateScreen(player);
 
-      while (~player.getIsDead() &
+      let forceNextRedraw[0]=true;
+
+      while  (~player.getIsDead() &
              (player.getPowerRemaining()>0) |
              ~(bulletList[0]=0)  ){
+
         let action = __getInput__();
 
         if ( (action=1) & (deBounce<1) ) {
@@ -89,104 +91,124 @@ class GameEngine {
           let foo=player.getPowerRemaining();
           do player.setPowerRemaining(foo-powerSetting);
         }
+        if (action=8 & (deBounce<1) ) { // quit
+          do player.setPowerRemaining(0);
+        }
+
         // reset the debounce counter.
         if (~(action=0)) {let deBounce=settings.getDebounceSetting();}
         if (deBounce > 0){ let deBounce = deBounce-1; }
 
         let foo = settings.getTimeStep();
         do px.stepForward(foo);
+
+
         do updateScreen(player);
         do Sys.wait(foo);
 
         // detect collisions
         do checkForCollisions();
 
+
         // detect player colision
         let currentAttributes = player.getSpriteAttributes();
+
         let foo = px.detectCollision(currentAttributes);
+
         if ( ~(foo=0) ) { do player.kill(); do Output.printInt(foo);}
-      }
 
+      }
       return;
+  }
+
+  method void __shoot__(Attributes playerAttributes) {
+    // shoots a bullet from player. playerAttributes
+    // is the attributes object from the shooting player
+    var Bullet newBullet;
+    var Attributes currentAttributes;
+    var int Px,Py,radius, accel, rotation,mass;
+    var int distanceAhead;
+    var AdvancedMath mx;
+
+    let radius=settings.getBulletRadius();
+    let accel=powerSetting;
+    let Px = playerAttributes.getPx();
+    let Py = playerAttributes.getPy();
+    let mass=settings.getBulletMass();
+    let rotation = playerAttributes.getRotation();
+    let distanceAhead = radius+playerAttributes.getRadius()+1;
+
+    let mx = gx.borrowMathEngine();
+    let Px = Px + (((mx.sin100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
+    let Py = Py - (((mx.cos100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
+
+    let newBullet = Bullet.new(Px,Py,0,0,radius, mass);
+    do registerBullet(newBullet);
+    do gx.registerBullet(newBullet);
+    do px.registerBullet(newBullet);
+    if ( newBullet.getIsDead() ) {
+      do newBullet.dispose();
+    } else {
+      let currentAttributes = newBullet.getAttributes();
+
+      do px.applyAcceleration(currentAttributes,accel, rotation);
     }
+    let forceNextRedraw[2]=true;
+    return;
+  }
 
-    method void __shoot__(Attributes playerAttributes) {
-      // shoots a bullet from player. playerAttributes
-      // is the attributes object from the shooting player
-      var Bullet newBullet;
-      var Attributes currentAttributes;
-      var int Px,Py,radius, accel, rotation,mass;
+  method void changePower(int powerDelta, int powerRemaining) {
+    let powerSetting = powerSetting + powerDelta;
+    if (powerSetting>powerRemaining) { let powerSetting=powerRemaining;}
+    if (powerSetting<0) { let powerSetting=0;}
+    let forceNextRedraw[2]=true;
+    return;
+  }
 
-      let radius=settings.getBulletRadius();
-      let accel=powerSetting;
-      let Px = playerAttributes.getPx();
-      let Py = playerAttributes.getPy();
-      let mass=settings.getBulletMass();
 
-      let newBullet = Bullet.new(Px,Py,0,0,radius, mass);
-      do registerBullet(newBullet);
-      do gx.registerBullet(newBullet);
-      do px.registerBullet(newBullet);
-      if ( newBullet.getIsDead() ) {
-        do newBullet.dispose();
-      } else {
-        let currentAttributes = newBullet.getAttributes();
-        let rotation = playerAttributes.getRotation();
+  method int __getInput__() {
+    // Polls the keyboard for input and look up
+    // the action in the keybinds. Returns an
+    // int coresponding with that action.
+    var char inputKey;
+    var char action;
 
-        do px.applyAcceleration(currentAttributes,accel, rotation);
-      }
-      let forceNextRedraw[2]=true;
-      return;
+    let inputKey = Keyboard.keyPressed();
+    //do Output.moveCursor(0,0);
+    //do Output.printInt(inputKey);
+    // don't register inputs if a recent input was made.
+    let action = settings.getDesiredAction(inputKey);
+    return action;
+  }
+
+  method void updateScreen(Player currentPlayer) {
+    // if force redraw is true, it'll blank the screen and
+    // redraw everything
+
+    var int powerRemaining;
+    var int maxPower;
+
+    if (forceNextRedraw[0]) {
+      do Screen.clearScreen();
     }
-
-    method void changePower(int powerDelta, int powerRemaining) {
-      let powerSetting = powerSetting + powerDelta;
-      if (powerSetting>powerRemaining) { let powerSetting=powerRemaining;}
-      if (powerSetting<0) { let powerSetting=0;}
-      let forceNextRedraw[2]=true;
-      return;
+    if (forceNextRedraw[3]|forceNextRedraw[0]) {
+      do gx.drawScreenEdges();
     }
-
-
-    method int __getInput__() {
-      // Polls the keyboard for input and look up
-      // the action in the keybinds. Returns an
-      // int coresponding with that action.
-      var char inputKey;
-      var char action;
-
-      let inputKey = Keyboard.keyPressed();
-      //do Output.moveCursor(0,0);
-      //do Output.printInt(inputKey);
-      // don't register inputs if a recent input was made.
-      let action = settings.getDesiredAction(inputKey);
-      return action;
+    if (forceNextRedraw[2]|forceNextRedraw[0]) {
+      let powerRemaining=currentPlayer.getPowerRemaining();
+      let maxPower = settings.getPlayerStartingPower();
+      do gx.drawPowerIndicator(maxPower,powerRemaining, powerSetting);
     }
+    do Output.moveCursor(0,0);
+    do Output.printString(currentPlayer.getName());
 
-    method void updateScreen(Player currentPlayer) {
-      // if force redraw is true, it'll blank the screen and
-      // redraw everything
-      var int powerRemaining;
-      var int maxPower;
-
-      if (forceNextRedraw[0]) {
-        do Screen.clearScreen();
-      }
-      if (forceNextRedraw[3]|forceNextRedraw[0]) {
-        do gx.drawScreenEdges();
-      }
-      if (forceNextRedraw[2]|forceNextRedraw[0]) {
-        let powerRemaining=currentPlayer.getPowerRemaining();
-        let maxPower = settings.getPlayerStartingPower();
-        do gx.drawPowerIndicator(maxPower,powerRemaining, powerSetting);
-      }
-      do gx.drawAllObjects(forceNextRedraw[1]|forceNextRedraw[0]);
-      let forceNextRedraw[0]=false;
-      let forceNextRedraw[1]=false;
-      let forceNextRedraw[2]=false;
-      let forceNextRedraw[3]=false;
-      return;
-    }
+    do gx.drawAllObjects(forceNextRedraw[1]|forceNextRedraw[0]);
+    let forceNextRedraw[0]=false;
+    let forceNextRedraw[1]=false;
+    let forceNextRedraw[2]=false;
+    let forceNextRedraw[3]=false;
+    return;
+  }
 
     method void killBullet(Bullet killBullet) {
       do unregisterBullet(killBullet);
@@ -206,13 +228,10 @@ class GameEngine {
     let i = 0;
     while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
       let fooBullet = bulletList[i];
-      do fooBullet.agePlusOne();
       let activationAge = settings.getBulletActivationAge();
-      if (fooBullet.getAge()>activationAge) { // only check for collisions if the bullet is active
-        let currentAttributes = fooBullet.getAttributes();
-        let collisionCode = px.detectCollision(currentAttributes);
-        if (~(collisionCode=0)) {do killBullet(fooBullet);}
-      }
+      let currentAttributes = fooBullet.getAttributes();
+      let collisionCode = px.detectCollision(currentAttributes);
+      if (~(collisionCode=0)) {do killBullet(fooBullet);}
       let i=i+1;
     }
     return;

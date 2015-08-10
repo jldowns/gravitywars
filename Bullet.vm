@@ -1,5 +1,5 @@
 function Bullet.new 0
-push constant 2
+push constant 1
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -11,8 +11,6 @@ push argument 4
 push argument 5
 call Attributes.new 7
 pop this 0
-push constant 0
-pop this 1
 push pointer 0
 return
 function Bullet.getAttributes 0
@@ -54,20 +52,6 @@ push argument 0
 pop pointer 0
 push this 0
 call Attributes.getIsDead 1
-return
-function Bullet.agePlusOne 0
-push argument 0
-pop pointer 0
-push this 1
-push constant 1
-add
-pop this 1
-push constant 0
-return
-function Bullet.getAge 0
-push argument 0
-pop pointer 0
-push this 1
 return
 function Bullet.dispose 0
 push argument 0
