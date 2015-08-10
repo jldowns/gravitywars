@@ -77,6 +77,14 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push local 3
+push local 7
+call GameEngine.registerPlayer 2
+pop temp 0
+push local 3
+push local 8
+call GameEngine.registerPlayer 2
+pop temp 0
 push local 1
 push local 4
 call GXEngine.registerGravitySink 2

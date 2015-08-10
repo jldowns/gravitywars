@@ -7,6 +7,7 @@ class GameEngine {
   field PXEngine px;
   field GXEngine gx;
   field Array bulletList;
+  field Array playerList;
   field int powerSetting;
   field int deBounce; // counts how many frames since the last keystroke
   field Array forceNextRedraw;
@@ -19,12 +20,19 @@ class GameEngine {
                              PXEngine myPXEngine) {
 
     var int i;
+
     let settings = gameSettings;
     let bulletList = Array.new(settings.getMaxBullets());
     // initialize bulletList
     let i=0;
     while (i<settings.getMaxBullets()) {
       let bulletList[i] = 0;
+      let i=i+1; }
+    // initialize playerList
+    let playerList = Array.new(settings.getMaxPlayers());
+    let i=0;
+    while (i<settings.getMaxPlayers()) {
+      let playerList[i] = 0;
       let i=i+1; }
 
     let gx = myGXEngine;
@@ -47,16 +55,17 @@ class GameEngine {
       var int action;
       var int foo, bar;
       var Attributes currentAttributes;
+      var Player fooPlayer;
+      var bool stillMyTurn;
 
+      let stillMyTurn=true;
       let currentAttributes = player.getSpriteAttributes();
       let foo = settings.getPlayerStartingPower();
       do player.setPowerRemaining(foo);
 
       let forceNextRedraw[0]=true;
 
-      while  (~player.getIsDead() &
-             (player.getPowerRemaining()>0) |
-             ~(bulletList[0]=0)  ){
+      while  (stillMyTurn){
 
         let action = __getInput__();
 
@@ -107,16 +116,16 @@ class GameEngine {
         do Sys.wait(foo);
 
         // detect collisions
-        do checkForCollisions();
+        do checkForCollisions(player);
 
-
-        // detect player colision
-        let currentAttributes = player.getSpriteAttributes();
-
-        let foo = px.detectCollision(currentAttributes);
-
-        if ( ~(foo=0) ) { do player.kill(); do Output.printInt(foo);}
-
+        // is it the next dude's turn?
+        let foo = 0;
+        while(~(playerList[foo]=0) & (foo<settings.getMaxPlayers()) ) {
+          let fooPlayer = playerList[foo];
+          let stillMyTurn =stillMyTurn & (~fooPlayer.getIsDead());
+          let foo=foo+1;
+        }
+        let stillMyTurn = (stillMyTurn & (player.getPowerRemaining()>0) ) | ~(bulletList[0]=0);
       }
       return;
   }
@@ -219,19 +228,34 @@ class GameEngine {
       return;
   }
 
-  method void checkForCollisions() {
+  method void checkForCollisions(Player player) {
     var int i, collisionCode, activationAge;
     var Bullet fooBullet;
+    var Player fooPlayer;
     var Attributes currentAttributes;
+
+    // check for player collisions
+    let currentAttributes = player.getSpriteAttributes();
+    let collisionCode = px.detectCollision(currentAttributes);
+
+    if ( ~(collisionCode = 0) ) { do player.kill(); }
+    if ( (collisionCode > 3) ) {
+      let fooPlayer = playerList[collisionCode-4]; // you hit another player
+      do fooPlayer.kill();
+    }
+
 
     // check bullet collisions
     let i = 0;
     while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
       let fooBullet = bulletList[i];
-      let activationAge = settings.getBulletActivationAge();
       let currentAttributes = fooBullet.getAttributes();
       let collisionCode = px.detectCollision(currentAttributes);
       if (~(collisionCode=0)) {do killBullet(fooBullet);}
+      if ( (collisionCode > 3) ) {
+        let fooPlayer = playerList[collisionCode-4]; // you hit another player
+        do fooPlayer.kill();
+      }
       let i=i+1;
     }
     return;
@@ -239,7 +263,7 @@ class GameEngine {
 
 
   method void registerBullet(Bullet newBullet) {
-    // adds an gravitySink to the list
+    // adds an bullet to the list
     var int i;
     let i = 0;
     while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
@@ -261,6 +285,18 @@ class GameEngine {
       let i=i+1;
     }
     if (bulletList[i]=killBullet) { let bulletList[i]=0;}
+    return;
+  }
+
+  method void registerPlayer(Player newPlayer) {
+    // adds an Player to the list
+    var int i;
+    let i = 0;
+    while(~(playerList[i]=0) & (i<settings.getMaxPlayers()) ) {
+      let i=i+1;
+    }
+    let playerList[i] = newPlayer;
+
     return;
   }
 

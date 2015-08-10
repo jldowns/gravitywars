@@ -37,6 +37,8 @@ class Main {
     let playerArray[1]=ps2;
 
     // register game objects
+    do myGame.registerPlayer(ps1);
+    do myGame.registerPlayer(ps2);
     do gx.registerGravitySink(gs1);
     do px.registerGravitySink(gs1);
     do gx.registerGravitySink(gs2);
