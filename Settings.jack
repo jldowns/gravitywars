@@ -41,7 +41,7 @@ class Settings {
     let screenBoundTop=20;
     let screenBoundBottom=220;
     let screenBoundLeft=50;
-    let screenBoundRight=350;
+    let screenBoundRight=450;
 
     let worldResolutionX = 100;
     let worldResolutionY = 100;

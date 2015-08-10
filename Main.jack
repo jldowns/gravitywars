@@ -64,19 +64,12 @@ class Main {
 
 
 
+    let i=0;
+    if (ps1.getIsDead() & ps2.getIsDead()) { let i=0; }
+    if (ps1.getIsDead() & ~ps2.getIsDead()) { let i=2; }
+    if (~ps1.getIsDead() & ps2.getIsDead()) { let i=1; }
 
-    if (ps1.getIsDead() & ps2.getIsDead())
-    {
-      do Output.printString("Both players dead. Draw.");
-    }
-    if (ps1.getIsDead() & ~ps2.getIsDead())
-    {
-      do Output.printString("Player 1 is dead.");
-    }
-    if (~ps1.getIsDead() & ps2.getIsDead())
-    {
-      do Output.printString("Player 2 is dead.");
-    }
+    do gx.displayGameResult(i);
 
 
     return;

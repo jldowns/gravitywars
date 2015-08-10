@@ -8,7 +8,7 @@ push constant 220
 pop this 3
 push constant 50
 pop this 0
-push constant 350
+push constant 450
 pop this 1
 push constant 100
 pop this 6
