@@ -245,7 +245,7 @@ class GXEngine {
     return;
   }
 
-  method void doInto() {
+  method void doIntro() {
 
     var int titleX, titleY;
     var int menuX, menuY;

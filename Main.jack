@@ -22,7 +22,7 @@ class Main {
     let settings = Settings.new();
     let OM = ObjectManager.new(settings);
     let gx = GXEngine.new(settings, OM);
-    let px = PXEngine.new(settings);
+    let px = PXEngine.new(settings, OM);
     let myGame = GameEngine.new(settings, gx, px, OM);
 
     let i = settings.getPlayerSpriteSideLength()+1;
@@ -43,11 +43,6 @@ class Main {
     // register game objects
     do myGame.registerPlayer(ps1);
     do myGame.registerPlayer(ps2);
-    do px.registerGravitySink(gs1);
-    do px.registerGravitySink(gs2);
-    do px.registerGravitySink(gs3);
-    do px.registerGravitySink(gs4);
-    do px.registerGravitySink(gs5);
     let fooSprite = ps1.getSprite();
     do px.registerPlayerSprite(fooSprite);
     let fooSprite = ps2.getSprite();
@@ -70,7 +65,7 @@ class Main {
     do Output.printInt(ps2);
     do Output.printString(")");
 
-    do gx.doInto();
+    do gx.doIntro();
 
     let playerTurn=0;
     while (~ps1.getIsDead() & ~ps2.getIsDead())

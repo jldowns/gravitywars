@@ -4,18 +4,16 @@ call Memory.alloc 1
 pop pointer 0
 push argument 0
 pop this 0
+push argument 1
+pop this 1
 call AdvancedMath.new 0
 pop this 4
 push this 0
 call Settings.getMaxBullets 1
 call Array.new 1
-pop this 1
-push this 0
-call Settings.getMaxPlayers 1
-call Array.new 1
 pop this 2
 push this 0
-call Settings.getMaxGravitySinks 1
+call Settings.getMaxPlayers 1
 call Array.new 1
 pop this 3
 push constant 0
@@ -28,7 +26,7 @@ lt
 not
 if-goto WHILE_END0
 push local 0
-push this 1
+push this 2
 add
 push constant 0
 pop temp 0
@@ -51,7 +49,7 @@ lt
 not
 if-goto WHILE_END1
 push local 0
-push this 2
+push this 3
 add
 push constant 0
 pop temp 0
@@ -74,7 +72,7 @@ lt
 not
 if-goto WHILE_END2
 push local 0
-push this 1
+push this 2
 add
 push constant 0
 pop temp 0
@@ -96,7 +94,7 @@ push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 1
+push this 2
 add
 pop pointer 1
 push that 0
@@ -133,7 +131,7 @@ pop temp 0
 goto IF_END0
 label IF_FALSE0
 push local 0
-push this 1
+push this 2
 add
 push argument 1
 pop temp 0
@@ -150,7 +148,7 @@ push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 1
+push this 2
 add
 pop pointer 1
 push that 0
@@ -158,7 +156,7 @@ push argument 1
 eq
 not
 push local 0
-push this 1
+push this 2
 add
 pop pointer 1
 push that 0
@@ -180,7 +178,7 @@ pop local 0
 goto WHILE_EXP0
 label WHILE_END0
 push local 0
-push this 1
+push this 2
 add
 pop pointer 1
 push that 0
@@ -190,7 +188,7 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push local 0
-push this 1
+push this 2
 add
 push constant 0
 pop temp 0
@@ -207,43 +205,6 @@ push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 2
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
-push local 0
-push this 0
-call Settings.getMaxPlayers 1
-lt
-and
-not
-if-goto WHILE_END0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 0
-push this 2
-add
-push argument 1
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push constant 0
-return
-function PXEngine.registerGravitySink 1
-push argument 0
-pop pointer 0
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
 push this 3
 add
 pop pointer 1
@@ -253,7 +214,7 @@ eq
 not
 push local 0
 push this 0
-call Settings.getMaxGravitySinks 1
+call Settings.getMaxPlayers 1
 lt
 and
 not
@@ -392,7 +353,7 @@ push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 2
+push this 3
 add
 pop pointer 1
 push that 0
@@ -407,7 +368,7 @@ and
 not
 if-goto WHILE_END0
 push local 0
-push this 2
+push this 3
 add
 pop pointer 1
 push that 0
@@ -521,7 +482,7 @@ push constant 0
 pop local 0
 label WHILE_EXP1
 push local 0
-push this 1
+push this 2
 add
 pop pointer 1
 push that 0
@@ -536,7 +497,7 @@ and
 not
 if-goto WHILE_END1
 push local 0
-push this 1
+push this 2
 add
 pop pointer 1
 push that 0
@@ -631,7 +592,7 @@ push constant 0
 pop local 0
 label WHILE_EXP0
 push local 0
-push this 2
+push this 3
 add
 pop pointer 1
 push that 0
@@ -646,7 +607,7 @@ and
 not
 if-goto WHILE_END0
 push local 0
-push this 2
+push this 3
 add
 pop pointer 1
 push that 0
@@ -705,11 +666,9 @@ label WHILE_END0
 push constant 0
 pop local 0
 label WHILE_EXP1
+push this 1
 push local 0
-push this 3
-add
-pop pointer 1
-push that 0
+call ObjectManager.getGravitySink 2
 push constant 0
 eq
 not
@@ -720,11 +679,9 @@ lt
 and
 not
 if-goto WHILE_END1
+push this 1
 push local 0
-push this 3
-add
-pop pointer 1
-push that 0
+call ObjectManager.getGravitySink 2
 pop local 11
 push local 11
 call GravitySink.getAttributes 1
@@ -958,11 +915,9 @@ pop local 6
 push constant 0
 pop local 0
 label WHILE_EXP0
+push this 1
 push local 0
-push this 3
-add
-pop pointer 1
-push that 0
+call ObjectManager.getGravitySink 2
 push constant 0
 eq
 not
@@ -973,11 +928,9 @@ lt
 and
 not
 if-goto WHILE_END0
+push this 1
 push local 0
-push this 3
-add
-pop pointer 1
-push that 0
+call ObjectManager.getGravitySink 2
 pop local 12
 push local 12
 call GravitySink.getAttributes 1
@@ -1050,10 +1003,10 @@ return
 function PXEngine.dispose 0
 push argument 0
 pop pointer 0
-push this 1
+push this 2
 call Memory.deAlloc 1
 pop temp 0
-push this 2
+push this 3
 call Memory.deAlloc 1
 pop temp 0
 push this 4

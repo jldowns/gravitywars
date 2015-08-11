@@ -846,7 +846,7 @@ call Output.printString 1
 pop temp 0
 push constant 0
 return
-function GXEngine.doInto 23
+function GXEngine.doIntro 23
 push argument 0
 pop pointer 0
 push constant 20
