@@ -49,10 +49,8 @@ class Main {
     do px.registerGravitySink(gs4);
     do px.registerGravitySink(gs5);
     let fooSprite = ps1.getSprite();
-    do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
     let fooSprite = ps2.getSprite();
-    do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
     // register game object into the object manager
     do OM.registerGravitySink(gs1);

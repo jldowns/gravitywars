@@ -127,7 +127,6 @@ class ObjectManager {
     return returnAttributes;
   }
 
-
   method Player getPlayer(int i) {
     // returns a Player from the list at array index i.
     // returns zero if empty or if outside array bounds
@@ -147,14 +146,29 @@ class ObjectManager {
     var Player tempPlayer;
     var PlayerSprite returnPS;
 
-    if (i>settings.getMaxPlayers()) {
+    let tempPlayer = getPlayer(i);
+    if (tempPlayer=0) {
       let returnPS = 0;
     } else {
-      let tempPlayer = playerList[i];
       let returnPS = tempPlayer.getSprite();
     }
     return returnPS;
   }
+
+  method Attributes getPlayerSpriteAttributes(int i) {
+    var PlayerSprite returnPS;
+    var Attributes returnAtt;
+
+    let returnPS=getPlayerSprite(i);
+
+    if (returnPS=0) {
+      let returnAtt=0;
+    } else {
+      let returnAtt=returnPS.getAttributes();
+    }
+    return returnAtt;
+  }
+
 
   method GravitySink getGravitySink(int i) {
     // returns a GravitySink from the list at array index i.

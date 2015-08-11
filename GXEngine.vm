@@ -1,102 +1,38 @@
 function GXEngine.new 1
-push constant 12
+push constant 11
 call Memory.alloc 1
 pop pointer 0
 push argument 0
 pop this 0
 call AdvancedMath.new 0
-pop this 3
+pop this 2
 push argument 1
 pop this 1
 push this 0
-call Settings.getMaxPlayers 1
-call Array.new 1
-pop this 2
-push this 0
 call Settings.getworldResolutionX 1
-pop this 4
+pop this 3
 push this 0
 call Settings.getworldResolutionY 1
-pop this 5
+pop this 4
 push this 0
 call Settings.getscreenSizeX 1
-pop this 6
+pop this 5
 push this 0
 call Settings.getscreenSizeY 1
-pop this 7
+pop this 6
 push this 0
 call Settings.getScreenBoundLeft 1
-pop this 8
+pop this 7
 push this 0
 call Settings.getScreenBoundRight 1
-pop this 9
+pop this 8
 push this 0
 call Settings.getScreenBoundTop 1
-pop this 10
+pop this 9
 push this 0
 call Settings.getScreenBoundBottom 1
-pop this 11
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 0
-call Settings.getMaxPlayers 1
-lt
-not
-if-goto WHILE_END0
-push local 0
-push this 2
-add
-push constant 0
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
+pop this 10
 push pointer 0
-return
-function GXEngine.registerPlayerSprite 1
-push argument 0
-pop pointer 0
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 2
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
-push local 0
-push this 0
-call Settings.getMaxPlayers 1
-lt
-and
-not
-if-goto WHILE_END0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 0
-push this 2
-add
-push argument 1
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push constant 0
 return
 function GXEngine.drawAllObjects 5
 push argument 0
@@ -191,29 +127,21 @@ label WHILE_END1
 push constant 0
 pop local 0
 label WHILE_EXP2
+push this 1
 push local 0
-push this 2
-add
-pop pointer 1
-push that 0
+call ObjectManager.getPlayerSprite 2
 push constant 0
 eq
 not
-push local 0
-push this 0
-call Settings.getMaxPlayers 1
-lt
-and
 not
 if-goto WHILE_END2
+push this 1
 push local 0
-push this 2
-add
-pop pointer 1
-push that 0
+call ObjectManager.getPlayerSprite 2
 pop local 3
-push local 3
-call PlayerSprite.getAttributes 1
+push this 1
+push local 0
+call ObjectManager.getPlayerSpriteAttributes 2
 pop local 1
 push local 1
 call Attributes.getNeedsUpdate 1
@@ -264,7 +192,7 @@ goto IF_FALSE0
 label IF_TRUE0
 push local 11
 call Attributes.getPx 1
-push this 4
+push this 3
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
@@ -272,7 +200,7 @@ add
 pop local 0
 push local 11
 call Attributes.getPy 1
-push this 5
+push this 4
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
@@ -285,7 +213,7 @@ goto IF_END0
 label IF_FALSE0
 push local 11
 call Attributes.getOldPx 1
-push this 4
+push this 3
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
@@ -293,7 +221,7 @@ add
 pop local 0
 push local 11
 call Attributes.getOldPy 1
-push this 5
+push this 4
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
@@ -308,7 +236,7 @@ pop local 5
 push local 1
 pop local 6
 push local 0
-push this 3
+push this 2
 push local 2
 call AdvancedMath.sin100 2
 push local 4
@@ -320,7 +248,7 @@ call Math.divide 2
 add
 pop local 5
 push local 1
-push this 3
+push this 2
 push local 2
 call AdvancedMath.cos100 2
 push local 4
@@ -332,7 +260,7 @@ call Math.divide 2
 sub
 pop local 6
 push local 5
-push this 3
+push this 2
 push local 2
 push local 3
 sub
@@ -344,7 +272,7 @@ call Math.divide 2
 sub
 pop local 7
 push local 6
-push this 3
+push this 2
 push local 2
 push local 3
 sub
@@ -356,7 +284,7 @@ call Math.divide 2
 add
 pop local 8
 push local 5
-push this 3
+push this 2
 push local 2
 push local 3
 add
@@ -368,7 +296,7 @@ call Math.divide 2
 sub
 pop local 9
 push local 6
-push this 3
+push this 2
 push local 2
 push local 3
 add
@@ -410,7 +338,7 @@ call GravitySink.getAttributes 1
 pop local 3
 push local 3
 call Attributes.getPx 1
-push this 4
+push this 3
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
@@ -418,7 +346,7 @@ add
 pop local 0
 push local 3
 call Attributes.getPy 1
-push this 5
+push this 4
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
@@ -449,7 +377,7 @@ goto IF_FALSE0
 label IF_TRUE0
 push local 3
 call Attributes.getPx 1
-push this 4
+push this 3
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
@@ -457,7 +385,7 @@ add
 pop local 0
 push local 3
 call Attributes.getPy 1
-push this 5
+push this 4
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
@@ -470,7 +398,7 @@ goto IF_END0
 label IF_FALSE0
 push local 3
 call Attributes.getOldPx 1
-push this 4
+push this 3
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
@@ -478,7 +406,7 @@ add
 pop local 0
 push local 3
 call Attributes.getOldPy 1
-push this 5
+push this 4
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
@@ -505,28 +433,28 @@ push constant 0
 not
 call Screen.setColor 1
 pop temp 0
+push this 7
+push this 9
 push this 8
-push this 10
 push this 9
-push this 10
-call Screen.drawLine 4
-pop temp 0
-push this 9
-push this 10
-push this 9
-push this 11
-call Screen.drawLine 4
-pop temp 0
-push this 9
-push this 11
-push this 8
-push this 11
 call Screen.drawLine 4
 pop temp 0
 push this 8
-push this 11
+push this 9
 push this 8
 push this 10
+call Screen.drawLine 4
+pop temp 0
+push this 8
+push this 10
+push this 7
+push this 10
+call Screen.drawLine 4
+pop temp 0
+push this 7
+push this 10
+push this 7
+push this 9
 call Screen.drawLine 4
 pop temp 0
 push constant 0
@@ -1308,7 +1236,7 @@ push local 22
 push constant 1
 add
 pop local 22
-push this 3
+push this 2
 push local 22
 call AdvancedMath.plantSeed 2
 pop temp 0
@@ -1327,5 +1255,5 @@ return
 function GXEngine.borrowMathEngine 0
 push argument 0
 pop pointer 0
-push this 3
+push this 2
 return
