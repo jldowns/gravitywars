@@ -106,17 +106,9 @@ pop temp 0
 push local 10
 call Player.getSprite 1
 pop local 12
-push local 2
-push local 12
-call PXEngine.registerPlayerSprite 2
-pop temp 0
 push local 11
 call Player.getSprite 1
 pop local 12
-push local 2
-push local 12
-call PXEngine.registerPlayerSprite 2
-pop temp 0
 push local 4
 push local 5
 call ObjectManager.registerGravitySink 2

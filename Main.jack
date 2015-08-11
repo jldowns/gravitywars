@@ -44,9 +44,7 @@ class Main {
     do myGame.registerPlayer(ps1);
     do myGame.registerPlayer(ps2);
     let fooSprite = ps1.getSprite();
-    do px.registerPlayerSprite(fooSprite);
     let fooSprite = ps2.getSprite();
-    do px.registerPlayerSprite(fooSprite);
     // register game object into the object manager
     do OM.registerGravitySink(gs1);
     do OM.registerGravitySink(gs2);

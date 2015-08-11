@@ -366,7 +366,6 @@ class GameEngine {
 
         do registerPlayer(ps1);
         let fooSprite = ps1.getSprite();
-        do px.registerPlayerSprite(fooSprite);
         let playerArray[i] = ps1;
         let i = i+1;
       }
