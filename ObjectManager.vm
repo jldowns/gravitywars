@@ -412,6 +412,47 @@ pop local 0
 label IF_END0
 push local 0
 return
+function ObjectManager.playersStillAlive 3
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+push constant 0
+pop local 0
+push pointer 0
+push local 1
+call ObjectManager.getPlayer 2
+pop local 2
+label WHILE_EXP0
+push local 2
+push constant 0
+eq
+not
+not
+if-goto WHILE_END0
+push local 2
+call Player.getIsDead 1
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+push constant 1
+add
+pop local 0
+label IF_FALSE0
+push local 1
+push constant 1
+add
+pop local 1
+push pointer 0
+push local 1
+call ObjectManager.getPlayer 2
+pop local 2
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+return
 function ObjectManager.getPlayerSprite 2
 push argument 0
 pop pointer 0

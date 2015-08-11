@@ -168,6 +168,23 @@ class ObjectManager {
     return returnPlayer;
   }
 
+  method int playersStillAlive(){
+    var int stillAlive;
+    var int i;
+    var Player currentPlayer;
+
+    let i=0;
+    let stillAlive=0;
+
+    let currentPlayer = getPlayer(i);
+    while(~(currentPlayer=0)) {
+      if (~currentPlayer.getIsDead()) { let stillAlive=stillAlive+1; }
+      let i=i+1;
+      let currentPlayer = getPlayer(i);
+    }
+    return stillAlive;
+}
+
   method PlayerSprite getPlayerSprite(int i) {
     // returns a PlayerSprite from the Player at the list at array index i.
     // returns zero if empty or if outside array bounds

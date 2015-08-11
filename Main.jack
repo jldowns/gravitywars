@@ -12,8 +12,8 @@ class Main {
 
     var GravitySink gs1, gs2, gs3, gs4, gs5;
     var Player ps1, ps2;
+    var Player fooPlayer;
     var PlayerSprite fooSprite;
-    var Array playerArray;
 
     var int i;
     var int playerTurn;
@@ -35,11 +35,6 @@ class Main {
     let ps1 = Player.new("1",3000, 3000, 180, i,0);
     let ps2 = Player.new("2",15000, 15000, 60, i,0);
 
-    // put players in local player array
-    let playerArray = Array.new(settings.getMaxPlayers());
-    let playerArray[0]=ps1;
-    let playerArray[1]=ps2;
-
     // register game object into the object manager
     do OM.registerGravitySink(gs1);
     do OM.registerGravitySink(gs2);
@@ -49,21 +44,13 @@ class Main {
     do OM.registerPlayer(ps1);
     do OM.registerPlayer(ps2);
 
-    let ps1 = playerArray[0];
-    let ps2 = playerArray[1];
-
-    do Output.printString("(");
-    do Output.printInt(ps1);
-    do Output.printString(",");
-    do Output.printInt(ps2);
-    do Output.printString(")");
-
     do gx.doIntro();
 
     let playerTurn=0;
-    while (~ps1.getIsDead() & ~ps2.getIsDead())
+    while (OM.playersStillAlive()>1)
     {
-      do myGame.takeTurn(playerArray[playerTurn]);
+      let fooPlayer=OM.getPlayer(playerTurn);
+      do myGame.takeTurn(fooPlayer);
       let playerTurn=playerTurn+1;
       if (playerTurn > (settings.getMaxPlayers()-1)) { let playerTurn=0;}
     }
