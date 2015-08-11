@@ -35,5 +35,11 @@ class Player {
   method void kill() {let isDead=true; return; }
   method bool getIsDead(){return isDead;}
 
+  method void dispose(){
+    do mySprite.dispose();
+    do Memory.deAlloc(this);
+    return;
+  }
+
 
 }

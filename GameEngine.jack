@@ -316,4 +316,71 @@ class GameEngine {
     return;
   }
 
+  method void generateUniverse(GameEngine myGame, GXEngine gx, PXEngine px,
+                               Settings settings, Array playerArray,
+                               int totalGravity, int numberOfPlayers) {
+      var int playerLength;
+      var int i;
+      var bool cleanCreation;
+      var Player ps1;
+      var GravitySink gs1;
+      var PlayerSprite fooSprite;
+      var Attributes att;
+      var int maxX, maxY;
+      var int rand1, rand2, rand3, rand4;
+      var AdvancedMath mx;
+      let mx=gx.borrowMathEngine();
+
+      let maxX = settings.getscreenSizeX()*settings.getworldResolutionX();
+      let maxY = settings.getscreenSizeY()*settings.getworldResolutionY();
+      let playerLength = settings.getPlayerSpriteSideLength()+1;
+
+      // create players
+      let i=0;
+      while (i<numberOfPlayers) {
+        let cleanCreation = false;
+
+        while (~(cleanCreation)){
+          do Output.printInt(i);
+          let rand1 = mx.random(0,maxX);
+          let rand2 = mx.random(0,maxX);
+          let rand3 = mx.random(0,360);
+          let ps1 = Player.new(i,rand1, rand2, rand3, playerLength,0);
+          let att=ps1.getSpriteAttributes();
+
+          if (px.detectCollision(att)=0){
+            let cleanCreation=true;
+          } else {
+            do ps1.dispose();
+          }
+
+        }
+        //do Output.printString("(");
+        //do Output.printInt(att.getPx());
+        //do Output.printString(",");
+        //do Output.printInt(att.getPy());
+        //do Output.printString(")");
+
+        do registerPlayer(ps1);
+        let fooSprite = ps1.getSprite();
+        do gx.registerPlayerSprite(fooSprite);
+        do px.registerPlayerSprite(fooSprite);
+        let playerArray[i] = ps1;
+        let i = i+1;
+      }
+
+
+
+
+      //let gs1 = GravitySink.new(10000, 3000, 20, 20);
+      //let gs2 = GravitySink.new(2000, 10000, 10, 10);
+      //let gs3 = GravitySink.new(20000, 20000, 15, 15);
+      //let gs4 = GravitySink.new(30000, 15000, 15, 15);
+      //let gs5 = GravitySink.new(25000, 4000, 25, 25);
+      //let ps1 = Player.new("1",3000, 3000, 180, playerLength,0);
+      //let ps2 = Player.new("2",15000, 15000, 60, playerLength,0);
+
+      return;
+  }
+
 }

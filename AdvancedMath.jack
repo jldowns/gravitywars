@@ -10,7 +10,7 @@ class AdvancedMath {
 
   constructor AdvancedMath new(){
 
-    let randomSeed = 77; // we'll reseed this later.
+    let randomSeed = 73; // we'll reseed this later.
 
     let sineLookup = Array.new(72);
     let cosineLookup = Array.new(72);

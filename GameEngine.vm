@@ -991,3 +991,120 @@ push temp 0
 pop that 0
 push constant 0
 return
+function GameEngine.generateUniverse 14
+push argument 0
+pop pointer 0
+push argument 2
+call GXEngine.borrowMathEngine 1
+pop local 13
+push argument 4
+call Settings.getscreenSizeX 1
+push argument 4
+call Settings.getworldResolutionX 1
+call Math.multiply 2
+pop local 7
+push argument 4
+call Settings.getscreenSizeY 1
+push argument 4
+call Settings.getworldResolutionY 1
+call Math.multiply 2
+pop local 8
+push argument 4
+call Settings.getPlayerSpriteSideLength 1
+push constant 1
+add
+pop local 0
+push constant 0
+pop local 1
+label WHILE_EXP0
+push local 1
+push argument 7
+lt
+not
+if-goto WHILE_END0
+push constant 0
+pop local 2
+label WHILE_EXP1
+push local 2
+not
+not
+if-goto WHILE_END1
+push local 1
+call Output.printInt 1
+pop temp 0
+push local 13
+push constant 0
+push local 7
+call AdvancedMath.random 3
+pop local 9
+push local 13
+push constant 0
+push local 7
+call AdvancedMath.random 3
+pop local 10
+push local 13
+push constant 0
+push constant 360
+call AdvancedMath.random 3
+pop local 11
+push local 1
+push local 9
+push local 10
+push local 11
+push local 0
+push constant 0
+call Player.new 6
+pop local 3
+push local 3
+call Player.getSpriteAttributes 1
+pop local 6
+push argument 3
+push local 6
+call PXEngine.detectCollision 2
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+pop local 2
+goto IF_END0
+label IF_FALSE0
+push local 3
+call Player.dispose 1
+pop temp 0
+label IF_END0
+goto WHILE_EXP1
+label WHILE_END1
+push pointer 0
+push local 3
+call GameEngine.registerPlayer 2
+pop temp 0
+push local 3
+call Player.getSprite 1
+pop local 5
+push argument 2
+push local 5
+call GXEngine.registerPlayerSprite 2
+pop temp 0
+push argument 3
+push local 5
+call PXEngine.registerPlayerSprite 2
+pop temp 0
+push local 1
+push argument 5
+add
+push local 3
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return

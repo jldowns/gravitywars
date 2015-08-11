@@ -8,6 +8,7 @@ class Main {
     var GXEngine gx;
     var PXEngine px;
     var GameEngine myGame;
+    var ObjectManager OM;
 
     var GravitySink gs1, gs2, gs3, gs4, gs5;
     var Player ps1, ps2;
@@ -19,7 +20,8 @@ class Main {
 
     // load engines
     let settings = Settings.new();
-    let gx = GXEngine.new(settings);
+    let OM = ObjectManager.new(settings);
+    let gx = GXEngine.new(settings, OM);
     let px = PXEngine.new(settings);
     let myGame = GameEngine.new(settings, gx, px);
 
@@ -41,15 +43,10 @@ class Main {
     // register game objects
     do myGame.registerPlayer(ps1);
     do myGame.registerPlayer(ps2);
-    do gx.registerGravitySink(gs1);
     do px.registerGravitySink(gs1);
-    do gx.registerGravitySink(gs2);
     do px.registerGravitySink(gs2);
-    do gx.registerGravitySink(gs3);
     do px.registerGravitySink(gs3);
-    do gx.registerGravitySink(gs4);
     do px.registerGravitySink(gs4);
-    do gx.registerGravitySink(gs5);
     do px.registerGravitySink(gs5);
     let fooSprite = ps1.getSprite();
     do gx.registerPlayerSprite(fooSprite);
@@ -57,6 +54,23 @@ class Main {
     let fooSprite = ps2.getSprite();
     do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
+    // register game object into the object manager
+    do OM.registerGravitySink(gs1);
+    do OM.registerGravitySink(gs2);
+    do OM.registerGravitySink(gs3);
+    do OM.registerGravitySink(gs4);
+    do OM.registerGravitySink(gs5);
+    do OM.registerPlayer(ps1);
+    do OM.registerPlayer(ps2);
+
+    let ps1 = playerArray[0];
+    let ps2 = playerArray[1];
+
+    do Output.printString("(");
+    do Output.printInt(ps1);
+    do Output.printString(",");
+    do Output.printInt(ps2);
+    do Output.printString(")");
 
     do gx.doInto();
 
@@ -81,25 +95,4 @@ class Main {
 
     return;
   }
-
-  //method void generateUniverse(int totalGravity, int numberOfPlayers) {
-  //
-  //    let i = settings.getPlayerSpriteSideLength()+1;
-  //    // create game objects
-  //    let gs1 = GravitySink.new(10000, 3000, 20, 20);
-  //    let gs2 = GravitySink.new(2000, 10000, 10, 10);
-  //    let gs3 = GravitySink.new(20000, 20000, 15, 15);
-  //    let gs4 = GravitySink.new(30000, 15000, 15, 15);
-  //    let gs5 = GravitySink.new(25000, 4000, 25, 25);
-  //    let ps1 = Player.new("1",3000, 3000, 180, i,0);
-  //    let ps2 = Player.new("2",15000, 15000, 60, i,0);
-  //
-  //    return;
-  //}
-
-  method void dispose(){
-    do Memory.deAlloc(this);
-    return;
-  }
-
 }
