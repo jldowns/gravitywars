@@ -6,6 +6,7 @@ class GameEngine {
   field Settings settings;
   field PXEngine px;
   field GXEngine gx;
+  field ObjectManager OM;
   field Array bulletList;
   field Array playerList;
   field int powerSetting;
@@ -17,11 +18,13 @@ class GameEngine {
 
   constructor GameEngine new(Settings gameSettings,
                              GXEngine myGXEngine,
-                             PXEngine myPXEngine) {
+                             PXEngine myPXEngine,
+                             ObjectManager newOM) {
 
     var int i;
 
     let settings = gameSettings;
+    let OM = newOM;
     let bulletList = Array.new(settings.getMaxBullets());
     // initialize bulletList
     let i=0;
@@ -158,8 +161,8 @@ class GameEngine {
 
     let newBullet = Bullet.new(Px,Py,0,0,radius, mass);
     do registerBullet(newBullet);
-    do gx.registerBullet(newBullet);
     do px.registerBullet(newBullet);
+    do OM.registerBullet(newBullet);
     if ( newBullet.getIsDead() ) {
       do newBullet.dispose();
     } else {
@@ -224,13 +227,13 @@ class GameEngine {
     return;
   }
 
-    method void killBullet(Bullet killBullet) {
-      do unregisterBullet(killBullet);
-      do gx.unregisterBullet(killBullet);
-      do px.unregisterBullet(killBullet);
-      do killBullet.dispose();
-      let forceNextRedraw[0]=true;
-      return;
+  method void killBullet(Bullet killBullet) {
+    do unregisterBullet(killBullet);
+    do px.unregisterBullet(killBullet);
+    do OM.unregisterBullet(killBullet);
+    do killBullet.dispose();
+    let forceNextRedraw[0]=true;
+    return;
   }
 
   method void checkForCollisions(Player player) {

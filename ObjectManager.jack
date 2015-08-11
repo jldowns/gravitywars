@@ -112,6 +112,22 @@ class ObjectManager {
     return returnBullet;
   }
 
+  method Attributes getBulletAttributes(int i) {
+    // returns a Bullet from the list at array index i.
+    // returns zero if empty or if outside array bounds
+    var Bullet returnBullet;
+    var Attributes returnAttributes;
+
+    let returnBullet=getBullet(i);
+    if (returnBullet=0) {
+      let returnAttributes=0;
+    } else {
+      let returnAttributes=returnBullet.getAttributes();
+    }
+    return returnAttributes;
+  }
+
+
   method Player getPlayer(int i) {
     // returns a Player from the list at array index i.
     // returns zero if empty or if outside array bounds

@@ -14,7 +14,8 @@ pop local 2
 push local 0
 push local 1
 push local 2
-call GameEngine.new 3
+push local 4
+call GameEngine.new 4
 pop local 3
 push local 0
 call Settings.getPlayerSpriteSideLength 1
