@@ -198,6 +198,50 @@ push temp 0
 pop that 0
 push constant 0
 return
+function ObjectManager.atMaxBullets 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 3
+add
+pop pointer 1
+push that 0
+push constant 0
+eq
+not
+push local 0
+push this 0
+call Settings.getMaxBullets 1
+lt
+and
+not
+if-goto WHILE_END0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+push this 0
+call Settings.getMaxBullets 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+pop local 1
+goto IF_END0
+label IF_FALSE0
+push constant 0
+pop local 1
+label IF_END0
+push local 1
+return
 function ObjectManager.unregisterBullet 2
 push argument 0
 pop pointer 0

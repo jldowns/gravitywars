@@ -147,30 +147,27 @@ class GameEngine {
     var int distanceAhead;
     var AdvancedMath mx;
 
-    let radius=settings.getBulletRadius();
-    let accel=powerSetting;
-    let Px = playerAttributes.getPx();
-    let Py = playerAttributes.getPy();
-    let mass=settings.getBulletMass();
-    let rotation = playerAttributes.getRotation();
-    let distanceAhead = radius+playerAttributes.getRadius()+2;
+    if (~OM.atMaxBullets()) { // Make sure we can fire more bullets
+      let radius=settings.getBulletRadius();
+      let accel=powerSetting;
+      let Px = playerAttributes.getPx();
+      let Py = playerAttributes.getPy();
+      let mass=settings.getBulletMass();
+      let rotation = playerAttributes.getRotation();
+      let distanceAhead = radius+playerAttributes.getRadius()+2;
 
-    let mx = gx.borrowMathEngine();
-    let Px = Px + (((mx.sin100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
-    let Py = Py - (((mx.cos100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
+      let mx = gx.borrowMathEngine();
+      let Px = Px + (((mx.sin100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
+      let Py = Py - (((mx.cos100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
 
-    let newBullet = Bullet.new(Px,Py,0,0,radius, mass);
-    do registerBullet(newBullet);
-    do px.registerBullet(newBullet);
-    do OM.registerBullet(newBullet);
-    if ( newBullet.getIsDead() ) {
-      do newBullet.dispose();
-    } else {
+      let newBullet = Bullet.new(Px,Py,0,0,radius, mass);
+      do registerBullet(newBullet);
+      do OM.registerBullet(newBullet);
       let currentAttributes = newBullet.getAttributes();
-
       do px.applyAcceleration(currentAttributes,accel, rotation);
+      let forceNextRedraw[2]=true;
     }
-    let forceNextRedraw[2]=true;
+
     return;
   }
 
@@ -229,7 +226,6 @@ class GameEngine {
 
   method void killBullet(Bullet killBullet) {
     do unregisterBullet(killBullet);
-    do px.unregisterBullet(killBullet);
     do OM.unregisterBullet(killBullet);
     do killBullet.dispose();
     let forceNextRedraw[0]=true;

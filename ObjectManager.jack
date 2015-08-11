@@ -73,6 +73,24 @@ class ObjectManager {
     return;
   }
 
+  method bool atMaxBullets() {
+    var int i;
+    var bool returnValue;
+    let i = 0;
+    while(~(bulletList[i]=0) & (i<settings.getMaxBullets()) ) {
+      let i=i+1;
+    }
+    if (i=settings.getMaxBullets()) {
+      let returnValue=true;
+    } else {
+      let returnValue=false;
+    }
+
+    return returnValue;
+  }
+
+
+
   method void unregisterBullet(Bullet killBullet) {
     // removes a bullet object from the bulletList
     // and shifts the other bullets over to fill the gap
