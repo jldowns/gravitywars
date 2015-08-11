@@ -40,11 +40,6 @@ class Main {
     let playerArray[0]=ps1;
     let playerArray[1]=ps2;
 
-    // register game objects
-    do myGame.registerPlayer(ps1);
-    do myGame.registerPlayer(ps2);
-    let fooSprite = ps1.getSprite();
-    let fooSprite = ps2.getSprite();
     // register game object into the object manager
     do OM.registerGravitySink(gs1);
     do OM.registerGravitySink(gs2);
