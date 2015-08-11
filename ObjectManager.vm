@@ -242,6 +242,27 @@ pop local 1
 label IF_END0
 push local 1
 return
+function ObjectManager.bulletsRemain 1
+push argument 0
+pop pointer 0
+push pointer 0
+push constant 0
+call ObjectManager.getBullet 2
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+pop local 0
+goto IF_END0
+label IF_FALSE0
+push constant 0
+not
+pop local 0
+label IF_END0
+push local 0
+return
 function ObjectManager.unregisterBullet 2
 push argument 0
 pop pointer 0

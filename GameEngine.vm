@@ -1,51 +1,24 @@
 function GameEngine.new 1
-push constant 8
+push constant 7
 call Memory.alloc 1
 pop pointer 0
 push argument 0
 pop this 0
 push argument 3
 pop this 3
-push this 0
-call Settings.getMaxBullets 1
-call Array.new 1
-pop this 4
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 0
-call Settings.getMaxBullets 1
-lt
-not
-if-goto WHILE_END0
-push local 0
-push this 4
-add
-push constant 0
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
 push argument 1
 pop this 2
 push argument 2
 pop this 1
 push constant 20
-pop this 5
+pop this 4
 push constant 0
-pop this 6
+pop this 5
 push constant 3
 call Array.new 1
-pop this 7
+pop this 6
 push constant 0
-push this 7
+push this 6
 add
 push constant 0
 pop temp 0
@@ -53,7 +26,7 @@ pop pointer 1
 push temp 0
 pop that 0
 push constant 1
-push this 7
+push this 6
 add
 push constant 0
 pop temp 0
@@ -61,7 +34,7 @@ pop pointer 1
 push temp 0
 pop that 0
 push constant 2
-push this 7
+push this 6
 add
 push constant 0
 pop temp 0
@@ -87,7 +60,7 @@ push local 1
 call Player.setPowerRemaining 2
 pop temp 0
 push constant 0
-push this 7
+push this 6
 add
 push constant 0
 not
@@ -105,7 +78,7 @@ pop local 0
 push local 0
 push constant 1
 eq
-push this 6
+push this 5
 push constant 1
 lt
 and
@@ -120,7 +93,7 @@ call Settings.getthrusterAcceleration 1
 pop local 2
 push this 1
 push local 3
-push this 5
+push this 4
 push local 2
 call Math.multiply 2
 push local 1
@@ -131,12 +104,12 @@ call Player.getPowerRemaining 1
 pop local 1
 push argument 1
 push local 1
-push this 5
+push this 4
 sub
 call Player.setPowerRemaining 2
 pop temp 0
 push constant 2
-push this 7
+push this 6
 add
 push constant 0
 not
@@ -216,7 +189,7 @@ label IF_FALSE4
 push local 0
 push constant 7
 eq
-push this 6
+push this 5
 push constant 1
 lt
 and
@@ -232,7 +205,7 @@ call Player.getPowerRemaining 1
 pop local 1
 push argument 1
 push local 1
-push this 5
+push this 4
 sub
 call Player.setPowerRemaining 2
 pop temp 0
@@ -240,7 +213,7 @@ label IF_FALSE5
 push local 0
 push constant 8
 eq
-push this 6
+push this 5
 push constant 1
 lt
 and
@@ -256,7 +229,7 @@ push local 0
 push constant 0
 eq
 not
-push this 5
+push this 4
 push argument 1
 call Player.getPowerRemaining 1
 gt
@@ -266,7 +239,7 @@ goto IF_FALSE7
 label IF_TRUE7
 push argument 1
 call Player.getPowerRemaining 1
-pop this 5
+pop this 4
 label IF_FALSE7
 push local 0
 push constant 0
@@ -277,18 +250,18 @@ goto IF_FALSE8
 label IF_TRUE8
 push this 0
 call Settings.getDebounceSetting 1
-pop this 6
+pop this 5
 label IF_FALSE8
-push this 6
+push this 5
 push constant 0
 gt
 if-goto IF_TRUE9
 goto IF_FALSE9
 label IF_TRUE9
-push this 6
+push this 5
 push constant 1
 sub
-pop this 6
+pop this 5
 label IF_FALSE9
 push this 0
 call Settings.getTimeStep 1
@@ -341,14 +314,8 @@ call Player.getPowerRemaining 1
 push constant 0
 gt
 and
-push constant 0
-push this 4
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
+push this 3
+call ObjectManager.bulletsRemain 1
 or
 pop local 5
 goto WHILE_EXP0
@@ -367,7 +334,7 @@ label IF_TRUE0
 push this 0
 call Settings.getBulletRadius 1
 pop local 4
-push this 5
+push this 4
 pop local 5
 push argument 1
 call Attributes.getPx 1
@@ -425,10 +392,6 @@ push local 4
 push local 7
 call Bullet.new 6
 pop local 0
-push pointer 0
-push local 0
-call GameEngine.registerBullet 2
-pop temp 0
 push this 3
 push local 0
 call ObjectManager.registerBullet 2
@@ -443,7 +406,7 @@ push local 6
 call PXEngine.applyAcceleration 4
 pop temp 0
 push constant 2
-push this 7
+push this 6
 add
 push constant 0
 not
@@ -457,30 +420,30 @@ return
 function GameEngine.changePower 0
 push argument 0
 pop pointer 0
-push this 5
+push this 4
 push argument 1
 add
-pop this 5
-push this 5
+pop this 4
+push this 4
 push argument 2
 gt
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push argument 2
-pop this 5
+pop this 4
 label IF_FALSE0
-push this 5
+push this 4
 push constant 0
 lt
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push constant 0
-pop this 5
+pop this 4
 label IF_FALSE1
 push constant 2
-push this 7
+push this 6
 add
 push constant 0
 not
@@ -505,7 +468,7 @@ function GameEngine.updateScreen 2
 push argument 0
 pop pointer 0
 push constant 0
-push this 7
+push this 6
 add
 pop pointer 1
 push that 0
@@ -516,12 +479,12 @@ call Screen.clearScreen 0
 pop temp 0
 label IF_FALSE0
 push constant 3
-push this 7
+push this 6
 add
 pop pointer 1
 push that 0
 push constant 0
-push this 7
+push this 6
 add
 pop pointer 1
 push that 0
@@ -534,12 +497,12 @@ call GXEngine.drawScreenEdges 1
 pop temp 0
 label IF_FALSE1
 push constant 2
-push this 7
+push this 6
 add
 pop pointer 1
 push that 0
 push constant 0
-push this 7
+push this 6
 add
 pop pointer 1
 push that 0
@@ -556,7 +519,7 @@ pop local 1
 push this 2
 push local 1
 push local 0
-push this 5
+push this 4
 call GXEngine.drawPowerIndicator 4
 pop temp 0
 label IF_FALSE2
@@ -570,12 +533,12 @@ call Output.printString 1
 pop temp 0
 push this 2
 push constant 1
-push this 7
+push this 6
 add
 pop pointer 1
 push that 0
 push constant 0
-push this 7
+push this 6
 add
 pop pointer 1
 push that 0
@@ -583,7 +546,7 @@ or
 call GXEngine.drawAllObjects 2
 pop temp 0
 push constant 0
-push this 7
+push this 6
 add
 push constant 0
 pop temp 0
@@ -591,7 +554,7 @@ pop pointer 1
 push temp 0
 pop that 0
 push constant 1
-push this 7
+push this 6
 add
 push constant 0
 pop temp 0
@@ -599,7 +562,7 @@ pop pointer 1
 push temp 0
 pop that 0
 push constant 2
-push this 7
+push this 6
 add
 push constant 0
 pop temp 0
@@ -607,7 +570,7 @@ pop pointer 1
 push temp 0
 pop that 0
 push constant 3
-push this 7
+push this 6
 add
 push constant 0
 pop temp 0
@@ -619,10 +582,6 @@ return
 function GameEngine.killBullet 0
 push argument 0
 pop pointer 0
-push pointer 0
-push argument 1
-call GameEngine.unregisterBullet 2
-pop temp 0
 push this 3
 push argument 1
 call ObjectManager.unregisterBullet 2
@@ -631,7 +590,7 @@ push argument 1
 call Bullet.dispose 1
 pop temp 0
 push constant 0
-push this 7
+push this 6
 add
 push constant 0
 not
@@ -705,29 +664,21 @@ label IF_FALSE1
 push constant 0
 pop local 0
 label WHILE_EXP0
+push this 3
 push local 0
-push this 4
-add
-pop pointer 1
-push that 0
+call ObjectManager.getBullet 2
 push constant 0
 eq
 not
-push local 0
-push this 0
-call Settings.getMaxBullets 1
-lt
-and
 not
 if-goto WHILE_END0
+push this 3
 push local 0
-push this 4
-add
-pop pointer 1
-push that 0
+call ObjectManager.getBullet 2
 pop local 5
-push local 5
-call Bullet.getAttributes 1
+push this 3
+push local 0
+call ObjectManager.getBulletAttributes 2
 pop local 7
 push this 1
 push local 7
@@ -791,117 +742,6 @@ add
 pop local 0
 goto WHILE_EXP0
 label WHILE_END0
-push constant 0
-return
-function GameEngine.registerBullet 1
-push argument 0
-pop pointer 0
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 4
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
-push local 0
-push this 0
-call Settings.getMaxBullets 1
-lt
-and
-not
-if-goto WHILE_END0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 0
-push this 0
-call Settings.getMaxBullets 1
-push constant 1
-sub
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push argument 1
-push constant 0
-not
-call Bullet.setIsDead 2
-pop temp 0
-goto IF_END0
-label IF_FALSE0
-push local 0
-push this 4
-add
-push argument 1
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-label IF_END0
-push constant 0
-return
-function GameEngine.unregisterBullet 1
-push argument 0
-pop pointer 0
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 4
-add
-pop pointer 1
-push that 0
-push argument 1
-eq
-not
-push local 0
-push this 4
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
-and
-push local 0
-push this 0
-call Settings.getMaxBullets 1
-lt
-and
-not
-if-goto WHILE_END0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 0
-push this 4
-add
-pop pointer 1
-push that 0
-push argument 1
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push local 0
-push this 4
-add
-push constant 0
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-label IF_FALSE0
 push constant 0
 return
 function GameEngine.generateUniverse 14

@@ -89,6 +89,16 @@ class ObjectManager {
     return returnValue;
   }
 
+  method bool bulletsRemain() {
+    var bool returnValue;
+    if (getBullet(0)=0) {
+      let returnValue=false;
+    } else {
+      let returnValue=true;
+    }
+    return returnValue;
+  }
+
 
 
   method void unregisterBullet(Bullet killBullet) {
