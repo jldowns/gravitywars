@@ -6,8 +6,12 @@ class AdvancedMath {
 
   field Array sineLookup;
   field Array cosineLookup;
+  field int randomSeed;
 
   constructor AdvancedMath new(){
+
+    let randomSeed = 77; // we'll reseed this later.
+
     let sineLookup = Array.new(72);
     let cosineLookup = Array.new(72);
 
@@ -187,6 +191,27 @@ class AdvancedMath {
       let angle = angle+360;
     }
     return cosineLookup[angle/5];
+  }
+
+  method void plantSeed(int newSeed) {
+    // seed the random number generator. Use a seed between 0 and 100.
+    // and we want it to be positive.
+    let randomSeed = 7 * mod(newSeed*10,1011);
+    return;
+  }
+
+  method int random(int min, int max){
+    let randomSeed= randomSeed*max*7;
+    if (randomSeed<1){let randomSeed=(randomSeed*-1);}
+    let randomSeed = mod(randomSeed,max+1) +min;
+
+    return randomSeed;
+  }
+
+  method int mod(int numberToBeModulated, int base) {
+    var int i;
+    let i= Math.divide(numberToBeModulated,base);
+    return numberToBeModulated-(base*i);
   }
 
   method void dispose() {

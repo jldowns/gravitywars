@@ -1,4 +1,4 @@
-function Main.main 13
+function Main.main 15
 call Settings.new 0
 pop local 0
 push local 0
@@ -16,7 +16,7 @@ push local 0
 call Settings.getPlayerSpriteSideLength 1
 push constant 1
 add
-pop local 11
+pop local 13
 push constant 10000
 push constant 3000
 push constant 20
@@ -26,15 +26,27 @@ pop local 4
 push constant 2000
 push constant 10000
 push constant 10
-push constant 20
+push constant 10
 call GravitySink.new 4
 pop local 5
 push constant 20000
 push constant 20000
 push constant 15
-push constant 20
+push constant 15
 call GravitySink.new 4
 pop local 6
+push constant 30000
+push constant 15000
+push constant 15
+push constant 15
+call GravitySink.new 4
+pop local 7
+push constant 25000
+push constant 4000
+push constant 25
+push constant 25
+call GravitySink.new 4
+pop local 8
 push constant 1
 call String.new 1
 push constant 49
@@ -42,10 +54,10 @@ call String.appendChar 2
 push constant 3000
 push constant 3000
 push constant 180
-push local 11
+push local 13
 push constant 0
 call Player.new 6
-pop local 7
+pop local 9
 push constant 1
 call String.new 1
 push constant 50
@@ -53,36 +65,36 @@ call String.appendChar 2
 push constant 15000
 push constant 15000
 push constant 60
-push local 11
+push local 13
 push constant 0
 call Player.new 6
-pop local 8
+pop local 10
 push local 0
 call Settings.getMaxPlayers 1
 call Array.new 1
-pop local 10
+pop local 12
 push constant 0
-push local 10
+push local 12
 add
-push local 7
+push local 9
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
 push constant 1
-push local 10
+push local 12
 add
-push local 8
+push local 10
 pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
 push local 3
-push local 7
+push local 9
 call GameEngine.registerPlayer 2
 pop temp 0
 push local 3
-push local 8
+push local 10
 call GameEngine.registerPlayer 2
 pop temp 0
 push local 1
@@ -109,53 +121,72 @@ push local 2
 push local 6
 call PXEngine.registerGravitySink 2
 pop temp 0
+push local 1
 push local 7
-call Player.getSprite 1
-pop local 9
-push local 1
-push local 9
-call GXEngine.registerPlayerSprite 2
+call GXEngine.registerGravitySink 2
 pop temp 0
 push local 2
-push local 9
-call PXEngine.registerPlayerSprite 2
+push local 7
+call PXEngine.registerGravitySink 2
 pop temp 0
+push local 1
 push local 8
-call Player.getSprite 1
-pop local 9
-push local 1
+call GXEngine.registerGravitySink 2
+pop temp 0
+push local 2
+push local 8
+call PXEngine.registerGravitySink 2
+pop temp 0
 push local 9
+call Player.getSprite 1
+pop local 11
+push local 1
+push local 11
 call GXEngine.registerPlayerSprite 2
 pop temp 0
 push local 2
-push local 9
+push local 11
 call PXEngine.registerPlayerSprite 2
+pop temp 0
+push local 10
+call Player.getSprite 1
+pop local 11
+push local 1
+push local 11
+call GXEngine.registerPlayerSprite 2
+pop temp 0
+push local 2
+push local 11
+call PXEngine.registerPlayerSprite 2
+pop temp 0
+push local 1
+call GXEngine.doInto 1
 pop temp 0
 push constant 0
-pop local 12
+pop local 14
 label WHILE_EXP0
-push local 7
+push local 9
 call Player.getIsDead 1
 not
-push local 8
+push local 10
 call Player.getIsDead 1
 not
 and
 not
 if-goto WHILE_END0
 push local 3
+push local 14
 push local 12
-push local 10
 add
 pop pointer 1
 push that 0
 call GameEngine.takeTurn 2
 pop temp 0
-push local 12
+push local 14
 push constant 1
 add
-pop local 12
-push local 12
+pop local 14
+push local 14
 push local 0
 call Settings.getMaxPlayers 1
 push constant 1
@@ -165,26 +196,26 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 0
-pop local 12
+pop local 14
 label IF_FALSE0
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
-pop local 11
-push local 7
+pop local 13
+push local 9
 call Player.getIsDead 1
-push local 8
+push local 10
 call Player.getIsDead 1
 and
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push constant 0
-pop local 11
+pop local 13
 label IF_FALSE1
-push local 7
+push local 9
 call Player.getIsDead 1
-push local 8
+push local 10
 call Player.getIsDead 1
 not
 and
@@ -192,23 +223,31 @@ if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push constant 2
-pop local 11
+pop local 13
 label IF_FALSE2
-push local 7
+push local 9
 call Player.getIsDead 1
 not
-push local 8
+push local 10
 call Player.getIsDead 1
 and
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
 push constant 1
-pop local 11
+pop local 13
 label IF_FALSE3
 push local 1
-push local 11
+push local 13
 call GXEngine.displayGameResult 2
+pop temp 0
+push constant 0
+return
+function Main.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return

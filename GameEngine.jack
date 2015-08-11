@@ -104,6 +104,11 @@ class GameEngine {
           do player.setPowerRemaining(0);
         }
 
+        // if an action occured, make sure the new power setting is not more than
+        // the amount of power the player has
+        if (~(action=0) & (powerSetting>player.getPowerRemaining())){
+          let powerSetting=player.getPowerRemaining();}
+
         // reset the debounce counter.
         if (~(action=0)) {let deBounce=settings.getDebounceSetting();}
         if (deBounce > 0){ let deBounce = deBounce-1; }
@@ -145,7 +150,7 @@ class GameEngine {
     let Py = playerAttributes.getPy();
     let mass=settings.getBulletMass();
     let rotation = playerAttributes.getRotation();
-    let distanceAhead = radius+playerAttributes.getRadius()+1;
+    let distanceAhead = radius+playerAttributes.getRadius()+2;
 
     let mx = gx.borrowMathEngine();
     let Px = Px + (((mx.sin100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
@@ -183,7 +188,7 @@ class GameEngine {
     var char action;
 
     let inputKey = Keyboard.keyPressed();
-    //do Output.moveCursor(0,0);
+    //do Output.moveCursor(3,0);
     //do Output.printInt(inputKey);
     // don't register inputs if a recent input was made.
     let action = settings.getDesiredAction(inputKey);
@@ -230,6 +235,7 @@ class GameEngine {
 
   method void checkForCollisions(Player player) {
     var int i, collisionCode, activationAge;
+    var int x,y;
     var Bullet fooBullet;
     var Player fooPlayer;
     var Attributes currentAttributes;
@@ -238,7 +244,12 @@ class GameEngine {
     let currentAttributes = player.getSpriteAttributes();
     let collisionCode = px.detectCollision(currentAttributes);
 
-    if ( ~(collisionCode = 0) ) { do player.kill(); }
+    if ( ~(collisionCode = 0) ) {
+      do player.kill();
+      let x=(currentAttributes.getPx()/settings.getworldResolutionX())+settings.getScreenBoundLeft();
+      let y=(currentAttributes.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop();
+      do gx.drawExplosion(x,y,10);
+    }
     if ( (collisionCode > 3) ) {
       let fooPlayer = playerList[collisionCode-4]; // you hit another player
       do fooPlayer.kill();
@@ -251,7 +262,12 @@ class GameEngine {
       let fooBullet = bulletList[i];
       let currentAttributes = fooBullet.getAttributes();
       let collisionCode = px.detectCollision(currentAttributes);
-      if (~(collisionCode=0)) {do killBullet(fooBullet);}
+      if (~(collisionCode=0)) {
+        do killBullet(fooBullet);
+        let x=(currentAttributes.getPx()/settings.getworldResolutionX())+settings.getScreenBoundLeft();
+        let y=(currentAttributes.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop();
+        do gx.drawExplosion(x,y,10);
+      }
       if ( (collisionCode > 3) ) {
         let fooPlayer = playerList[collisionCode-4]; // you hit another player
         do fooPlayer.kill();

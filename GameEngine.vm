@@ -281,24 +281,40 @@ push local 0
 push constant 0
 eq
 not
+push this 5
+push argument 1
+call Player.getPowerRemaining 1
+gt
+and
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
-push this 0
-call Settings.getDebounceSetting 1
-pop this 6
+push argument 1
+call Player.getPowerRemaining 1
+pop this 5
 label IF_FALSE7
-push this 6
+push local 0
 push constant 0
-gt
+eq
+not
 if-goto IF_TRUE8
 goto IF_FALSE8
 label IF_TRUE8
+push this 0
+call Settings.getDebounceSetting 1
+pop this 6
+label IF_FALSE8
+push this 6
+push constant 0
+gt
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
 push this 6
 push constant 1
 sub
 pop this 6
-label IF_FALSE8
+label IF_FALSE9
 push this 0
 call Settings.getTimeStep 1
 pop local 1
@@ -397,7 +413,7 @@ push local 4
 push argument 1
 call Attributes.getRadius 1
 add
-push constant 1
+push constant 2
 add
 pop local 8
 push this 2
@@ -671,14 +687,14 @@ push temp 0
 pop that 0
 push constant 0
 return
-function GameEngine.checkForCollisions 6
+function GameEngine.checkForCollisions 8
 push argument 0
 pop pointer 0
 push argument 1
 call Player.getSpriteAttributes 1
-pop local 5
+pop local 7
 push this 1
-push local 5
+push local 7
 call PXEngine.detectCollision 2
 pop local 1
 push local 1
@@ -690,6 +706,30 @@ goto IF_FALSE0
 label IF_TRUE0
 push argument 1
 call Player.kill 1
+pop temp 0
+push local 7
+call Attributes.getPx 1
+push this 0
+call Settings.getworldResolutionX 1
+call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
+pop local 3
+push local 7
+call Attributes.getPy 1
+push this 0
+call Settings.getworldResolutionY 1
+call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
+pop local 4
+push this 2
+push local 3
+push local 4
+push constant 10
+call GXEngine.drawExplosion 4
 pop temp 0
 label IF_FALSE0
 push local 1
@@ -705,8 +745,8 @@ push this 4
 add
 pop pointer 1
 push that 0
-pop local 4
-push local 4
+pop local 6
+push local 6
 call Player.kill 1
 pop temp 0
 label IF_FALSE1
@@ -733,12 +773,12 @@ push this 3
 add
 pop pointer 1
 push that 0
-pop local 3
-push local 3
-call Bullet.getAttributes 1
 pop local 5
-push this 1
 push local 5
+call Bullet.getAttributes 1
+pop local 7
+push this 1
+push local 7
 call PXEngine.detectCollision 2
 pop local 1
 push local 1
@@ -749,8 +789,32 @@ if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push pointer 0
-push local 3
+push local 5
 call GameEngine.killBullet 2
+pop temp 0
+push local 7
+call Attributes.getPx 1
+push this 0
+call Settings.getworldResolutionX 1
+call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
+pop local 3
+push local 7
+call Attributes.getPy 1
+push this 0
+call Settings.getworldResolutionY 1
+call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
+pop local 4
+push this 2
+push local 3
+push local 4
+push constant 10
+call GXEngine.drawExplosion 4
 pop temp 0
 label IF_FALSE2
 push local 1
@@ -766,8 +830,8 @@ push this 4
 add
 pop pointer 1
 push that 0
-pop local 4
-push local 4
+pop local 6
+push local 6
 call Player.kill 1
 pop temp 0
 label IF_FALSE3

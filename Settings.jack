@@ -41,7 +41,7 @@ class Settings {
     let screenBoundTop=20;
     let screenBoundBottom=220;
     let screenBoundLeft=50;
-    let screenBoundRight=450;
+    let screenBoundRight=330;
 
     let worldResolutionX = 100;
     let worldResolutionY = 100;
@@ -57,7 +57,7 @@ class Settings {
 
     let playerSpritePointAngle = 15; // the point of the player sprite will be twice this, or 30 degrees
     let playerSpriteSideLength = 10;
-    let bulletRadius = 3;
+    let bulletRadius = 2;
 
     let thrusterAcceleration = 25;
     let rotationSensativity = 2;

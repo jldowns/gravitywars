@@ -177,11 +177,14 @@ class GXEngine {
     let x1=x;
     let y1=y;
 
-    let x2=x-((mathEngine.sin100(rot-angle)*length)/100);
-    let y2=y+((mathEngine.cos100(rot-angle)*length)/100);
+    let x1=x+((mathEngine.sin100(rot)*(length/2))/100);
+    let y1=y-((mathEngine.cos100(rot)*(length/2))/100);
 
-    let x3=x-((mathEngine.sin100(rot+angle)*length)/100);
-    let y3=y+((mathEngine.cos100(rot+angle)*length)/100);
+    let x2=x1-((mathEngine.sin100(rot-angle)*length)/100);
+    let y2=y1+((mathEngine.cos100(rot-angle)*length)/100);
+
+    let x3=x1-((mathEngine.sin100(rot+angle)*length)/100);
+    let y3=y1+((mathEngine.cos100(rot+angle)*length)/100);
 
     do Screen.setColor(drawOrErase);
     do Screen.drawLine(x1, y1, x2, y2);
@@ -240,7 +243,7 @@ class GXEngine {
   }
 
   method void drawPowerIndicator(int maxPower, int powerRemaining,int powerSetting) {
-    var int x,y,height, width, carrotWidth;
+    var int x,y,height, width, carrotWidth, carrotHalfHight;
     var int powerIndicatorRatio; // ratio between the power indicator height
                              // and the max amount of power
     let x=1;
@@ -248,6 +251,7 @@ class GXEngine {
     let height=100;
     let width=10;
     let carrotWidth=3;
+    let carrotHalfHight = 3;
 
 
     let powerIndicatorRatio = maxPower/height;
@@ -263,8 +267,41 @@ class GXEngine {
 
     // draw power setting carrot
     do Screen.drawLine(x+width,  y+height-(powerSetting/powerIndicatorRatio),
-                    x+width+carrotWidth, y+height-(powerSetting/powerIndicatorRatio) );
+                    x+width+carrotWidth, y+height-(powerSetting/powerIndicatorRatio)-carrotHalfHight );
+    do Screen.drawLine(x+width,  y+height-(powerSetting/powerIndicatorRatio),
+                    x+width+carrotWidth, y+height-(powerSetting/powerIndicatorRatio)+carrotHalfHight );
 
+    return;
+  }
+
+  method void drawExplosion(int x, int y, int size) {
+    // Draws a cool exposion to the screen
+    do Screen.setColor(true);
+    do Screen.drawCircle(x+(size/2),y,size/2);
+    do Screen.drawCircle(x,y+(size/2),size/2);
+    do Screen.setColor(false);
+    do Screen.drawCircle(x+(size/3),y,size/2);
+    do Screen.drawCircle(x,y+(size/3),size/2);
+    do Screen.setColor(true);
+    do Screen.drawCircle(x-(size/2),y,size/2);
+    do Screen.drawCircle(x,y+(size/2),size/2);
+    do Screen.setColor(false);
+    do Screen.drawCircle(x+(size/3),y,size/2);
+    do Screen.drawCircle(x,y-(size/3),size/2);
+    do Sys.wait(100);
+    do Screen.setColor(false);
+    do Screen.drawCircle(x-(size/3),y,size/2);
+    do Screen.drawCircle(x,y+(size/2),size/2);
+    do Screen.setColor(true);
+    do Screen.drawCircle(x+(size/3),y,size/2);
+    do Screen.drawCircle(x,y-(size/2),size/2);
+    do Screen.setColor(false);
+    do Screen.drawCircle(x+(size/3),y,size/2);
+    do Screen.drawCircle(x,y+(size/2),size/2);
+    do Screen.setColor(true);
+    do Screen.drawCircle(x+(size/3),y,size/2);
+    do Screen.drawCircle(x,y-(size/4),size/2);
+    do Sys.wait(100);
     return;
   }
 
@@ -277,6 +314,93 @@ class GXEngine {
     do Output.printString(" Player ");
     do Output.printInt(gameResult);
     do Output.printString(" Wins! ");
+
+
+    return;
+  }
+
+  method void doInto() {
+
+    var int titleX, titleY;
+    var int menuX, menuY;
+    var int currentSelection, finalSelection;
+    var int carrotX, carrotY, carrotY0;
+    var int carrotHalfHight, carrotWidth;
+    var int numberOfSelections;
+    var int currentNumberOfPlayers;
+    var int distanceBetweenItems;
+    var char selectionKey;
+    var char upKey, downKey, leftKey, rightKey;
+    var char carrot, spaceChar, enterChar;
+    var int randomSeed;
+
+    let titleX = 20;
+    let titleY = 2;
+    let menuX = 10;
+    let menuY = 5;
+    let distanceBetweenItems=2;
+    let numberOfSelections = 3;
+    let upKey = 131;
+    let downKey = 133;
+    let leftKey = 130;
+    let rightKey = 132;
+    let carrot = 62;
+    let spaceChar=32;
+    let enterChar = 128;
+
+    let carrotX = 20;
+    let finalSelection=0;
+    let currentSelection =1;
+    let currentNumberOfPlayers=2;
+
+    // print title
+    do Output.moveCursor(titleY, titleX);
+    do Output.printString("GRAVITY WARS!");
+
+
+    // print menu
+    do Output.moveCursor(menuY,menuX);
+    do Output.printString("Engage in a GRAVITY WAR");
+    do Output.moveCursor(menuY+distanceBetweenItems,menuX);
+    do Output.printString("Number of PLAYERS: ");
+    do Output.printInt(currentNumberOfPlayers);
+    do Output.moveCursor(menuY+(distanceBetweenItems*2),menuX);
+    do Output.printString("Instructions");
+
+
+    // Print cursor
+    do Output.moveCursor(currentSelection-1+menuY,menuX-1);
+    do Output.printChar(carrot);
+
+    while (finalSelection=0){
+      let selectionKey=Keyboard.keyPressed();
+
+      // Start Keyboard Handling
+      if ( ~(selectionKey=0) ) {
+        do Output.moveCursor((currentSelection-1)*distanceBetweenItems+menuY,menuX-1);
+        do Output.printChar(spaceChar);}
+
+      if ( (selectionKey=upKey) & (currentSelection>1) ){let currentSelection = currentSelection-1; }
+      if ( (selectionKey=downKey) & (currentSelection<numberOfSelections) ){let currentSelection = currentSelection+1;}
+      if ( (selectionKey=rightKey) & (currentNumberOfPlayers<settings.getMaxPlayers()) & (currentSelection=2) )
+        {let currentNumberOfPlayers = currentNumberOfPlayers+1;}
+      if ( (selectionKey=leftKey) & (currentNumberOfPlayers>0) & (currentSelection=2) )
+        {let currentNumberOfPlayers = currentNumberOfPlayers-1;}
+      if ( (selectionKey=spaceChar) | (selectionKey=enterChar) ){let finalSelection = currentSelection;}
+
+      // reprint carrot
+      if (~(selectionKey=0)) {
+        do Output.moveCursor((currentSelection-1)*distanceBetweenItems+menuY,menuX-1);
+        do Output.printChar(carrot);
+        do Sys.wait(200);}
+      // reprint number of players
+      if ( (selectionKey=rightKey) | (selectionKey=leftKey)) {
+        do Output.moveCursor(menuY+distanceBetweenItems,menuX+19);
+        do Output.printInt(currentNumberOfPlayers);}
+
+      let randomSeed = randomSeed+1;
+      do mathEngine.plantSeed(randomSeed);
+    }
 
 
     return;

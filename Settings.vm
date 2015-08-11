@@ -8,7 +8,7 @@ push constant 220
 pop this 3
 push constant 50
 pop this 0
-push constant 450
+push constant 330
 pop this 1
 push constant 100
 pop this 6
@@ -32,7 +32,7 @@ push constant 15
 pop this 13
 push constant 10
 pop this 14
-push constant 3
+push constant 2
 pop this 15
 push constant 25
 pop this 16

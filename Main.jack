@@ -9,7 +9,7 @@ class Main {
     var PXEngine px;
     var GameEngine myGame;
 
-    var GravitySink gs1, gs2, gs3;
+    var GravitySink gs1, gs2, gs3, gs4, gs5;
     var Player ps1, ps2;
     var PlayerSprite fooSprite;
     var Array playerArray;
@@ -26,8 +26,10 @@ class Main {
     let i = settings.getPlayerSpriteSideLength()+1;
     // create game objects
     let gs1 = GravitySink.new(10000, 3000, 20, 20);
-    let gs2 = GravitySink.new(2000, 10000, 10, 20);
-    let gs3 = GravitySink.new(20000, 20000, 15, 20);
+    let gs2 = GravitySink.new(2000, 10000, 10, 10);
+    let gs3 = GravitySink.new(20000, 20000, 15, 15);
+    let gs4 = GravitySink.new(30000, 15000, 15, 15);
+    let gs5 = GravitySink.new(25000, 4000, 25, 25);
     let ps1 = Player.new("1",3000, 3000, 180, i,0);
     let ps2 = Player.new("2",15000, 15000, 60, i,0);
 
@@ -45,6 +47,10 @@ class Main {
     do px.registerGravitySink(gs2);
     do gx.registerGravitySink(gs3);
     do px.registerGravitySink(gs3);
+    do gx.registerGravitySink(gs4);
+    do px.registerGravitySink(gs4);
+    do gx.registerGravitySink(gs5);
+    do px.registerGravitySink(gs5);
     let fooSprite = ps1.getSprite();
     do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
@@ -52,6 +58,7 @@ class Main {
     do gx.registerPlayerSprite(fooSprite);
     do px.registerPlayerSprite(fooSprite);
 
+    do gx.doInto();
 
     let playerTurn=0;
     while (~ps1.getIsDead() & ~ps2.getIsDead())
@@ -74,4 +81,25 @@ class Main {
 
     return;
   }
+
+  //method void generateUniverse(int totalGravity, int numberOfPlayers) {
+  //
+  //    let i = settings.getPlayerSpriteSideLength()+1;
+  //    // create game objects
+  //    let gs1 = GravitySink.new(10000, 3000, 20, 20);
+  //    let gs2 = GravitySink.new(2000, 10000, 10, 10);
+  //    let gs3 = GravitySink.new(20000, 20000, 15, 15);
+  //    let gs4 = GravitySink.new(30000, 15000, 15, 15);
+  //    let gs5 = GravitySink.new(25000, 4000, 25, 25);
+  //    let ps1 = Player.new("1",3000, 3000, 180, i,0);
+  //    let ps2 = Player.new("2",15000, 15000, 60, i,0);
+  //
+  //    return;
+  //}
+
+  method void dispose(){
+    do Memory.deAlloc(this);
+    return;
+  }
+
 }
