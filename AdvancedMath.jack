@@ -10,7 +10,7 @@ class AdvancedMath {
 
   constructor AdvancedMath new(){
 
-    let randomSeed = 51; // we'll reseed this later.
+    let randomSeed = 500; // we'll reseed this later.
 
     let sineLookup = Array.new(72);
     let cosineLookup = Array.new(72);
@@ -199,7 +199,7 @@ class AdvancedMath {
     let newSeed=newSeed*7;
     //if (newSeed<1){let newSeed=(newSeed*-1);}
 
-    let randomSeed = mod(newSeed,101);
+    let randomSeed = mod(newSeed,1009);
 
     return;
   }
@@ -230,32 +230,31 @@ class AdvancedMath {
   }
 
   method int random(int min, int max){
-    var int i,returnNumber,returnNumberMinus,j;
+    // returns a randomish number between min and max.
+    // if someone requests a number larger than 1000,
+    // we scale the request down to accomodate the hardware
+    // limitations, and then scale the answer back up at the end.
+    var int ratio, oldMax, scaledAnswer;
+
+    let ratio=1;
+    let oldMax=max;
+
+    if (max>1000) {
+      let ratio = (max)/1000;
+      // if you request a max of 2500, this will set the scaled max
+      // at 1250. The avoids low-number biases.
+      let max=1009+(max-(1000*ratio));
+    }
+
     do plantSeed(randomSeed);
+    let scaledAnswer = mod(randomSeed*7,max+1);
 
-    //if (randomSeed<1){let randomSeed=(randomSeed*-1);}
-    let returnNumber=1;
-    let i=1;
-    while((i < max)& (i>0)) {
-      do plantSeed(randomSeed);
-      let returnNumberMinus=returnNumber;
-      let returnNumber = returnNumber + (i*mod(randomSeed,2));
-      let i=i*2;
-      //do Output.printInt(i);
-
-      //do Output.printString("-");
-      //do Output.printInt(returnNumber);
-      //do Output.printString("-");
-      //do Sys.wait(50);
-
-
-      //if (j>20){let randomSeed=51;let i = 1;let j=0;}
+    if (max>1000) {
+      let scaledAnswer=mod(scaledAnswer*ratio+min,oldMax+1);
     }
-    //do plantSeed(randomSeed);
-    //let returnNumber = returnNumber + (i*mod(randomSeed,2));
-    return returnNumber*3;
-    //return mod(returnNumber*3,max+1);
-    }
+
+    return scaledAnswer;
+  }
 
   method int exp(int a, int b) {
     // returns a^b

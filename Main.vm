@@ -58,30 +58,6 @@ push constant 25
 push constant 25
 call GravitySink.new 4
 pop local 10
-label WHILE_EXP0
-push constant 0
-not
-not
-if-goto WHILE_END0
-push constant 50
-call Sys.wait 1
-pop temp 0
-push local 5
-push constant 0
-push constant 10000
-call AdvancedMath.random 3
-call Output.printInt 1
-pop temp 0
-push constant 2
-call String.new 1
-push constant 32
-call String.appendChar 2
-push constant 32
-call String.appendChar 2
-call Output.printString 1
-pop temp 0
-goto WHILE_EXP0
-label WHILE_END0
 push local 1
 call GXEngine.doIntro 1
 pop temp 0
@@ -114,13 +90,13 @@ call ObjectManager.registerGravitySink 2
 pop temp 0
 push constant 0
 pop local 16
-label WHILE_EXP1
+label WHILE_EXP0
 push local 4
 call ObjectManager.playersStillAlive 1
 push constant 1
 gt
 not
-if-goto WHILE_END1
+if-goto WHILE_END0
 push local 4
 push local 16
 call ObjectManager.getPlayer 2
@@ -145,8 +121,8 @@ label IF_TRUE0
 push constant 0
 pop local 16
 label IF_FALSE0
-goto WHILE_EXP1
-label WHILE_END1
+goto WHILE_EXP0
+label WHILE_END0
 push constant 0
 pop local 15
 push local 1

@@ -39,16 +39,16 @@ class Main {
     //let ps2 = Player.new("2",15000, 15000, 60, i,0);
 
 
-    while(true) {
-      //do Output.printInt(settings.getscreenSizeX()*settings.getworldResolutionX());
-
-    //let foo=Keyboard.readInt("Mod: ");
-    //let bar=Keyboard.readInt("Mod: ");
-    do Sys.wait(50);
-    do Output.printInt(mx.random(0,10000));
-    do Output.printString("  ");
-
-    }
+    //while(true) {
+    //  //do Output.printInt(settings.getscreenSizeX()*settings.getworldResolutionX());
+    //
+    ////let foo=Keyboard.readInt("Mod: ");
+    ////let bar=Keyboard.readInt("Mod: ");
+    //do Sys.wait(50);
+    //do Output.printInt(mx.random(0,28000)/1000);
+    //do Output.printString("  ");
+    //
+    //}
 
 
     do gx.doIntro();
