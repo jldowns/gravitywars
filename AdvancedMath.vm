@@ -1318,65 +1318,6 @@ call AdvancedMath.mod 3
 pop this 2
 push constant 0
 return
-function AdvancedMath.isPrime 2
-push argument 0
-pop pointer 0
-push constant 0
-not
-pop local 1
-push argument 1
-push constant 2
-call Math.divide 2
-pop argument 1
-push constant 2
-pop local 0
-label WHILE_EXP0
-push local 0
-push argument 1
-lt
-push local 1
-and
-not
-if-goto WHILE_END0
-push argument 1
-push argument 1
-push local 0
-call Math.divide 2
-push local 0
-call Math.multiply 2
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-pop local 1
-label IF_FALSE0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 1
-return
-function AdvancedMath.getNextPrime 0
-push argument 0
-pop pointer 0
-label WHILE_EXP0
-push pointer 0
-push argument 1
-call AdvancedMath.isPrime 2
-not
-not
-if-goto WHILE_END0
-push argument 1
-push constant 1
-add
-pop argument 1
-goto WHILE_EXP0
-label WHILE_END0
-push argument 1
-return
 function AdvancedMath.random 3
 push argument 0
 pop pointer 0
@@ -1415,8 +1356,6 @@ push argument 2
 push constant 1
 add
 call AdvancedMath.mod 3
-push argument 1
-add
 pop local 2
 push argument 2
 push constant 1000
@@ -1428,6 +1367,8 @@ push pointer 0
 push local 2
 push local 0
 call Math.multiply 2
+push argument 1
+add
 push local 1
 push constant 1
 add
@@ -1435,29 +1376,6 @@ call AdvancedMath.mod 3
 pop local 2
 label IF_FALSE1
 push local 2
-return
-function AdvancedMath.exp 1
-push argument 0
-pop pointer 0
-push constant 1
-pop local 0
-label WHILE_EXP0
-push local 0
-push argument 2
-lt
-not
-if-goto WHILE_END0
-push argument 1
-push argument 1
-call Math.multiply 2
-pop argument 1
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push argument 1
 return
 function AdvancedMath.mod 1
 push argument 0

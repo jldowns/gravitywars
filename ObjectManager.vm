@@ -1,5 +1,5 @@
 function ObjectManager.new 1
-push constant 4
+push constant 7
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -16,6 +16,12 @@ push this 0
 call Settings.getMaxBullets 1
 call Array.new 1
 pop this 3
+push constant 0
+pop this 4
+push constant 0
+pop this 5
+push constant 0
+pop this 6
 push constant 0
 pop local 0
 label WHILE_EXP0
@@ -87,34 +93,23 @@ goto WHILE_EXP2
 label WHILE_END2
 push pointer 0
 return
-function ObjectManager.registerGravitySink 1
+function ObjectManager.registerGravitySink 0
 push argument 0
 pop pointer 0
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 1
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
-push local 0
+push this 4
 push this 0
 call Settings.getMaxGravitySinks 1
 lt
-and
-not
-if-goto WHILE_END0
-push local 0
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 4
 push constant 1
 add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 0
+pop this 4
+push this 4
+push constant 1
+sub
 push this 1
 add
 push argument 1
@@ -122,36 +117,26 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+label IF_FALSE0
 push constant 0
 return
-function ObjectManager.registerPlayer 1
+function ObjectManager.registerPlayer 0
 push argument 0
 pop pointer 0
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 2
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
-push local 0
+push this 5
 push this 0
 call Settings.getMaxPlayers 1
 lt
-and
-not
-if-goto WHILE_END0
-push local 0
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 5
 push constant 1
 add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 0
+pop this 5
+push this 5
+push constant 1
+sub
 push this 2
 add
 push argument 1
@@ -159,36 +144,26 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+label IF_FALSE0
 push constant 0
 return
-function ObjectManager.registerBullet 1
+function ObjectManager.registerBullet 0
 push argument 0
 pop pointer 0
-push constant 0
-pop local 0
-label WHILE_EXP0
-push local 0
-push this 3
-add
-pop pointer 1
-push that 0
-push constant 0
-eq
-not
-push local 0
+push this 6
 push this 0
 call Settings.getMaxBullets 1
 lt
-and
-not
-if-goto WHILE_END0
-push local 0
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 6
 push constant 1
 add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-push local 0
+pop this 6
+push this 6
+push constant 1
+sub
 push this 3
 add
 push argument 1
@@ -196,6 +171,7 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+label IF_FALSE0
 push constant 0
 return
 function ObjectManager.atMaxBullets 2
@@ -521,6 +497,85 @@ push that 0
 pop local 0
 label IF_END0
 push local 0
+return
+function ObjectManager.getAttributes 4
+push argument 0
+pop pointer 0
+push constant 0
+pop local 3
+push argument 1
+push constant 1
+add
+push this 5
+lt
+push local 3
+push constant 0
+eq
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 1
+call ObjectManager.getPlayerSpriteAttributes 2
+pop local 3
+goto IF_END0
+label IF_FALSE0
+push argument 1
+push this 5
+sub
+pop argument 1
+label IF_END0
+push argument 1
+push constant 1
+add
+push this 4
+lt
+push local 3
+push constant 0
+eq
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+push argument 1
+call ObjectManager.getGravitySink 2
+pop local 1
+push local 1
+call GravitySink.getAttributes 1
+pop local 3
+goto IF_END1
+label IF_FALSE1
+push argument 1
+push this 4
+sub
+pop argument 1
+label IF_END1
+push argument 1
+push constant 1
+add
+push this 6
+lt
+push local 3
+push constant 0
+eq
+and
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+push argument 1
+call ObjectManager.getBulletAttributes 2
+pop local 3
+goto IF_END2
+label IF_FALSE2
+push argument 1
+push this 6
+sub
+pop argument 1
+label IF_END2
+push local 3
 return
 function ObjectManager.dispose 0
 push argument 0

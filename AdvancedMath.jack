@@ -204,31 +204,6 @@ class AdvancedMath {
     return;
   }
 
-  method bool isPrime(int specimen) {
-    var int i;
-    var bool stillPrime;
-
-    let stillPrime=true;
-    let specimen=specimen/2;
-    let i=2;
-
-    while ((i<specimen) & stillPrime){
-      if ( specimen=((specimen/i)*i) ) {
-        let stillPrime=false;
-      }
-      let i=i+1;
-    }
-    return stillPrime;
-  }
-
-  method int getNextPrime(int specimen) {
-    while(~(isPrime(specimen)))
-    {
-      let specimen=specimen+1;
-    }
-    return specimen;
-  }
-
   method int random(int min, int max){
     // returns a randomish number between min and max.
     // if someone requests a number larger than 1000,
@@ -254,14 +229,6 @@ class AdvancedMath {
     }
 
     return scaledAnswer;
-  }
-
-  method int exp(int a, int b) {
-    // returns a^b
-    var int i;
-    let i=1;
-    while (i<b) {let a=a*a;let i=i+1;}
-    return a;
   }
 
   method int mod(int numberToBeModulated, int base) {

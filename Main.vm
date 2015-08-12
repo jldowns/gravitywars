@@ -1,4 +1,4 @@
-function Main.main 19
+function Main.main 14
 call Settings.new 0
 pop local 0
 call AdvancedMath.new 0
@@ -23,41 +23,6 @@ push local 5
 push local 4
 call GameEngine.new 5
 pop local 3
-push local 0
-call Settings.getPlayerSpriteSideLength 1
-push constant 1
-add
-pop local 15
-push constant 10000
-push constant 3000
-push constant 20
-push constant 20
-call GravitySink.new 4
-pop local 6
-push constant 2000
-push constant 10000
-push constant 10
-push constant 10
-call GravitySink.new 4
-pop local 7
-push constant 20000
-push constant 20000
-push constant 15
-push constant 15
-call GravitySink.new 4
-pop local 8
-push constant 30000
-push constant 15000
-push constant 15
-push constant 15
-call GravitySink.new 4
-pop local 9
-push constant 25000
-push constant 4000
-push constant 25
-push constant 25
-call GravitySink.new 4
-pop local 10
 push local 1
 call GXEngine.doIntro 1
 pop temp 0
@@ -68,28 +33,8 @@ push constant 200
 push constant 2
 call GameEngine.generateUniverse 5
 pop temp 0
-push local 4
-push local 6
-call ObjectManager.registerGravitySink 2
-pop temp 0
-push local 4
-push local 7
-call ObjectManager.registerGravitySink 2
-pop temp 0
-push local 4
-push local 8
-call ObjectManager.registerGravitySink 2
-pop temp 0
-push local 4
-push local 9
-call ObjectManager.registerGravitySink 2
-pop temp 0
-push local 4
-push local 10
-call ObjectManager.registerGravitySink 2
-pop temp 0
 push constant 0
-pop local 16
+pop local 11
 label WHILE_EXP0
 push local 4
 call ObjectManager.playersStillAlive 1
@@ -98,18 +43,18 @@ gt
 not
 if-goto WHILE_END0
 push local 4
-push local 16
+push local 11
 call ObjectManager.getPlayer 2
-pop local 13
+pop local 8
 push local 3
-push local 13
+push local 8
 call GameEngine.takeTurn 2
 pop temp 0
-push local 16
+push local 11
 push constant 1
 add
-pop local 16
-push local 16
+pop local 11
+push local 11
 push local 0
 call Settings.getMaxPlayers 1
 push constant 1
@@ -119,14 +64,14 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 0
-pop local 16
+pop local 11
 label IF_FALSE0
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
-pop local 15
+pop local 10
 push local 1
-push local 15
+push local 10
 call GXEngine.displayGameResult 2
 pop temp 0
 push constant 0
