@@ -115,6 +115,61 @@ class ObjectManager {
       // If this bullet is the one we're looking for, remove it from the list
       if (bulletList[i]=killBullet) {
         let bulletList[i]=0;
+        let numBullets=numBullets-1;
+        let found=true;
+      }
+      let i=i+1;
+    }
+    return;
+  }
+
+  method void unregisterPlayer(Player killPlayer) {
+    // removes a player object from the playerList
+    // and shifts the other players over to fill the gap
+    var int i;
+    var bool found;
+    let found = false;
+
+    let i = 0;
+    while( ~(playerList[i]=0) & (i<settings.getMaxPlayers()) ) {
+
+      // If we alredy found the player, shift this one to the left
+      // and fill with a zero.
+      if (found) {
+        let playerList[i-1]=playerList[i];
+        let playerList[i]=0;
+      }
+      // If this player is the one we're looking for, remove it from the list
+      if (playerList[i]=killPlayer) {
+        let playerList[i]=0;
+        let numPlayers=numPlayers-1;
+        let found=true;
+      }
+      let i=i+1;
+    }
+    return;
+  }
+
+  method void unregisterGravitySink(GravitySink killGravitySink) {
+    // removes a gravitySink object from the gravitySinkList
+    // and shifts the other gravitySinks over to fill the gap
+    var int i;
+    var bool found;
+    let found = false;
+
+    let i = 0;
+    while( ~(gravitySinkList[i]=0) & (i<settings.getMaxGravitySinks()) ) {
+
+      // If we alredy found the gravitySink, shift this one to the left
+      // and fill with a zero.
+      if (found) {
+        let gravitySinkList[i-1]=gravitySinkList[i];
+        let gravitySinkList[i]=0;
+      }
+      // If this gravitySink is the one we're looking for, remove it from the list
+      if (gravitySinkList[i]=killGravitySink) {
+        let gravitySinkList[i]=0;
+        let numGravitySinks=numGravitySinks-1;
         let found=true;
       }
       let i=i+1;
@@ -232,29 +287,81 @@ class ObjectManager {
     var Bullet bulletSpecimen;
     var Attributes returnAttributes;
 
-    let returnAttributes=0;
+    //do Output.printString("*");
+    //do Output.printInt(numPlayers);
+    //do Output.printString(",");
+    //do Output.printInt(numGravitySinks);
+    //do Output.printString(",");
+    //do Output.printInt(numBullets);
+    //do Output.printString("*");
 
+    let returnAttributes=0;
+    //do Output.printString("(");
+    //do Output.printInt(i);
+    //do Output.printString(")");
+    //do Output.printString("@");
+    //do Output.printInt(numPlayers);
+    //do Output.printString(",");
+    //do Output.printInt(numGravitySinks);
+    //do Output.printString(",");
+    //do Output.printInt(numBullets);
+    //do Output.printString("#  ");
     // first look at PlayerList
-    if ( ((i+1) < numPlayers) & (returnAttributes=0)){
+    if ( (i < numPlayers) & (returnAttributes=0)){
+      //do Output.printString("it's a player");
+
+
       let returnAttributes=getPlayerSpriteAttributes(i);
+      //do Output.printInt(returnAttributes);
+
     } else {
       let i=i-numPlayers;
     }
     // then look at the Gravity Sinks
-    if ( ((i+1) < numGravitySinks) & (returnAttributes=0)){
+    if ( (i < numGravitySinks) & (returnAttributes=0)){
       let GSSpecimen=getGravitySink(i);
       let returnAttributes = GSSpecimen.getAttributes();
     } else {
       let i=i-numGravitySinks;
     }
     // and finally the bullets
-    if ( ((i+1) < numBullets) & (returnAttributes=0)){
+    if ( (i < numBullets) & (returnAttributes=0)){
       let returnAttributes = getBulletAttributes(i);
     } else {
       let i=i-numBullets;
     }
 
     return returnAttributes;
+  }
+
+  method void cleanBulletList() {
+    var int i;
+    var Player playerSpecimen;
+    var GravitySink GSSpecimen;
+    var Bullet bulletSpecimen;
+    var Attributes attributeSpecimen;
+
+    let i=0;
+    let bulletSpecimen=getBullet(i);
+    while ( ~(bulletSpecimen=0) ){
+      let attributeSpecimen = bulletSpecimen.getAttributes();
+      if (attributeSpecimen.getIsDead() ) {
+          do unregisterBullet(bulletSpecimen);
+          do bulletSpecimen.dispose();
+        }
+        let i=i+1;
+        let bulletSpecimen=getBullet(i);
+        
+      }
+      return;
+  }
+
+  method bool atMaxGravitySinks() {
+    if (numGravitySinks=settings.getMaxGravitySinks()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 

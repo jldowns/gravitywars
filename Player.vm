@@ -1,5 +1,5 @@
 function Player.new 0
-push constant 5
+push constant 4
 call Memory.alloc 1
 pop pointer 0
 push argument 1
@@ -14,8 +14,6 @@ pop this 1
 push constant 0
 pop this 2
 push argument 0
-pop this 4
-push constant 0
 pop this 3
 push pointer 0
 return
@@ -57,20 +55,29 @@ return
 function Player.getName 0
 push argument 0
 pop pointer 0
-push this 4
+push this 3
 return
-function Player.kill 0
+function Player.kill 1
 push argument 0
 pop pointer 0
+push this 0
+call PlayerSprite.getAttributes 1
+pop local 0
+push local 0
 push constant 0
 not
-pop this 3
+call Attributes.setIsDead 2
+pop temp 0
 push constant 0
 return
-function Player.getIsDead 0
+function Player.getIsDead 1
 push argument 0
 pop pointer 0
-push this 3
+push this 0
+call PlayerSprite.getAttributes 1
+pop local 0
+push local 0
+call Attributes.getIsDead 1
 return
 function Player.dispose 0
 push argument 0

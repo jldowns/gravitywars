@@ -215,7 +215,7 @@ class AdvancedMath {
     let oldMax=max;
 
     if (max>1000) {
-      let ratio = (max)/1000;
+      let ratio = (max+1)/1000;
       // if you request a max of 2500, this will set the scaled max
       // at 1250. The avoids low-number biases.
       let max=1009+(max-(1000*ratio));
@@ -224,8 +224,19 @@ class AdvancedMath {
     do plantSeed(randomSeed);
     let scaledAnswer = mod(randomSeed*7,max+1);
 
+    //do Output.printString("+++");
+    //do Output.printInt(scaledAnswer);
+    //do Output.printString(",");
+    //do Output.printInt(ratio);
+    //do Output.printString(",");
+    //do Output.printInt(max);
+    //do Output.printString(",");
+
+
     if (max>1000) {
       let scaledAnswer=mod(scaledAnswer*ratio+min,oldMax+1);
+      //do Output.printInt(scaledAnswer);
+      //do Output.printString("+++");
     }
 
     return scaledAnswer;

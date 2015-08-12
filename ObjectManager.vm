@@ -307,6 +307,178 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push this 6
+push constant 1
+sub
+pop this 6
+push constant 0
+not
+pop local 1
+label IF_FALSE1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function ObjectManager.unregisterPlayer 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 2
+add
+pop pointer 1
+push that 0
+push constant 0
+eq
+not
+push local 0
+push this 0
+call Settings.getMaxPlayers 1
+lt
+and
+not
+if-goto WHILE_END0
+push local 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+push constant 1
+sub
+push this 2
+add
+push local 0
+push this 2
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push this 2
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_FALSE0
+push local 0
+push this 2
+add
+pop pointer 1
+push that 0
+push argument 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
+push this 2
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push this 5
+push constant 1
+sub
+pop this 5
+push constant 0
+not
+pop local 1
+label IF_FALSE1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function ObjectManager.unregisterGravitySink 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+add
+pop pointer 1
+push that 0
+push constant 0
+eq
+not
+push local 0
+push this 0
+call Settings.getMaxGravitySinks 1
+lt
+and
+not
+if-goto WHILE_END0
+push local 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+push constant 1
+sub
+push this 1
+add
+push local 0
+push this 1
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push this 1
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_FALSE0
+push local 0
+push this 1
+add
+pop pointer 1
+push that 0
+push argument 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 0
+push this 1
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push this 4
+push constant 1
+sub
+pop this 4
 push constant 0
 not
 pop local 1
@@ -504,8 +676,6 @@ pop pointer 0
 push constant 0
 pop local 3
 push argument 1
-push constant 1
-add
 push this 5
 lt
 push local 3
@@ -527,8 +697,6 @@ sub
 pop argument 1
 label IF_END0
 push argument 1
-push constant 1
-add
 push this 4
 lt
 push local 3
@@ -553,8 +721,6 @@ sub
 pop argument 1
 label IF_END1
 push argument 1
-push constant 1
-add
 push this 6
 lt
 push local 3
@@ -577,6 +743,68 @@ pop argument 1
 label IF_END2
 push local 3
 return
+function ObjectManager.cleanBulletList 5
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push pointer 0
+push local 0
+call ObjectManager.getBullet 2
+pop local 3
+label WHILE_EXP0
+push local 3
+push constant 0
+eq
+not
+not
+if-goto WHILE_END0
+push local 3
+call Bullet.getAttributes 1
+pop local 4
+push local 4
+call Attributes.getIsDead 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push local 3
+call ObjectManager.unregisterBullet 2
+pop temp 0
+push local 3
+call Bullet.dispose 1
+pop temp 0
+label IF_FALSE0
+push local 0
+push constant 1
+add
+pop local 0
+push pointer 0
+push local 0
+call ObjectManager.getBullet 2
+pop local 3
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function ObjectManager.atMaxGravitySinks 0
+push argument 0
+pop pointer 0
+push this 4
+push this 0
+call Settings.getMaxGravitySinks 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+goto IF_END0
+label IF_FALSE0
+push constant 0
+return
+label IF_END0
 function ObjectManager.dispose 0
 push argument 0
 pop pointer 0

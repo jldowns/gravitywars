@@ -30,8 +30,9 @@ push local 3
 push local 0
 push local 4
 push constant 200
+push constant 30
 push constant 2
-call GameEngine.generateUniverse 5
+call GameEngine.generateUniverse 6
 pop temp 0
 push constant 0
 pop local 11

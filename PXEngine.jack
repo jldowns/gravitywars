@@ -66,6 +66,9 @@ class PXEngine {
     return;
   }
 
+
+
+
   method void stepForward(int timeDelta) {
     // applies accelerations and velocitys to physical objects
     // over a period of timeDelta
@@ -163,84 +166,137 @@ class PXEngine {
     return;
   }
 
-
-  method int detectCollision(Attributes att) {
-    // Detects whether or not a certain object has hit either
-    // a gravity sink, a player sprite, or has fallen off the edge
-    // of reality.
-    // 0-no collision   1-gravitySink
-    // 2-fallenOffEdge  4+ - hit player x-3 (a return value of 5 means you hit player 2)
-    var int i,dist;
+  method bool detectCollision(bool executeKill) {
+    // returns true if there are overlapping objects.
+    // when executeKill is true, this function will set the
+    // isDead flag on every attribute that is party to a collision
+    var int i,j, res, dist;
     var int x1, y1, x2, y2;
     var int r1, r2;
-    var int collisionCondition;
-    var Attributes currentAttributes;
-    var GravitySink fooGS;
+    var bool collisionOccured;
+    var Attributes att1, att2;
 
-    let collisionCondition = 0;
-    let x1=att.getPx();
-    let y1=att.getPy();
-    let r1=att.getRadius();
+    let i=0;
+    let att1 = OM.getAttributes(i);
+    let collisionOccured = false;
 
+    // iterate throuh all objects.
+    while (~(att1=0)) {
+      let x1=att1.getPx();
+      let y1=att1.getPy();
+      let r1=att1.getRadius();
 
-    // === Check for player collisions ===
-    let i = 0;
-    while(~(OM.getPlayerSprite(i)=0)) {
+      //do Output.printString("-");
+      //do Output.printInt(i);
+      //do Output.printString(",");
+      //do Output.printInt(j);
+      //do Output.printString("-  ");
 
-      let currentAttributes=OM.getPlayerSpriteAttributes(i);
+      let j=0;
+      let att2 = OM.getAttributes(j);
 
-      if (~(att=currentAttributes)) {
-        let x2=currentAttributes.getPx();
-        let y2=currentAttributes.getPy();
-        let r2 =currentAttributes.getRadius();
+      // check against all other objects (skipping itself)
+      while( ~(att2=0) & ~(j=i) ) {
+
+      //do Output.moveCursor(2,2);
+        //do Output.printString(".");
+        //do Output.printInt(j);
+        //do Output.printString(".  ");
+        //do Sys.wait(200);
+        let x2=att2.getPx();
+        let y2=att2.getPy();
+        let r2=att2.getRadius();
+
         let dist = __getDistance__(x1,y1,x2,y2,r1+r2);
         if (dist < (r1+r2)) {
-            let collisionCondition = i+3+1; // this means you hit a player.
-        }                                   // since arrays start at 0 and players start at 1, we add one.
-      }
-      let i=i+1;
-    }
+          let collisionOccured=true;
+          do Output.printString("hitobject");
 
-    // === Check for Gravity Sink collisions ===
-    let i = 0;
-    while(~(OM.getGravitySink(i)=0)) {
-
-      let fooGS = OM.getGravitySink(i);
-      let currentAttributes=fooGS.getAttributes();
-
-      if (~(att=currentAttributes)) {
-        let x2=currentAttributes.getPx();
-        let y2=currentAttributes.getPy();
-        let r2 =currentAttributes.getRadius();
-        //do Output.moveCursor(0,0);
-        //do Output.printInt(x1-x2);
-        let dist = __getDistance__(x1,y1,x2,y2,r1+r2);
-        if (dist < (r1+r2)) {
-            let collisionCondition = 1; // this means you hit a gravity sink.
+          if (executeKill) {
+            do att1.setIsDead(true);
+            do att2.setIsDead(true);
+          }
         }
+
+        let j=j+1;
+
+        let att2=OM.getAttributes(j);
+      } // next j
+      //do Output.printString("checking");
+
+
+      // Now check if the object it outside the game bounds.
+      // x1 and y1 are still the object from the outside loop.
+      // x2 and y2 are now being overwritten to study the screen bounds.
+      let res=settings.getworldResolutionX();
+      let x1=x1/res;
+      let res=settings.getworldResolutionY();
+      //do Output.printString("=");
+      //do Output.printInt(y1);
+      //do Output.printString("=");
+      let y1=y1/res;
+      //do Output.printString("^");
+      //do Output.printInt(y1);
+      //do Output.printString("^");
+
+      let x2 = 0;
+      if ((x1-r1)<x2){
+        let collisionOccured=true;
+        //do Output.printInt(i);
+        //do Output.printString("offscreen1");
+        //do Output.printString("=");
+        //do Output.printInt(x1);
+        //do Output.printString("=");
+
+        if (executeKill){ do att1.setIsDead(true); }
+        }
+
+      let x2 = settings.getscreenSizeX();
+      if ((x1+r1)>x2){
+        let collisionOccured=true;
+        //do Output.printInt(i);
+        //do Output.printString("offscreen2");
+        //do Output.printString("=");
+        //do Output.printInt(x1);
+        //do Output.printString("=");
+
+        if (executeKill){ do att1.setIsDead(true); }
       }
+
+      let y2 = 0;
+      if ((y1-r1)<y2){
+        let collisionOccured=true;
+        //do Output.printInt(i);
+        //do Output.printString("offscreen3");
+        //do Output.printString("=");
+        //do Output.printInt(y1);
+        //do Output.printString("=");
+
+        if (executeKill){ do att1.setIsDead(true); }
+      }
+
+      let y2 = settings.getscreenSizeY();
+      if ((y1+r1)>y2){
+        let collisionOccured=true;
+        //do Output.printInt(i);
+        //do Output.printString("offscreen");
+        //do Output.printString("=");
+        //do Output.printInt(y1);
+        //do Output.printString("=");
+
+
+        if (executeKill){ do att1.setIsDead(true); }
+      }
+
+      // i++
       let i=i+1;
+      //do Output.printString("!");
+      //do Output.printInt(i);
+      //do Output.printString("!");
+      let att1=OM.getAttributes(i);
     }
-
-    // === Check to see if you've exited the universe ===
-    let i=settings.getworldResolutionX();
-    let x1=x1/i;
-    let i=settings.getworldResolutionY();
-    let y1=y1/i;
-
-    let x2 = 0;
-    if ((x1-r1)<x2){ let collisionCondition=2; }
-
-    let x2 = settings.getscreenSizeX();
-    if ((x1+r1)>x2){ let collisionCondition=2; }
-
-    let y2 = 0;
-    if ((y1-r1)<y2){ let collisionCondition=2; }
-
-    let y2 = settings.getscreenSizeY();
-    if ((y1+r1)>y2){ let collisionCondition=2; }
-
-    return collisionCondition;
+  //return false;
+    return collisionOccured;
   }
 
   method int __getDistance__(int x1,int y1,int x2,int y2, int envelope) {

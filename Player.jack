@@ -9,7 +9,6 @@ class Player {
   field PlayerSprite mySprite;
   field int powerRemaining;
   field int bulletsRemaing;
-  field bool isDead;
   field String name;
 
   constructor Player new(String myName, int startX, int startY,
@@ -19,7 +18,6 @@ class Player {
     let powerRemaining = 0;
     let bulletsRemaing=0;
     let name=myName;
-    let isDead=false;
     return this;
   }
 
@@ -32,8 +30,16 @@ class Player {
   method void setBulletsRemaing(int newValue) { let bulletsRemaing=newValue; return; }
   method String getName() {return name;}
 
-  method void kill() {let isDead=true; return; }
-  method bool getIsDead(){return isDead;}
+  method void kill() {
+    var Attributes att;
+    let att=mySprite.getAttributes();
+    do att.setIsDead(true);
+    return; }
+
+  method bool getIsDead(){
+    var Attributes att;
+    let att=mySprite.getAttributes();
+    return att.getIsDead();}
 
   method void dispose(){
     do mySprite.dispose();

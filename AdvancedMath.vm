@@ -1332,6 +1332,8 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push argument 2
+push constant 1
+add
 push constant 1000
 call Math.divide 2
 pop local 0

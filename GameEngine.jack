@@ -50,6 +50,13 @@ class GameEngine {
       var Player fooPlayer;
       var bool stillMyTurn;
 
+      ////////////////////////////
+      var int i,j, res, dist;
+      var int x1, y1, x2, y2;
+      var int r1, r2;
+      var Attributes att1, att2;
+      ////////////////////////////
+
       let stillMyTurn=true;
       let currentAttributes = player.getSpriteAttributes();
       let foo = settings.getPlayerStartingPower();
@@ -87,13 +94,27 @@ class GameEngine {
           let foo=settings.getPowerSensativity();
           do changePower(foo*-1, player.getPowerRemaining());
         }
-        if ( (action=7) & (deBounce<1) ) { //shoot
+        if ( (action=7)  ) { //shoot
           do __shoot__(currentAttributes);
           let foo=player.getPowerRemaining();
           do player.setPowerRemaining(foo-powerSetting);
         }
         if (action=8 & (deBounce<1) ) { // quit
           do player.setPowerRemaining(0);
+        }
+        if (Keyboard.keyPressed()=75){
+          let att1 = OM.getAttributes(2);
+          let att2 = OM.getBulletAttributes(0);
+          let x1=att1.getPx();
+          let y1=att1.getPy();
+          let r1=att1.getRadius();
+          let x2=att2.getPx();
+          let y2=att2.getPy();
+          let r2=att2.getRadius();
+          do Output.moveCursor(2,2);
+        do Output.printString("(");
+        do Output.printInt(px.__getDistance__(x1,y1,x2,y2,r1+r2));
+        do Output.printString(")");
         }
 
         // if an action occured, make sure the new power setting is not more than
@@ -113,15 +134,11 @@ class GameEngine {
         do Sys.wait(foo);
 
         // detect collisions
-        do checkForCollisions(player);
+        do px.detectCollision(true);
+        do OM.cleanBulletList();
 
         // is it the next dude's turn?
-        let foo = 0;
-        while(~(OM.getPlayer(foo)=0) ) {
-          let fooPlayer = OM.getPlayer(foo);
-          let stillMyTurn =stillMyTurn & (~fooPlayer.getIsDead());
-          let foo=foo+1;
-        }
+        let stillMyTurn =stillMyTurn & (~player.getIsDead()) & (OM.playersStillAlive()>1);
         let stillMyTurn = ( (stillMyTurn & (player.getPowerRemaining()>0) ) | OM.bulletsRemain());
       }
       return;
@@ -201,8 +218,8 @@ class GameEngine {
       let maxPower = settings.getPlayerStartingPower();
       do gx.drawPowerIndicator(maxPower,powerRemaining, powerSetting);
     }
-    do Output.moveCursor(0,0);
-    do Output.printString(currentPlayer.getName());
+    //do Output.moveCursor(0,0);
+    //do Output.printString(currentPlayer.getName());
 
     do gx.drawAllObjects(forceNextRedraw[1]|forceNextRedraw[0]);
     let forceNextRedraw[0]=false;
@@ -219,52 +236,8 @@ class GameEngine {
     return;
   }
 
-  method void checkForCollisions(Player player) {
-    var int i, collisionCode, activationAge;
-    var int x,y;
-    var Bullet fooBullet;
-    var Player fooPlayer;
-    var Attributes currentAttributes;
-
-    // check for player collisions
-    let currentAttributes = player.getSpriteAttributes();
-    let collisionCode = px.detectCollision(currentAttributes);
-
-    if ( ~(collisionCode = 0) ) {
-      do player.kill();
-      let x=(currentAttributes.getPx()/settings.getworldResolutionX())+settings.getScreenBoundLeft();
-      let y=(currentAttributes.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop();
-      do gx.drawExplosion(x,y,10);
-    }
-    if ( (collisionCode > 3) ) {
-      let fooPlayer = OM.getPlayer(collisionCode-4); // you hit another player
-      do fooPlayer.kill();
-    }
-
-
-    // check bullet collisions
-    let i = 0;
-    while(~(OM.getBullet(i)=0)) {
-      let fooBullet = OM.getBullet(i);
-      let currentAttributes = OM.getBulletAttributes(i);
-      let collisionCode = px.detectCollision(currentAttributes);
-      if (~(collisionCode=0)) {
-        do killBullet(fooBullet);
-        let x=(currentAttributes.getPx()/settings.getworldResolutionX())+settings.getScreenBoundLeft();
-        let y=(currentAttributes.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop();
-        do gx.drawExplosion(x,y,10);
-      }
-      if ( (collisionCode > 3) ) {
-        let fooPlayer = OM.getPlayer(collisionCode-4); // you hit another player
-        do fooPlayer.kill();
-      }
-      let i=i+1;
-    }
-    return;
-  }
-
   method void generateUniverse(Settings settings, ObjectManager OM,
-                               int totalGravity, int numberOfPlayers) {
+                               int totalGravity, int maxGravitySinkSize, int numberOfPlayers) {
       var int playerLength;
       var int i;
       var bool cleanCreation;
@@ -277,25 +250,12 @@ class GameEngine {
       var Array playerNames;
       var GravitySink gs1, gs2, gs3, gs4, gs5;
 
-      // create gravity sinks
-      let gs1 = GravitySink.new(10000, 3000, 20, 20);
-      let gs2 = GravitySink.new(2000, 10000, 10, 10);
-      let gs3 = GravitySink.new(20000, 20000, 15, 15);
-      let gs4 = GravitySink.new(30000, 15000, 15, 15);
-      let gs5 = GravitySink.new(25000, 4000, 25, 25);
-
-      do OM.registerGravitySink(gs1);
-      do OM.registerGravitySink(gs2);
-      do OM.registerGravitySink(gs3);
-      do OM.registerGravitySink(gs4);
-      do OM.registerGravitySink(gs5);
-
       let playerNames=Array.new(2);
       let playerNames[0]="Ash";
       let playerNames[1]="Cloud";
 
-      let maxX = settings.getscreenSizeX()*settings.getworldResolutionX();
-      let maxY = settings.getscreenSizeY()*settings.getworldResolutionY();
+      let maxX = (settings.getscreenSizeX()*settings.getworldResolutionX())-1;
+      let maxY = (settings.getscreenSizeY()*settings.getworldResolutionY())-1;
       let playerLength = settings.getPlayerSpriteSideLength()+1;
 
       // create players
@@ -304,23 +264,64 @@ class GameEngine {
         let cleanCreation = false;
 
         while (~(cleanCreation)){
+          do Sys.wait(100);
+          do Output.printString("P");
           do Output.printInt(i);
-          let rand1 = mx.random(0,maxX);
-          let rand2 = mx.random(0,maxX);
+          let rand1 = mx.random(playerLength,maxX- (playerLength*settings.getworldResolutionX()) );
+          let rand2 = mx.random(playerLength,maxY- (playerLength*settings.getworldResolutionY()) );
           let rand3 = mx.random(0,360);
+          do Output.printString("(");
+          do Output.printInt(rand1);
+          do Output.printString(",");
+          do Output.printInt(rand2);
+          do Output.printString(",");
+          do Output.printInt(rand3);
+          do Output.printString(")");
+
           let ps1 = Player.new(playerNames[i],rand1, rand2, rand3, playerLength,0);
-          let att=ps1.getSpriteAttributes();
+          do OM.registerPlayer(ps1);
 
-          if (px.detectCollision(att)=0){
+          if ( ~(px.detectCollision(false)) ){
             let cleanCreation=true;
-            do OM.registerPlayer(ps1);
           } else {
-            do ps1.dispose();
-          }
-
-        }
+            do OM.unregisterPlayer(ps1);
+            do ps1.dispose(); }
+        } // end inner while
         let i = i+1;
       }
+      // end create players
+
+      // create gravity sinks
+      let i=0;
+      while ((totalGravity>maxGravitySinkSize) & ~(OM.atMaxGravitySinks()) ) {
+        let cleanCreation = false;
+
+        while (~(cleanCreation)){
+          do Output.printString("G");
+          do Output.printInt(i);
+          let rand3 = mx.random(0,maxGravitySinkSize); // gravity
+          let rand1 = mx.random(rand3,maxX- (rand3*settings.getworldResolutionX()) );
+          let rand2 = mx.random(rand3,maxY- (rand3*settings.getworldResolutionY()) );
+          let gs1 = GravitySink.new(rand1, rand2, rand3, rand3);
+          do Output.printString("(");
+          do Output.printInt(rand1);
+          do Output.printString(",");
+          do Output.printInt(rand2);
+          do Output.printString(",");
+          do Output.printInt(rand3);
+          do Output.printString(")");
+          do OM.registerGravitySink(gs1);
+
+          if ( ~(px.detectCollision(false)) ){
+            let cleanCreation=true;
+          } else {
+            do OM.unregisterGravitySink(gs1);
+            do gs1.dispose();
+          }
+        } // end inner while
+        let i = i+1;
+      }
+      // end create gravity sinks
 
       return;
   }

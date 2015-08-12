@@ -41,7 +41,7 @@ class Main {
 
     do gx.doIntro();
 
-    do myGame.generateUniverse(settings, OM, 200, 2);
+    do myGame.generateUniverse(settings, OM, 200,30, 2);
 
     let playerTurn=0;
     while (OM.playersStillAlive()>1)
