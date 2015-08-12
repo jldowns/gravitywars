@@ -12,11 +12,11 @@ class GXEngine {
   field int screenTopY, screenBottomY;
 
 
-  constructor GXEngine new(Settings gameSettings, ObjectManager newOM) {
+  constructor GXEngine new(Settings gameSettings, AdvancedMath newMX, ObjectManager newOM) {
     var int i;
 
     let settings=gameSettings;
-    let mathEngine=AdvancedMath.new();
+    let mathEngine = newMX;
     let OM = newOM;
     let resX = settings.getworldResolutionX();
     let resY = settings.getworldResolutionY();
@@ -316,6 +316,9 @@ class GXEngine {
 
       // reprint carrot
       if (~(selectionKey=0)) {
+        do Output.moveCursor(0,0);
+        do Output.printInt(mathEngine.random(0,50));
+        do Output.printString("  ");
         do Output.moveCursor((currentSelection-1)*distanceBetweenItems+menuY,menuX-1);
         do Output.printChar(carrot);
         do Sys.wait(200);}
@@ -325,6 +328,7 @@ class GXEngine {
         do Output.printInt(currentNumberOfPlayers);}
 
       let randomSeed = randomSeed+1;
+      if (randomSeed>200){let randomSeed=0;}
       do mathEngine.plantSeed(randomSeed);
     }
 

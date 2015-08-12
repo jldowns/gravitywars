@@ -8,12 +8,12 @@ class PXEngine {
   field AdvancedMath mathEngine;
 
 
-  constructor PXEngine new(Settings gameSettings, ObjectManager newOM) {
+  constructor PXEngine new(Settings gameSettings, AdvancedMath newmx, ObjectManager newOM) {
     var int i;
 
     let settings=gameSettings;
     let OM=newOM;
-    let mathEngine=AdvancedMath.new();
+    let mathEngine=newmx;
 
     return this;
   }

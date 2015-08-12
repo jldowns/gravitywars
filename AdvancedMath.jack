@@ -10,7 +10,7 @@ class AdvancedMath {
 
   constructor AdvancedMath new(){
 
-    let randomSeed = 73; // we'll reseed this later.
+    let randomSeed = 51; // we'll reseed this later.
 
     let sineLookup = Array.new(72);
     let cosineLookup = Array.new(72);
@@ -194,23 +194,85 @@ class AdvancedMath {
   }
 
   method void plantSeed(int newSeed) {
-    // seed the random number generator. Use a seed between 0 and 100.
-    // and we want it to be positive.
-    let randomSeed = 7 * mod(newSeed*10,1011);
+    // seed the random number generator. 13567 is a prime number btw. So is 7.
+
+    let newSeed=newSeed*7;
+    //if (newSeed<1){let newSeed=(newSeed*-1);}
+
+    let randomSeed = mod(newSeed,101);
+
     return;
   }
 
-  method int random(int min, int max){
-    let randomSeed= randomSeed*max*7;
-    if (randomSeed<1){let randomSeed=(randomSeed*-1);}
-    let randomSeed = mod(randomSeed,max+1) +min;
+  method bool isPrime(int specimen) {
+    var int i;
+    var bool stillPrime;
 
-    return randomSeed;
+    let stillPrime=true;
+    let specimen=specimen/2;
+    let i=2;
+
+    while ((i<specimen) & stillPrime){
+      if ( specimen=((specimen/i)*i) ) {
+        let stillPrime=false;
+      }
+      let i=i+1;
+    }
+    return stillPrime;
+  }
+
+  method int getNextPrime(int specimen) {
+    while(~(isPrime(specimen)))
+    {
+      let specimen=specimen+1;
+    }
+    return specimen;
+  }
+
+  method int random(int min, int max){
+    var int i,returnNumber,returnNumberMinus,j;
+    do plantSeed(randomSeed);
+
+    //if (randomSeed<1){let randomSeed=(randomSeed*-1);}
+    let returnNumber=1;
+    let i=1;
+    while((i < max)& (i>0)) {
+      do plantSeed(randomSeed);
+      let returnNumberMinus=returnNumber;
+      let returnNumber = returnNumber + (i*mod(randomSeed,2));
+      let i=i*2;
+      //do Output.printInt(i);
+
+      //do Output.printString("-");
+      //do Output.printInt(returnNumber);
+      //do Output.printString("-");
+      //do Sys.wait(50);
+
+
+      //if (j>20){let randomSeed=51;let i = 1;let j=0;}
+    }
+    //do plantSeed(randomSeed);
+    //let returnNumber = returnNumber + (i*mod(randomSeed,2));
+    return returnNumber*3;
+    //return mod(returnNumber*3,max+1);
+    }
+
+  method int exp(int a, int b) {
+    // returns a^b
+    var int i;
+    let i=1;
+    while (i<b) {let a=a*a;let i=i+1;}
+    return a;
   }
 
   method int mod(int numberToBeModulated, int base) {
     var int i;
     let i= Math.divide(numberToBeModulated,base);
+
+    //do Output.printString("-");
+    //do Output.printInt(i);
+    //do Output.printString("-");
+
     return numberToBeModulated-(base*i);
   }
 

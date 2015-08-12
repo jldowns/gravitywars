@@ -10,6 +10,7 @@ class GameEngine {
   field int powerSetting;
   field int deBounce; // counts how many frames since the last keystroke
   field Array forceNextRedraw;
+  field AdvancedMath mx;
 
   // working variables for methods. Defined here
   // to only make one copy
@@ -17,6 +18,7 @@ class GameEngine {
   constructor GameEngine new(Settings gameSettings,
                              GXEngine myGXEngine,
                              PXEngine myPXEngine,
+                             AdvancedMath NewMx,
                              ObjectManager newOM) {
 
     var int i;
@@ -26,6 +28,7 @@ class GameEngine {
 
     let gx = myGXEngine;
     let px = myPXEngine;
+    let mx = NewMx;
     let powerSetting = 20;
     let deBounce = 0;
     // forceNextRedraw Array is a series of flags that
@@ -260,20 +263,22 @@ class GameEngine {
     return;
   }
 
-  method void generateUniverse(GameEngine myGame, GXEngine gx, PXEngine px,
-                               Settings settings, Array playerArray,
+  method void generateUniverse(Settings settings, ObjectManager OM,
                                int totalGravity, int numberOfPlayers) {
       var int playerLength;
       var int i;
       var bool cleanCreation;
-      var Player ps1;
+      var Player ps1, ps2;
       var GravitySink gs1;
       var PlayerSprite fooSprite;
       var Attributes att;
       var int maxX, maxY;
       var int rand1, rand2, rand3, rand4;
-      var AdvancedMath mx;
-      let mx=gx.borrowMathEngine();
+      var Array playerNames;
+
+      let playerNames=Array.new(2);
+      let playerNames[0]="Ash";
+      let playerNames[1]="Cloud";
 
       let maxX = settings.getscreenSizeX()*settings.getworldResolutionX();
       let maxY = settings.getscreenSizeY()*settings.getworldResolutionY();
@@ -289,37 +294,19 @@ class GameEngine {
           let rand1 = mx.random(0,maxX);
           let rand2 = mx.random(0,maxX);
           let rand3 = mx.random(0,360);
-          let ps1 = Player.new(i,rand1, rand2, rand3, playerLength,0);
+          let ps1 = Player.new(playerNames[i],rand1, rand2, rand3, playerLength,0);
           let att=ps1.getSpriteAttributes();
 
           if (px.detectCollision(att)=0){
             let cleanCreation=true;
+            do OM.registerPlayer(ps1);
           } else {
             do ps1.dispose();
           }
 
         }
-        //do Output.printString("(");
-        //do Output.printInt(att.getPx());
-        //do Output.printString(",");
-        //do Output.printInt(att.getPy());
-        //do Output.printString(")");
-
-        let fooSprite = ps1.getSprite();
-        let playerArray[i] = ps1;
         let i = i+1;
       }
-
-
-
-
-      //let gs1 = GravitySink.new(10000, 3000, 20, 20);
-      //let gs2 = GravitySink.new(2000, 10000, 10, 10);
-      //let gs3 = GravitySink.new(20000, 20000, 15, 15);
-      //let gs4 = GravitySink.new(30000, 15000, 15, 15);
-      //let gs5 = GravitySink.new(25000, 4000, 25, 25);
-      //let ps1 = Player.new("1",3000, 3000, 180, playerLength,0);
-      //let ps2 = Player.new("2",15000, 15000, 60, playerLength,0);
 
       return;
   }
