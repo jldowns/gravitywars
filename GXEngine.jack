@@ -216,15 +216,16 @@ class GXEngine {
     return;
   }
 
-  method void displayGameResult(int gameResult) {
+  method void displayGameResult(string winner) {
     // displays the winner of a game.
     // 0-Draw, 1-Player 1 wins 2-Player 2 wins
     do Screen.setColor(true);
-    do Screen.drawRectangle(0,110,500,122);
-    do Output.moveCursor(10,23);
-    do Output.printString(" Player ");
-    do Output.printInt(gameResult);
-    do Output.printString(" Wins! ");
+    do Screen.drawRectangle(settings.getBannerLeftX(),110,settings.getBannerRightX(),122);
+    do Output.moveCursor(10,8);
+    do Output.printString(winner);
+    do Output.printString(" wins! Congratulations ");
+    do Output.printString(winner);
+    do Output.printString("!");
 
 
     return;
@@ -352,11 +353,11 @@ class GXEngine {
 
       // draw banner
       do Screen.setColor(true);
-      do Screen.drawRectangle(0,bannerY,500,bannerY+12);
-      do Output.moveCursor(cursorY,13);
+      do Screen.drawRectangle(settings.getBannerLeftX(),bannerY,settings.getBannerRightX(),bannerY+12);
+      do Output.moveCursor(cursorY,8);
       do Output.printString(" Player ");
       do Output.printString(player.getName());
-      do Output.printString("'s Turn. Get Ready! ");
+      do Output.printString("'s Turn.  Get Ready! ");
 
       // slow down the animation
       do Sys.wait(50);

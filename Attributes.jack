@@ -16,6 +16,7 @@ class Attributes {
   field int radius;   // in pixels
   field int mass;
   field bool isDead;
+  field bool exploded;
   // Since we can't inherit over overload methods, we'll use the variable
   field int typeOfObject;
   // to let this child object be aware of its parent.
@@ -52,6 +53,7 @@ class Attributes {
     let isDead=false;
     let needsUpdate = true;
     let typeOfObject = myType;
+    let exploded=false;
 
     return this;
   }
@@ -87,6 +89,8 @@ class Attributes {
     return; }
 
   method int getMass() { return mass; }
+
+  method bool getExploded(){return exploded;}
 
   method void backup() {
     // backs up current attributes into savings containers

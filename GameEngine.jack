@@ -108,20 +108,20 @@ class GameEngine {
         if (action=8 & (deBounce<1) ) { // quit
           do player.setPowerRemaining(0);
         }
-        if (Keyboard.keyPressed()=75){
-          let att1 = OM.getAttributes(2);
-          let att2 = OM.getBulletAttributes(0);
-          let x1=att1.getPx();
-          let y1=att1.getPy();
-          let r1=att1.getRadius();
-          let x2=att2.getPx();
-          let y2=att2.getPy();
-          let r2=att2.getRadius();
-          do Output.moveCursor(2,2);
-        do Output.printString("(");
-        do Output.printInt(px.__getDistance__(x1,y1,x2,y2,r1+r2));
-        do Output.printString(")");
-        }
+        //if (Keyboard.keyPressed()=75){
+        //  let att1 = OM.getAttributes(2);
+        //  let att2 = OM.getBulletAttributes(0);
+        //  let x1=att1.getPx();
+        //  let y1=att1.getPy();
+        //  let r1=att1.getRadius();
+        //  let x2=att2.getPx();
+        //  let y2=att2.getPy();
+        //  let r2=att2.getRadius();
+        //  do Output.moveCursor(2,2);
+        //do Output.printString("(");
+        //do Output.printInt(px.__getDistance__(x1,y1,x2,y2,r1+r2));
+        //do Output.printString(")");
+        //}
 
         // if an action occured, make sure the new power setting is not more than
         // the amount of power the player has
@@ -140,14 +140,18 @@ class GameEngine {
         // detect collisions from the step forward
         if (px.detectCollision(true)){let forceNextRedraw[0]=true;}
         do OM.cleanBulletList(gx);
+        do doTheExposions();
+
 
         // redraw Screen after the dust settles from collisions
         do updateScreen(player);
 
 
         // is it the next dude's turn?
+        let currentAttributes=player.getAttributes();
         let stillMyTurn =stillMyTurn & (~player.getIsDead()) & (OM.playersStillAlive()>1);
         let stillMyTurn = ( (stillMyTurn & (player.getPowerRemaining()>0) ) | OM.bulletsRemain());
+        let stillMyTurn = stillMyTurn | (currentAttributes.getVx()>0) | (currentAttributes.getVy()>0);
       }
       return;
   }
@@ -241,6 +245,24 @@ class GameEngine {
     do OM.unregisterBullet(killBullet);
     do killBullet.dispose();
     let forceNextRedraw[0]=true;
+    return;
+  }
+
+  method void doTheExposions() {
+    var int i;
+    var Attributes fooAtt;
+    let fooAtt=OM.getAttributes(i);
+    while ( ~(fooAtt=0) ) {
+      if( ~(fooAtt.getType()=2) & fooAtt.getIsDead() & ~(fooAtt.getExploded())){
+          do gx.drawExplosion( (fooAtt.getPx()/settings.getworldResolutionX())+settings.getScreenBoundLeft(),
+                            (fooAtt.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop(),
+                            10 );
+      }
+
+      let i=i+1;
+      let fooAtt=OM.getAttributes(i);
+    }
+
     return;
   }
 

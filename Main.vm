@@ -1,4 +1,4 @@
-function Main.main 14
+function Main.main 13
 call Settings.new 0
 pop local 0
 call AdvancedMath.new 0
@@ -35,7 +35,7 @@ push constant 2
 call GameEngine.generateUniverse 6
 pop temp 0
 push constant 0
-pop local 11
+pop local 10
 label WHILE_EXP0
 push local 4
 call ObjectManager.playersStillAlive 1
@@ -44,18 +44,18 @@ gt
 not
 if-goto WHILE_END0
 push local 4
-push local 11
+push local 10
 call ObjectManager.getPlayer 2
-pop local 8
+pop local 6
 push local 3
-push local 8
+push local 6
 call GameEngine.takeTurn 2
 pop temp 0
-push local 11
+push local 10
 push constant 1
 add
-pop local 11
-push local 11
+pop local 10
+push local 10
 push local 0
 call Settings.getMaxPlayers 1
 push constant 1
@@ -65,14 +65,68 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 0
-pop local 11
+pop local 10
 label IF_FALSE0
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
-pop local 10
+pop local 8
+push constant 6
+call String.new 1
+push constant 78
+call String.appendChar 2
+push constant 111
+call String.appendChar 2
+push constant 98
+call String.appendChar 2
+push constant 111
+call String.appendChar 2
+push constant 100
+call String.appendChar 2
+push constant 121
+call String.appendChar 2
+pop local 9
+push local 4
+push local 8
+call ObjectManager.getPlayer 2
+pop local 6
+label WHILE_EXP1
+push local 8
+push local 0
+call Settings.getMaxPlayers 1
+lt
+push local 6
+push constant 0
+eq
+not
+and
+not
+if-goto WHILE_END1
+push local 6
+call Player.getAttributes 1
+pop local 7
+push local 7
+call Attributes.getIsDead 1
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 6
+call Player.getName 1
+pop local 9
+label IF_FALSE1
+push local 8
+push constant 1
+add
+pop local 8
+push local 4
+push local 8
+call ObjectManager.getPlayer 2
+pop local 6
+goto WHILE_EXP1
+label WHILE_END1
 push local 1
-push local 10
+push local 9
 call GXEngine.displayGameResult 2
 pop temp 0
 push constant 0

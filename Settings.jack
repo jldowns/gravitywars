@@ -11,6 +11,8 @@ class Settings {
   field int physicsTimeStepModifier; // One physics timeDelta will be timeStep/physicsTimeStepModifier
   field int worldResolutionX, worldResolutionY; // resolution of the world in meters/pixel
 
+  field int bannerLeftX, bannerRightX;
+
   field int maxObjects;
   field int maxGravitySinks;
   field int maxPlayers;
@@ -42,6 +44,9 @@ class Settings {
     let screenBoundBottom=220;
     let screenBoundLeft=50;
     let screenBoundRight=330;
+
+    let bannerLeftX = screenBoundLeft;
+    let bannerRightX = screenBoundRight;
 
     let worldResolutionX = 100;
     let worldResolutionY = 100;
@@ -84,6 +89,9 @@ class Settings {
   method int getScreenBoundBottom() { return screenBoundBottom; }
   method int getScreenBoundLeft() { return screenBoundLeft; }
   method int getScreenBoundRight() { return screenBoundRight; }
+
+  method int getBannerLeftX(){return bannerLeftX;}
+  method int getBannerRightX(){return bannerRightX;}
 
   method int getscreenSizeX() { return screenBoundRight - screenBoundLeft; }
   method int getscreenSizeY() { return screenBoundBottom - screenBoundTop; }
