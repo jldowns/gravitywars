@@ -53,7 +53,7 @@ class Settings {
     let maxGravitySinks = 5;
     let maxPlayers = 2;
     let maxBullets = 1;
-    let debounceSetting = 20;
+    let debounceSetting = 10;
 
     let playerSpritePointAngle = 15; // the point of the player sprite will be twice this, or 30 degrees
     let playerSpriteSideLength = 10;

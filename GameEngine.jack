@@ -63,6 +63,12 @@ class GameEngine {
       do player.setPowerRemaining(foo);
 
       let forceNextRedraw[0]=true;
+      do updateScreen(player);
+
+      do gx.displayNextTurnTitle(player);
+
+      let forceNextRedraw[0]=true;
+      do updateScreen(player);
 
       while  (stillMyTurn){
 
@@ -94,7 +100,7 @@ class GameEngine {
           let foo=settings.getPowerSensativity();
           do changePower(foo*-1, player.getPowerRemaining());
         }
-        if ( (action=7)  ) { //shoot
+        if ( (action=7 & (OM.getNumBullets()<settings.getMaxBullets()) )  ) { //shoot
           do __shoot__(currentAttributes);
           let foo=player.getPowerRemaining();
           do player.setPowerRemaining(foo-powerSetting);
@@ -301,7 +307,7 @@ class GameEngine {
         while (~(cleanCreation)){
           do Output.printString("G");
           do Output.printInt(i);
-          let rand3 = mx.random(0,maxGravitySinkSize); // gravity
+          let rand3 = mx.random(5,maxGravitySinkSize); // gravity
           let rand1 = mx.random(rand3,maxX- (rand3*settings.getworldResolutionX()) );
           let rand2 = mx.random(rand3,maxY- (rand3*settings.getworldResolutionY()) );
           let gs1 = GravitySink.new(settings, rand1, rand2, rand3, rand3);

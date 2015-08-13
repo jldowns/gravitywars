@@ -70,6 +70,27 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
+push pointer 0
+push argument 1
+call GameEngine.updateScreen 2
+pop temp 0
+push this 2
+push argument 1
+call GXEngine.displayNextTurnTitle 2
+pop temp 0
+push constant 0
+push this 6
+add
+push constant 0
+not
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push pointer 0
+push argument 1
+call GameEngine.updateScreen 2
+pop temp 0
 label WHILE_EXP0
 push local 5
 not
@@ -191,6 +212,12 @@ label IF_FALSE4
 push local 0
 push constant 7
 eq
+push this 3
+call ObjectManager.getNumBullets 1
+push this 0
+call Settings.getMaxBullets 1
+lt
+and
 if-goto IF_TRUE5
 goto IF_FALSE5
 label IF_TRUE5
@@ -872,7 +899,7 @@ push local 1
 call Output.printInt 1
 pop temp 0
 push this 7
-push constant 0
+push constant 5
 push argument 4
 call AdvancedMath.random 3
 pop local 12

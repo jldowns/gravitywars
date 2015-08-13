@@ -26,7 +26,7 @@ push constant 2
 pop this 10
 push constant 1
 pop this 11
-push constant 20
+push constant 10
 pop this 12
 push constant 15
 pop this 13

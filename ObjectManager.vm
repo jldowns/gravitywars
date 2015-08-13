@@ -514,6 +514,11 @@ pop local 0
 label IF_END0
 push local 0
 return
+function ObjectManager.getNumBullets 0
+push argument 0
+pop pointer 0
+push this 6
+return
 function ObjectManager.getBulletAttributes 2
 push argument 0
 pop pointer 0

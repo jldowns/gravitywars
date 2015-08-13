@@ -190,6 +190,8 @@ class ObjectManager {
     return returnBullet;
   }
 
+  method int getNumBullets() { return numBullets;}
+
   method Attributes getBulletAttributes(int i) {
     // returns a Bullet from the list at array index i.
     // returns zero if empty or if outside array bounds
