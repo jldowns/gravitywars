@@ -1,5 +1,8 @@
 # Created by https://www.gitignore.io
 
+### Jack ###
+*.vm
+
 ### OSX ###
 .DS_Store
 .AppleDouble

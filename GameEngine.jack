@@ -61,6 +61,7 @@ class GameEngine {
       let currentAttributes = player.getAttributes();
       let foo = settings.getPlayerStartingPower();
       do player.setPowerRemaining(foo);
+      let powerSetting=20;
 
       let forceNextRedraw[0]=true;
       do updateScreen(player);
@@ -329,7 +330,7 @@ class GameEngine {
         while (~(cleanCreation)){
           do Output.printString("G");
           do Output.printInt(i);
-          let rand3 = mx.random(5,maxGravitySinkSize); // gravity
+          let rand3 = mx.random(5,maxGravitySinkSize) +10; // gravity
           let rand1 = mx.random(rand3,maxX- (rand3*settings.getworldResolutionX()) );
           let rand2 = mx.random(rand3,maxY- (rand3*settings.getworldResolutionY()) );
           let gs1 = GravitySink.new(settings, rand1, rand2, rand3, rand3);

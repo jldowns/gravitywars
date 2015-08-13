@@ -157,8 +157,8 @@ class GXEngine {
     var int x,y,height, width, carrotWidth, carrotHalfHight;
     var int powerIndicatorRatio; // ratio between the power indicator height
                              // and the max amount of power
-    let x=1;
-    let y=20;
+    let x=10;
+    let y=60;
     let height=100;
     let width=10;
     let carrotWidth=3;
@@ -175,6 +175,11 @@ class GXEngine {
     // draw power remaining indicator
     do Screen.drawRectangle(x+2,y+((maxPower - powerRemaining)/powerIndicatorRatio),
                             x+width-4,y+height);
+    // draw power remaining outline
+    do Screen.drawLine(x+1,y-1,x+1,y+height);
+    do Screen.drawLine(x+width-3,y-1,x+width-3,y+height);
+    do Screen.drawLine(x+1,y-1,x-1,y-1);
+    do Screen.drawLine(x+width-3,y-1,x+width-1,y-1);
 
     // draw power setting carrot
     do Screen.drawLine(x+width,  y+height-(powerSetting/powerIndicatorRatio),
