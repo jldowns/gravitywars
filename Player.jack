@@ -6,23 +6,22 @@
 
 class Player {
 
-  field PlayerSprite mySprite;
+  field Attributes attributes;
   field int powerRemaining;
   field int bulletsRemaing;
   field String name;
 
-  constructor Player new(String myName, int startX, int startY,
+  constructor Player new(Settings newSettings, String myName, int startX, int startY,
                          int startRotation, int startRadius, int startMass) {
 
-    let mySprite = PlayerSprite.new(startX, startY, startRotation, startRadius, startMass);
+    let attributes = Attributes.new(1, startX, startY,0,0, startRotation, startRadius, startMass);
     let powerRemaining = 0;
     let bulletsRemaing=0;
     let name=myName;
     return this;
   }
 
-  method Attributes getSpriteAttributes(){ return mySprite.getAttributes(); }
-  method PlayerSprite getSprite(){ return mySprite; }
+  method Attributes getAttributes(){ return attributes; }
 
   method int getPowerRemaining() { return powerRemaining; }
   method void setPowerRemaining(int newValue) { let powerRemaining=newValue; return; }
@@ -31,18 +30,14 @@ class Player {
   method String getName() {return name;}
 
   method void kill() {
-    var Attributes att;
-    let att=mySprite.getAttributes();
-    do att.setIsDead(true);
+    do attributes.setIsDead(true);
     return; }
 
   method bool getIsDead(){
-    var Attributes att;
-    let att=mySprite.getAttributes();
-    return att.getIsDead();}
+    return attributes.getIsDead();}
 
   method void dispose(){
-    do mySprite.dispose();
+    do attributes.dispose();
     do Memory.deAlloc(this);
     return;
   }

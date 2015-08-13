@@ -4,18 +4,17 @@
 class GravitySink {
 
   field Attributes attributes;
-  field int gravitationalForce;
-
-  constructor GravitySink new(int startX, int startY,
+  constructor GravitySink new(Settings newSettings, int startX, int startY,
                               int startRadius, int startMass) {
 
-    let attributes = Attributes.new(startX, startY, 0, 0, 0, startRadius, startMass);
+    let attributes = Attributes.new(2, startX, startY, 0, 0, 0, startRadius, startMass);
 
     return this;
   }
 
   method Attributes getAttributes() {
     return attributes; }
+
 
   method void dispose() {
     do Memory.deAlloc(this);

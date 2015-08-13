@@ -49,11 +49,6 @@ class PXEngine {
     let previousX = att.getAx();
     let previousY = att.getAy();
 
-    //do Output.printInt(previousX+xComp);
-    //do Output.printString(",");
-    //do Output.printInt(previousY+yComp);
-    //do Output.printString("  ");
-
     do att.setAcceleration(previousX+xComp, previousY+yComp);
     return;
   }
@@ -76,6 +71,7 @@ class PXEngine {
     var Bullet thisBullet;
     var int friction10;
     var Attributes currentAttributes;
+    var Player playerSpecimen;
 
     // we're going to divide by a modifier here because a 10 millisecond
     // frame delay might not be what we want for a physics time delta.
@@ -84,8 +80,9 @@ class PXEngine {
 
     // do the players
     let i = 0;
-    while( ~(OM.getPlayerSprite(i)=0) ) {
-      let currentAttributes = OM.getPlayerSpriteAttributes(i);
+    while( ~(OM.getPlayer(i)=0) ) {
+      let playerSpecimen=OM.getPlayer(i);
+      let currentAttributes = playerSpecimen.getAttributes();
 
 
       // Apply accelerations
@@ -96,19 +93,10 @@ class PXEngine {
 
       // but only apply them if there is something to apply
       if ( ~(x1=0) | ~(x2=0) | ~(y1=0) | ~(y2=0) ){
-        //do Output.printInt(x1);
-        //do Output.printString(",");
-        //do Output.printInt(y1);
-        //do Output.printString("-");
+
         // first, apply space friction
         let x2= ((x2*1*friction10)/10);
         let y2= ((y2*1*friction10)/10);
-
-        //do Output.moveCursor(0,0);
-        //do Output.printInt(x2);
-        //do Output.printString(",");
-        //do Output.printInt(y2);
-        //do Output.printString(" | ");
 
 
         do currentAttributes.backup();
@@ -186,23 +174,11 @@ class PXEngine {
       let y1=att1.getPy();
       let r1=att1.getRadius();
 
-      //do Output.printString("-");
-      //do Output.printInt(i);
-      //do Output.printString(",");
-      //do Output.printInt(j);
-      //do Output.printString("-  ");
-
       let j=0;
       let att2 = OM.getAttributes(j);
 
       // check against all other objects (skipping itself)
       while( ~(att2=0) & ~(j=i) ) {
-
-      //do Output.moveCursor(2,2);
-        //do Output.printString(".");
-        //do Output.printInt(j);
-        //do Output.printString(".  ");
-        //do Sys.wait(200);
         let x2=att2.getPx();
         let y2=att2.getPy();
         let r2=att2.getRadius();
@@ -210,7 +186,6 @@ class PXEngine {
         let dist = __getDistance__(x1,y1,x2,y2,r1+r2);
         if (dist < (r1+r2)) {
           let collisionOccured=true;
-          do Output.printString("hitobject");
 
           if (executeKill) {
             do att1.setIsDead(true);
@@ -222,7 +197,6 @@ class PXEngine {
 
         let att2=OM.getAttributes(j);
       } // next j
-      //do Output.printString("checking");
 
 
       // Now check if the object it outside the game bounds.
@@ -231,22 +205,11 @@ class PXEngine {
       let res=settings.getworldResolutionX();
       let x1=x1/res;
       let res=settings.getworldResolutionY();
-      //do Output.printString("=");
-      //do Output.printInt(y1);
-      //do Output.printString("=");
       let y1=y1/res;
-      //do Output.printString("^");
-      //do Output.printInt(y1);
-      //do Output.printString("^");
 
       let x2 = 0;
       if ((x1-r1)<x2){
         let collisionOccured=true;
-        //do Output.printInt(i);
-        //do Output.printString("offscreen1");
-        //do Output.printString("=");
-        //do Output.printInt(x1);
-        //do Output.printString("=");
 
         if (executeKill){ do att1.setIsDead(true); }
         }
@@ -254,11 +217,6 @@ class PXEngine {
       let x2 = settings.getscreenSizeX();
       if ((x1+r1)>x2){
         let collisionOccured=true;
-        //do Output.printInt(i);
-        //do Output.printString("offscreen2");
-        //do Output.printString("=");
-        //do Output.printInt(x1);
-        //do Output.printString("=");
 
         if (executeKill){ do att1.setIsDead(true); }
       }
@@ -266,23 +224,12 @@ class PXEngine {
       let y2 = 0;
       if ((y1-r1)<y2){
         let collisionOccured=true;
-        //do Output.printInt(i);
-        //do Output.printString("offscreen3");
-        //do Output.printString("=");
-        //do Output.printInt(y1);
-        //do Output.printString("=");
-
         if (executeKill){ do att1.setIsDead(true); }
       }
 
       let y2 = settings.getscreenSizeY();
       if ((y1+r1)>y2){
         let collisionOccured=true;
-        //do Output.printInt(i);
-        //do Output.printString("offscreen");
-        //do Output.printString("=");
-        //do Output.printInt(y1);
-        //do Output.printString("=");
 
 
         if (executeKill){ do att1.setIsDead(true); }
@@ -290,9 +237,6 @@ class PXEngine {
 
       // i++
       let i=i+1;
-      //do Output.printString("!");
-      //do Output.printInt(i);
-      //do Output.printString("!");
       let att1=OM.getAttributes(i);
     }
   //return false;
@@ -307,16 +251,6 @@ class PXEngine {
     var int i;
     let x1 = Math.abs(x1-x2);
     let y1 = Math.abs(y1-y2);
-
-    //do Output.moveCursor(0,0);
-    //do Output.printInt(x1);
-    //do Output.printString(",");
-    //do Output.printInt(y1);
-    //do Output.printString("(");
-    //do Output.printInt(envelope);
-    //
-    //do Output.printString(")");
-    //do Output.printString("=");
 
     // to avoid arithmetic overflows
     let x1 = x1 / settings.getworldResolutionX();
@@ -333,16 +267,8 @@ class PXEngine {
       let i=i+10;
     }
 
-    //if ( ((x1+y1)>envelope) | (x1+y1<0) ) { return envelope+3; }
-    //do Output.printString(" x1:");
-    //do Output.printInt(x1);
-    //do Output.printString(" y1:");
-    //do Output.printInt(y1);
     let x1 = Math.sqrt( (x1*x1) + (y1*y1) );
     let x1=x1*i;
-    //do Output.printString(":");
-    //do Output.printInt(x1);
-    //do Output.printString(":");
 
     return x1;
   }
@@ -369,8 +295,6 @@ class PXEngine {
       let m2 = currentAttributes.getMass();
       // if the distance between two objects is > 10000 then it's negligable
       let d= __getDistance__(x1,y1,x2,y2,1000);
-      //do Output.printInt(m1);
-      //do Output.printString("   ");
 
       // Universal gravitational formula: F=(m1*m2)/d
       let f = (m1*m2)/d;
@@ -378,13 +302,6 @@ class PXEngine {
       // Fx=F*sin(theta) and sin(theta) = Dx/D, which are two values we know.
       let xComp = f*( (x2-x1)/settings.getworldResolutionX()/d); // x component
       let yComp = f*( (y2-y1)/settings.getworldResolutionY()/d); // y component
-      //do Output.printString("    (");
-      //do Output.printInt(f);
-      //do Output.printString("   ");
-      //do Output.printInt(m1);
-      //do Output.printString(",");
-      //do Output.printInt(m2);
-      //do Output.printString(")=");
       // now apply this gravitational pull to our object
       do applyCartesianAcceleration(att, xComp,yComp);
       let x2=att.getAx();

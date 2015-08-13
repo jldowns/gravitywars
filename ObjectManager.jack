@@ -235,34 +235,20 @@ class ObjectManager {
     return stillAlive;
 }
 
-  method PlayerSprite getPlayerSprite(int i) {
-    // returns a PlayerSprite from the Player at the list at array index i.
-    // returns zero if empty or if outside array bounds
-    var Player tempPlayer;
-    var PlayerSprite returnPS;
-
-    let tempPlayer = getPlayer(i);
-    if (tempPlayer=0) {
-      let returnPS = 0;
-    } else {
-      let returnPS = tempPlayer.getSprite();
-    }
-    return returnPS;
-  }
-
-  method Attributes getPlayerSpriteAttributes(int i) {
-    var PlayerSprite returnPS;
-    var Attributes returnAtt;
-
-    let returnPS=getPlayerSprite(i);
-
-    if (returnPS=0) {
-      let returnAtt=0;
-    } else {
-      let returnAtt=returnPS.getAttributes();
-    }
-    return returnAtt;
-  }
+  //method PlayerSprite getPlayerSprite(int i) {
+  //  // returns a PlayerSprite from the Player at the list at array index i.
+  //  // returns zero if empty or if outside array bounds
+  //  var Player tempPlayer;
+  //  var PlayerSprite returnPS;
+  //
+  //  let tempPlayer = getPlayer(i);
+  //  if (tempPlayer=0) {
+  //    let returnPS = 0;
+  //  } else {
+  //    let returnPS = tempPlayer.getSprite();
+  //  }
+  //  return returnPS;
+  //}
 
 
   method GravitySink getGravitySink(int i) {
@@ -310,8 +296,8 @@ class ObjectManager {
     if ( (i < numPlayers) & (returnAttributes=0)){
       //do Output.printString("it's a player");
 
-
-      let returnAttributes=getPlayerSpriteAttributes(i);
+      let playerSpecimen = getPlayer(i);
+      let returnAttributes=playerSpecimen.getAttributes();
       //do Output.printInt(returnAttributes);
 
     } else {
@@ -334,7 +320,7 @@ class ObjectManager {
     return returnAttributes;
   }
 
-  method void cleanBulletList() {
+  method void cleanBulletList(GXEngine gx) {
     var int i;
     var Player playerSpecimen;
     var GravitySink GSSpecimen;
@@ -346,12 +332,14 @@ class ObjectManager {
     while ( ~(bulletSpecimen=0) ){
       let attributeSpecimen = bulletSpecimen.getAttributes();
       if (attributeSpecimen.getIsDead() ) {
+          do gx.drawExplosion(attributeSpecimen.getPx()/settings.getworldResolutionX()+settings.getScreenBoundLeft(),
+                              attributeSpecimen.getPy()/settings.getworldResolutionY()+settings.getScreenBoundTop() ,10);
           do unregisterBullet(bulletSpecimen);
           do bulletSpecimen.dispose();
         }
         let i=i+1;
         let bulletSpecimen=getBullet(i);
-        
+
       }
       return;
   }

@@ -34,7 +34,7 @@ call Settings.getScreenBoundBottom 1
 pop this 10
 push pointer 0
 return
-function GXEngine.drawAllObjects 5
+function GXEngine.drawAllObjects 3
 push argument 0
 pop pointer 0
 push constant 0
@@ -42,7 +42,7 @@ pop local 0
 label WHILE_EXP0
 push this 1
 push local 0
-call ObjectManager.getGravitySink 2
+call ObjectManager.getAttributes 2
 push constant 0
 eq
 not
@@ -50,12 +50,9 @@ not
 if-goto WHILE_END0
 push this 1
 push local 0
-call ObjectManager.getGravitySink 2
-pop local 4
-push local 4
-call GravitySink.getAttributes 1
-pop local 1
-push local 1
+call ObjectManager.getAttributes 2
+pop local 2
+push local 2
 call Attributes.getNeedsUpdate 1
 push argument 1
 or
@@ -63,17 +60,17 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push pointer 0
-push local 4
+push local 2
 push constant 0
-call GXEngine.drawGravitySink 3
+call GXEngine.draw 3
 pop temp 0
 push pointer 0
-push local 4
+push local 2
 push constant 0
 not
-call GXEngine.drawGravitySink 3
+call GXEngine.draw 3
 pop temp 0
-push local 1
+push local 2
 push constant 0
 call Attributes.setNeedsUpdate 2
 pop temp 0
@@ -85,149 +82,108 @@ pop local 0
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
-pop local 0
-label WHILE_EXP1
-push this 1
-push local 0
-call ObjectManager.getBullet 2
-push constant 0
-eq
-not
-not
-if-goto WHILE_END1
-push this 1
-push local 0
-call ObjectManager.getBulletAttributes 2
-pop local 1
-push pointer 0
-push this 1
-push local 0
-call ObjectManager.getBullet 2
-push constant 0
-call GXEngine.drawBullet 3
-pop temp 0
-push pointer 0
-push this 1
-push local 0
-call ObjectManager.getBullet 2
-push constant 0
-not
-call GXEngine.drawBullet 3
-pop temp 0
-push local 1
-push constant 0
-call Attributes.setNeedsUpdate 2
-pop temp 0
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP1
-label WHILE_END1
-push constant 0
-pop local 0
-label WHILE_EXP2
-push this 1
-push local 0
-call ObjectManager.getPlayerSprite 2
-push constant 0
-eq
-not
-not
-if-goto WHILE_END2
-push this 1
-push local 0
-call ObjectManager.getPlayerSprite 2
-pop local 3
-push this 1
-push local 0
-call ObjectManager.getPlayerSpriteAttributes 2
-pop local 1
-push local 1
-call Attributes.getNeedsUpdate 1
+return
+function GXEngine.draw 0
+push argument 0
+pop pointer 0
 push argument 1
-or
+call Attributes.getType 1
+push constant 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+push argument 1
+push argument 2
+call GXEngine.drawPlayerSprite 3
+pop temp 0
+label IF_FALSE0
+push argument 1
+call Attributes.getType 1
+push constant 2
+eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push pointer 0
-push local 3
-push constant 0
-call GXEngine.drawPlayerSprite 3
-pop temp 0
-push pointer 0
-push local 3
-push constant 0
-not
-call GXEngine.drawPlayerSprite 3
-pop temp 0
-push local 1
-push constant 0
-call Attributes.setNeedsUpdate 2
+push argument 1
+push argument 2
+call GXEngine.drawGravitySink 3
 pop temp 0
 label IF_FALSE1
-push local 0
-push constant 1
-add
-pop local 0
-goto WHILE_EXP2
-label WHILE_END2
+push argument 1
+call Attributes.getType 1
+push constant 3
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+push argument 1
+push argument 2
+call GXEngine.drawBullet 3
+pop temp 0
+label IF_FALSE2
 push constant 0
 return
-function GXEngine.drawPlayerSprite 12
+function GXEngine.drawPlayerSprite 13
 push argument 0
 pop pointer 0
-push argument 1
-call PlayerSprite.getAttributes 1
-pop local 11
 push this 0
 call Settings.getPlayerSpritePointAngle 1
 pop local 3
 push this 0
 call Settings.getPlayerSpriteSideLength 1
 pop local 4
+push this 0
+call Settings.getworldResolutionX 1
+pop local 11
+push this 0
+call Settings.getworldResolutionY 1
+pop local 12
 push argument 2
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push local 11
+push argument 1
 call Attributes.getPx 1
-push this 3
+push local 11
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
 add
 pop local 0
-push local 11
+push argument 1
 call Attributes.getPy 1
-push this 4
+push local 12
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
 add
 pop local 1
-push local 11
+push argument 1
 call Attributes.getRotation 1
 pop local 2
 goto IF_END0
 label IF_FALSE0
-push local 11
+push argument 1
 call Attributes.getOldPx 1
-push this 3
+push local 11
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
 add
 pop local 0
-push local 11
+push argument 1
 call Attributes.getOldPy 1
-push this 4
+push local 12
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
 add
 pop local 1
-push local 11
+push argument 1
 call Attributes.getOldRotation 1
 pop local 2
 label IF_END0
@@ -330,31 +286,60 @@ call Screen.drawLine 4
 pop temp 0
 push constant 0
 return
-function GXEngine.drawGravitySink 4
+function GXEngine.drawBullet 5
 push argument 0
 pop pointer 0
-push argument 1
-call GravitySink.getAttributes 1
+push this 0
+call Settings.getworldResolutionX 1
 pop local 3
-push local 3
+push this 0
+call Settings.getworldResolutionY 1
+pop local 4
+push argument 2
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
 call Attributes.getPx 1
-push this 3
+push local 3
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
 add
 pop local 0
-push local 3
+push argument 1
 call Attributes.getPy 1
-push this 4
+push local 4
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
 add
 pop local 1
-push local 3
+push argument 1
 call Attributes.getRadius 1
 pop local 2
+goto IF_END0
+label IF_FALSE0
+push argument 1
+call Attributes.getOldPx 1
+push local 3
+call Math.divide 2
+push this 0
+call Settings.getScreenBoundLeft 1
+add
+pop local 0
+push argument 1
+call Attributes.getOldPy 1
+push local 4
+call Math.divide 2
+push this 0
+call Settings.getScreenBoundTop 1
+add
+pop local 1
+push argument 1
+call Attributes.getOldRadius 1
+pop local 2
+label IF_END0
 push argument 2
 call Screen.setColor 1
 pop temp 0
@@ -365,57 +350,34 @@ call Screen.drawCircle 3
 pop temp 0
 push constant 0
 return
-function GXEngine.drawBullet 4
+function GXEngine.drawGravitySink 5
 push argument 0
 pop pointer 0
-push argument 1
-call Bullet.getAttributes 1
+push this 0
+call Settings.getworldResolutionX 1
 pop local 3
-push argument 2
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push local 3
+push this 0
+call Settings.getworldResolutionY 1
+pop local 4
+push argument 1
 call Attributes.getPx 1
-push this 3
+push local 3
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundLeft 1
 add
 pop local 0
-push local 3
+push argument 1
 call Attributes.getPy 1
-push this 4
+push local 4
 call Math.divide 2
 push this 0
 call Settings.getScreenBoundTop 1
 add
 pop local 1
-push local 3
+push argument 1
 call Attributes.getRadius 1
 pop local 2
-goto IF_END0
-label IF_FALSE0
-push local 3
-call Attributes.getOldPx 1
-push this 3
-call Math.divide 2
-push this 0
-call Settings.getScreenBoundLeft 1
-add
-pop local 0
-push local 3
-call Attributes.getOldPy 1
-push this 4
-call Math.divide 2
-push this 0
-call Settings.getScreenBoundTop 1
-add
-pop local 1
-push local 3
-call Attributes.getOldRadius 1
-pop local 2
-label IF_END0
 push argument 2
 call Screen.setColor 1
 pop temp 0

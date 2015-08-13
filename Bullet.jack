@@ -3,10 +3,11 @@ class Bullet {
 
   field Attributes attributes;
 
-  constructor Bullet new(int startPx, int startPy,
+  constructor Bullet new(Settings newSettings, int startPx, int startPy,
                               int startVx, int startVy,
                               int startRadius, int startMass) {
-    let attributes = Attributes.new(startPx, startPy, startVx, startVy, 0, startRadius, startMass);
+    let attributes = Attributes.new(3, startPx, startPy, startVx, startVy, 0, startRadius, startMass);
+
     return this;
   }
 

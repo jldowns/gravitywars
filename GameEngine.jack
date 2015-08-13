@@ -58,7 +58,7 @@ class GameEngine {
       ////////////////////////////
 
       let stillMyTurn=true;
-      let currentAttributes = player.getSpriteAttributes();
+      let currentAttributes = player.getAttributes();
       let foo = settings.getPlayerStartingPower();
       do player.setPowerRemaining(foo);
 
@@ -66,8 +66,8 @@ class GameEngine {
 
       while  (stillMyTurn){
 
+        // process user input
         let action = __getInput__();
-
         if ( (action=1) & (deBounce<1) ) {
           // Jump action
           let foo = currentAttributes.getRotation();
@@ -126,16 +126,18 @@ class GameEngine {
         if (~(action=0)) {let deBounce=settings.getDebounceSetting();}
         if (deBounce > 0){ let deBounce = deBounce-1; }
 
+        // step forward in time
         let foo = settings.getTimeStep();
         do px.stepForward(foo);
-
-
-        do updateScreen(player);
         do Sys.wait(foo);
 
-        // detect collisions
-        do px.detectCollision(true);
-        do OM.cleanBulletList();
+        // detect collisions from the step forward
+        if (px.detectCollision(true)){let forceNextRedraw[0]=true;}
+        do OM.cleanBulletList(gx);
+
+        // redraw Screen after the dust settles from collisions
+        do updateScreen(player);
+
 
         // is it the next dude's turn?
         let stillMyTurn =stillMyTurn & (~player.getIsDead()) & (OM.playersStillAlive()>1);
@@ -166,7 +168,7 @@ class GameEngine {
       let Px = Px + (((mx.sin100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
       let Py = Py - (((mx.cos100(rotation)*(distanceAhead))/100)*settings.getworldResolutionX());
 
-      let newBullet = Bullet.new(Px,Py,0,0,radius, mass);
+      let newBullet = Bullet.new(settings, Px,Py,0,0,radius, mass);
       do OM.registerBullet(newBullet);
       let currentAttributes = newBullet.getAttributes();
       do px.applyAcceleration(currentAttributes,accel, rotation);
@@ -278,7 +280,7 @@ class GameEngine {
           do Output.printInt(rand3);
           do Output.printString(")");
 
-          let ps1 = Player.new(playerNames[i],rand1, rand2, rand3, playerLength,0);
+          let ps1 = Player.new(settings, playerNames[i],rand1, rand2, rand3, playerLength,0);
           do OM.registerPlayer(ps1);
 
           if ( ~(px.detectCollision(false)) ){
@@ -302,7 +304,7 @@ class GameEngine {
           let rand3 = mx.random(0,maxGravitySinkSize); // gravity
           let rand1 = mx.random(rand3,maxX- (rand3*settings.getworldResolutionX()) );
           let rand2 = mx.random(rand3,maxY- (rand3*settings.getworldResolutionY()) );
-          let gs1 = GravitySink.new(rand1, rand2, rand3, rand3);
+          let gs1 = GravitySink.new(settings, rand1, rand2, rand3, rand3);
           do Output.printString("(");
           do Output.printInt(rand1);
           do Output.printString(",");

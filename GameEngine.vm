@@ -52,7 +52,7 @@ push constant 0
 not
 pop local 5
 push argument 1
-call Player.getSpriteAttributes 1
+call Player.getAttributes 1
 pop local 3
 push this 0
 call Settings.getPlayerStartingPower 1
@@ -328,10 +328,6 @@ push this 1
 push local 1
 call PXEngine.stepForward 2
 pop temp 0
-push pointer 0
-push argument 1
-call GameEngine.updateScreen 2
-pop temp 0
 push local 1
 call Sys.wait 1
 pop temp 0
@@ -339,9 +335,26 @@ push this 1
 push constant 0
 not
 call PXEngine.detectCollision 2
+if-goto IF_TRUE11
+goto IF_FALSE11
+label IF_TRUE11
+push constant 0
+push this 6
+add
+push constant 0
+not
 pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_FALSE11
 push this 3
-call ObjectManager.cleanBulletList 1
+push this 2
+call ObjectManager.cleanBulletList 2
+pop temp 0
+push pointer 0
+push argument 1
+call GameEngine.updateScreen 2
 pop temp 0
 push local 5
 push argument 1
@@ -430,13 +443,14 @@ call Settings.getworldResolutionX 1
 call Math.multiply 2
 sub
 pop local 3
+push this 0
 push local 2
 push local 3
 push constant 0
 push constant 0
 push local 4
 push local 7
-call Bullet.new 6
+call Bullet.new 7
 pop local 0
 push this 3
 push local 0
@@ -784,6 +798,7 @@ push constant 41
 call String.appendChar 2
 call Output.printString 1
 pop temp 0
+push argument 1
 push local 1
 push local 14
 add
@@ -794,7 +809,7 @@ push local 11
 push local 12
 push local 0
 push constant 0
-call Player.new 6
+call Player.new 7
 pop local 3
 push argument 2
 push local 3
@@ -881,11 +896,12 @@ call Math.multiply 2
 sub
 call AdvancedMath.random 3
 pop local 11
+push argument 1
 push local 10
 push local 11
 push local 12
 push local 12
-call GravitySink.new 4
+call GravitySink.new 5
 pop local 15
 push constant 1
 call String.new 1

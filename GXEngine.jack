@@ -11,7 +11,6 @@ class GXEngine {
   field int screenLeftX, screenRightX;
   field int screenTopY, screenBottomY;
 
-
   constructor GXEngine new(Settings gameSettings, AdvancedMath newMX, ObjectManager newOM) {
     var int i;
 
@@ -32,45 +31,20 @@ class GXEngine {
   }
 
   method void drawAllObjects(bool forceDraw) {
-    // draws everything in its object lists that needs updating.
+    // draws all Sprites that needs updating.
     // if forceDraw=true, it'll draw everything regardless.
     var int i;
-    var Attributes fooatt;
-    var Bullet fooBull;
-    var PlayerSprite fooPS;
-    var GravitySink fooGS;
+    var Sprite spriteSpecimen;
+    var Attributes attributeSpecimen;
 
-    // draw gravitySinks
     let i = 0;
-    while(~(OM.getGravitySink(i) = 0)) {
-      let fooGS=OM.getGravitySink(i);
-      let fooatt = fooGS.getAttributes();
-      if (fooatt.getNeedsUpdate() | forceDraw){ // redraw sprite if it needs to be redrawn.
-        do drawGravitySink(fooGS, false); // erase
-        do drawGravitySink(fooGS, true); // then draw
-        do fooatt.setNeedsUpdate(false);
-      }
-      let i=i+1;
-    }
-    // draw bullets
-    let i = 0;
-    while(~(OM.getBullet(i) = 0) ) {
-      let fooatt = OM.getBulletAttributes(i);
-      do drawBullet(OM.getBullet(i), false);
-      do drawBullet(OM.getBullet(i), true);
-      do fooatt.setNeedsUpdate(false);
+    while(~(OM.getAttributes(i) = 0)) {
+      let attributeSpecimen=OM.getAttributes(i);
 
-      let i=i+1;
-    }
-    // draw playerSprites
-    let i = 0;
-    while(~(OM.getPlayerSprite(i)=0)) {
-      let fooPS=OM.getPlayerSprite(i);
-      let fooatt = OM.getPlayerSpriteAttributes(i);
-      if (fooatt.getNeedsUpdate() | forceDraw){ // redraw sprite if it needs to be redrawn.
-        do drawPlayerSprite(fooPS, false); // erase
-        do drawPlayerSprite(fooPS, true); // then draw
-        do fooatt.setNeedsUpdate(false);
+      if (attributeSpecimen.getNeedsUpdate() | forceDraw){ // redraw sprite if it needs to be redrawn.
+        do draw(attributeSpecimen, false); // erase
+        do draw(attributeSpecimen, true); // erase
+        do attributeSpecimen.setNeedsUpdate(false);
       }
       let i=i+1;
     }
@@ -78,26 +52,37 @@ class GXEngine {
     return;
   }
 
-  method void drawPlayerSprite(PlayerSprite gs, bool drawOrErase) {
+  method void draw(Attributes att, bool drawOrErase) {
+    // draws the parent object to the screen.
+    if(att.getType()=1) {do drawPlayerSprite(att, drawOrErase);}
+    if(att.getType()=2) {do drawGravitySink(att, drawOrErase);}
+    if(att.getType()=3) {do drawBullet(att, drawOrErase);}
+
+    return;
+    }
+
+  method void drawPlayerSprite(Attributes att, bool drawOrErase) {
     // draws a single PlayerSprite
     var int x,y,rot;
     var int angle, length;
     var int x1,y1, x2,y2, x3,y3; // 1-front, 2-back left, 3-back right
-    var Attributes currentAttributes;
+    var int resX, resY;
 
-    let currentAttributes = gs.getAttributes();
     let angle = settings.getPlayerSpritePointAngle();
     let length = settings.getPlayerSpriteSideLength();
+    let resX = settings.getworldResolutionX();
+    let resY = settings.getworldResolutionY();
+
 
     if (drawOrErase) {
-      let x = currentAttributes.getPx()/resX + settings.getScreenBoundLeft(); // we're dividing by resolution to
-      let y = currentAttributes.getPy()/resY + settings.getScreenBoundTop(); // convert from real space to pixel space
-      let rot = currentAttributes.getRotation();
+      let x = att.getPx()/resX + settings.getScreenBoundLeft(); // we're dividing by resolution to
+      let y = att.getPy()/resY + settings.getScreenBoundTop(); // convert from real space to pixel space
+      let rot = att.getRotation();
     } else {
       // if we're erasing we need to use the old attributes
-      let x = currentAttributes.getOldPx()/resX + settings.getScreenBoundLeft();
-      let y = currentAttributes.getOldPy()/resY + settings.getScreenBoundTop();
-      let rot = currentAttributes.getOldRotation();
+      let x = att.getOldPx()/resX + settings.getScreenBoundLeft();
+      let y = att.getOldPy()/resY + settings.getScreenBoundTop();
+      let rot = att.getOldRotation();
     }
 
     let x1=x;
@@ -119,40 +104,40 @@ class GXEngine {
    return;
   }
 
-  method void drawGravitySink(GravitySink gs, bool drawOrErase) {
-    // draws a single gravitySink
+  method void drawBullet(Attributes att, bool drawOrErase) {
+    // draws a single bullet
     var int x,y,r;
-    var Attributes currentAttributes;
+    var int resX, resY;
 
-    let currentAttributes = gs.getAttributes();
-    let x = currentAttributes.getPx()/resX + settings.getScreenBoundLeft(); // convert from real space to
-    let y = currentAttributes.getPy()/resY + settings.getScreenBoundTop(); // pixel space
-    let r = currentAttributes.getRadius();
+    let resX = settings.getworldResolutionX();
+    let resY = settings.getworldResolutionY();
 
+    if (drawOrErase) {
+      let x = att.getPx()/resX + settings.getScreenBoundLeft(); // we're dividing by resolution to
+      let y = att.getPy()/resY + settings.getScreenBoundTop(); // convert from real space to pixel space
+      let r = att.getRadius();
+    } else {
+      // if we're erasing we need to use the old attributes
+      let x = att.getOldPx()/resX + settings.getScreenBoundLeft();
+      let y = att.getOldPy()/resY + settings.getScreenBoundTop();
+      let r = att.getOldRadius();
+    }
     do Screen.setColor(drawOrErase);
     do Screen.drawCircle(x, y, r);
    return;
   }
 
-
-  method void drawBullet(Bullet gs, bool drawOrErase) {
-    // draws a single bullet
+  method void drawGravitySink(Attributes att, bool drawOrErase) {
+    // draws a single gravitySink
     var int x,y,r;
-    var Attributes currentAttributes;
+    var int resX, resY;
 
-    let currentAttributes = gs.getAttributes();
-    if (drawOrErase) {
-      let x = currentAttributes.getPx()/resX + settings.getScreenBoundLeft(); // we're dividing by resolution to
-      let y = currentAttributes.getPy()/resY + settings.getScreenBoundTop(); // convert from real space to pixel space
-      let r = currentAttributes.getRadius();
-    } else {
-      // if we're erasing we need to use the old attributes
-      let x = currentAttributes.getOldPx()/resX + settings.getScreenBoundLeft();
-      let y = currentAttributes.getOldPy()/resY + settings.getScreenBoundTop();
-      let r = currentAttributes.getOldRadius();
-    }
+    let resX = settings.getworldResolutionX();
+    let resY = settings.getworldResolutionY();
 
-
+    let x = att.getPx()/resX + settings.getScreenBoundLeft(); // convert from real space to
+    let y = att.getPy()/resY + settings.getScreenBoundTop(); // pixel space
+    let r = att.getRadius();
 
     do Screen.setColor(drawOrErase);
     do Screen.drawCircle(x, y, r);

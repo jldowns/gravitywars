@@ -16,13 +16,20 @@ class Attributes {
   field int radius;   // in pixels
   field int mass;
   field bool isDead;
+  // Since we can't inherit over overload methods, we'll use the variable
+  field int typeOfObject;
+  // to let this child object be aware of its parent.
+  // 1 - Player
+  // 2 - Gravity Sink
+  // 3 - Bullet
 
   // these are for saving the old location so the gx engine can erase
   // the object's old image
   field int oldPx, oldPy, oldRotation, oldRadius;
   field bool needsUpdate;
 
-  constructor Attributes new(int startPx, int startPy,
+  constructor Attributes new(int myType,
+                             int startPx, int startPy,
                              int startVx, int startVy,
                              int startRotation,
                              int startRadius,
@@ -44,6 +51,7 @@ class Attributes {
 
     let isDead=false;
     let needsUpdate = true;
+    let typeOfObject = myType;
 
     return this;
   }
@@ -102,6 +110,8 @@ class Attributes {
   method int getOldPy() { return oldPy; }
   method int getOldRotation() { return oldRotation; }
   method int getOldRadius() { return oldRadius; }
+
+  method int getType(){return typeOfObject;}
 
 
   method void dispose() {

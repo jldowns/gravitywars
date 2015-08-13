@@ -2,14 +2,15 @@ function Bullet.new 0
 push constant 1
 call Memory.alloc 1
 pop pointer 0
-push argument 0
+push constant 3
 push argument 1
 push argument 2
 push argument 3
-push constant 0
 push argument 4
+push constant 0
 push argument 5
-call Attributes.new 7
+push argument 6
+call Attributes.new 8
 pop this 0
 push pointer 0
 return

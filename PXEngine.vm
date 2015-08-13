@@ -111,7 +111,7 @@ call Attributes.setRotation 2
 pop temp 0
 push constant 0
 return
-function PXEngine.stepForward 8
+function PXEngine.stepForward 9
 push argument 0
 pop pointer 0
 push argument 1
@@ -129,7 +129,7 @@ pop local 0
 label WHILE_EXP0
 push this 1
 push local 0
-call ObjectManager.getPlayerSprite 2
+call ObjectManager.getPlayer 2
 push constant 0
 eq
 not
@@ -137,7 +137,10 @@ not
 if-goto WHILE_END0
 push this 1
 push local 0
-call ObjectManager.getPlayerSpriteAttributes 2
+call ObjectManager.getPlayer 2
+pop local 8
+push local 8
+call Player.getAttributes 1
 pop local 7
 push local 7
 call Attributes.getAx 1
@@ -400,28 +403,6 @@ label IF_TRUE0
 push constant 0
 not
 pop local 10
-push constant 9
-call String.new 1
-push constant 104
-call String.appendChar 2
-push constant 105
-call String.appendChar 2
-push constant 116
-call String.appendChar 2
-push constant 111
-call String.appendChar 2
-push constant 98
-call String.appendChar 2
-push constant 106
-call String.appendChar 2
-push constant 101
-call String.appendChar 2
-push constant 99
-call String.appendChar 2
-push constant 116
-call String.appendChar 2
-call Output.printString 1
-pop temp 0
 push argument 1
 if-goto IF_TRUE1
 goto IF_FALSE1
