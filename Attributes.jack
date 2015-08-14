@@ -91,6 +91,7 @@ class Attributes {
   method int getMass() { return mass; }
 
   method bool getExploded(){return exploded;}
+  method void setExploded(bool ex){let exploded=ex;return;}
 
   method void backup() {
     // backs up current attributes into savings containers

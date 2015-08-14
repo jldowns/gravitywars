@@ -257,8 +257,9 @@ class GameEngine {
     while ( ~(fooAtt=0) ) {
       if( ~(fooAtt.getType()=2) & fooAtt.getIsDead() & ~(fooAtt.getExploded())){
           do gx.drawExplosion( (fooAtt.getPx()/settings.getworldResolutionX())+settings.getScreenBoundLeft(),
-                            (fooAtt.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop(),
-                            10 );
+                               (fooAtt.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop(),
+                                10 );
+          do fooAtt.setExploded(true);
       }
 
       let i=i+1;
