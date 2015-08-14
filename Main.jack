@@ -30,8 +30,12 @@ class Main {
     // menu screen
     do gx.doIntro();
 
+    // loading screen
+    do gx.doLoadingScreen();
+
     // generate a random world
-    do myGame.generateUniverse(settings, OM, 200,30, 3);
+    do myGame.generateUniverse(settings, OM, settings.getUniverseGravity(),
+                               settings.getMaxGravitySinkSize(), settings.getNumberOfPlayers());
 
     // main game loop
     let playerTurn=0;

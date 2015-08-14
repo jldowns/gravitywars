@@ -238,6 +238,16 @@ class GXEngine {
     return;
   }
 
+  method void doLoadingScreen() {
+    // displays the winner of a game.
+    // 0-Draw, 1-Player 1 wins 2-Player 2 wins
+    do Screen.setColor(true);
+    do Screen.drawRectangle(settings.getBannerLeftX(),110,settings.getBannerRightX(),122);
+    do Output.moveCursor(10,8);
+    do Output.printString("Smashing Atoms... Please Wait...");
+    return;
+  }
+
   method void doIntro() {
 
     var int titleX, titleY;
@@ -246,19 +256,20 @@ class GXEngine {
     var int carrotX, carrotY, carrotY0;
     var int carrotHalfHight, carrotWidth;
     var int numberOfSelections;
-    var int currentNumberOfPlayers;
     var int distanceBetweenItems;
     var char selectionKey;
     var char upKey, downKey, leftKey, rightKey;
     var char carrot, spaceChar, enterChar;
     var int randomSeed;
+    var int difficultySetting;
+    var Array difficultySettingNames;
 
     let titleX = 20;
     let titleY = 2;
     let menuX = 10;
     let menuY = 5;
     let distanceBetweenItems=2;
-    let numberOfSelections = 3;
+    let numberOfSelections = 4;
     let upKey = 131;
     let downKey = 133;
     let leftKey = 130;
@@ -266,11 +277,15 @@ class GXEngine {
     let carrot = 62;
     let spaceChar=32;
     let enterChar = 128;
+    let difficultySetting=1;
+    let difficultySettingNames=Array.new(3);
+    let difficultySettingNames[0]="Zero Entropy         ";
+    let difficultySettingNames[1]="Not-so-distant future";
+    let difficultySettingNames[2]="Big Bang             ";
 
     let carrotX = 20;
     let finalSelection=0;
     let currentSelection =1;
-    let currentNumberOfPlayers=2;
 
     // print title
     do Output.moveCursor(titleY, titleX);
@@ -282,8 +297,11 @@ class GXEngine {
     do Output.printString("Engage in a GRAVITY WAR");
     do Output.moveCursor(menuY+distanceBetweenItems,menuX);
     do Output.printString("Number of PLAYERS: ");
-    do Output.printInt(currentNumberOfPlayers);
+    do Output.printInt(settings.getNumberOfPlayers());
     do Output.moveCursor(menuY+(distanceBetweenItems*2),menuX);
+    do Output.printString("Difficulty: ");
+    do Output.printString(difficultySettingNames[difficultySetting]);
+    do Output.moveCursor(menuY+(distanceBetweenItems*3),menuX);
     do Output.printString("Instructions");
 
 
@@ -297,34 +315,48 @@ class GXEngine {
       // Start Keyboard Handling
       if ( ~(selectionKey=0) ) {
         do Output.moveCursor((currentSelection-1)*distanceBetweenItems+menuY,menuX-1);
-        do Output.printChar(spaceChar);}
-
+        do Output.printChar(spaceChar);
+      }
+      // up/down
       if ( (selectionKey=upKey) & (currentSelection>1) ){let currentSelection = currentSelection-1; }
       if ( (selectionKey=downKey) & (currentSelection<numberOfSelections) ){let currentSelection = currentSelection+1;}
-      if ( (selectionKey=rightKey) & (currentNumberOfPlayers<settings.getMaxPlayers()) & (currentSelection=2) )
-        {let currentNumberOfPlayers = currentNumberOfPlayers+1;}
-      if ( (selectionKey=leftKey) & (currentNumberOfPlayers>0) & (currentSelection=2) )
-        {let currentNumberOfPlayers = currentNumberOfPlayers-1;}
+      // change # of players
+      if ( (selectionKey=rightKey) & (settings.getNumberOfPlayers()<settings.getMaxPlayers()) & (currentSelection=2) )
+        {do settings.setNumberOfPlayers(settings.getNumberOfPlayers()+1);}
+      if ( (selectionKey=leftKey) & (settings.getNumberOfPlayers()>0) & (currentSelection=2) )
+        {do settings.setNumberOfPlayers(settings.getNumberOfPlayers()-1);}
+      // change difficulty settings
+      if ( (selectionKey=rightKey) & (difficultySetting<2) & (currentSelection=3) )
+        {let difficultySetting = difficultySetting+1;}
+      if ( (selectionKey=leftKey) & (difficultySetting>0) & (currentSelection=3) )
+        {let difficultySetting = difficultySetting-1;}
+
+      // make selection
       if ( (selectionKey=spaceChar) | (selectionKey=enterChar) ){let finalSelection = currentSelection;}
 
       // reprint carrot
       if (~(selectionKey=0)) {
-        do Output.moveCursor(0,0);
-        do Output.printInt(mathEngine.random(0,50));
-        do Output.printString("  ");
         do Output.moveCursor((currentSelection-1)*distanceBetweenItems+menuY,menuX-1);
         do Output.printChar(carrot);
         do Sys.wait(200);}
       // reprint number of players
-      if ( (selectionKey=rightKey) | (selectionKey=leftKey)) {
+      if ( (selectionKey=rightKey) | (selectionKey=leftKey)& (currentSelection=2)) {
         do Output.moveCursor(menuY+distanceBetweenItems,menuX+19);
-        do Output.printInt(currentNumberOfPlayers);}
+        do Output.printInt(settings.getNumberOfPlayers());
+      }
+      // reprint difficulty setting
+      if ( (selectionKey=rightKey) | (selectionKey=leftKey)& (currentSelection=3)) {
+        do Output.moveCursor(menuY+(distanceBetweenItems*2),menuX+12);
+        do Output.printString(difficultySettingNames[difficultySetting]);
+      }
 
       let randomSeed = randomSeed+1;
       if (randomSeed>200){let randomSeed=0;}
       do mathEngine.plantSeed(randomSeed);
     }
 
+    do settings.setUniverseGravity((difficultySetting+1)*90);
+    do difficultySettingNames.dispose();
 
     return;
   }

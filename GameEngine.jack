@@ -300,18 +300,18 @@ class GameEngine {
 
         while (~(cleanCreation)){
           do Sys.wait(100);
-          do Output.printString("P");
-          do Output.printInt(i);
+          //do Output.printString("P");
+          //do Output.printInt(i);
           let rand1 = mx.random(playerLength,maxX- (playerLength*settings.getworldResolutionX()) );
           let rand2 = mx.random(playerLength,maxY- (playerLength*settings.getworldResolutionY()) );
           let rand3 = mx.random(0,360);
-          do Output.printString("(");
-          do Output.printInt(rand1);
-          do Output.printString(",");
-          do Output.printInt(rand2);
-          do Output.printString(",");
-          do Output.printInt(rand3);
-          do Output.printString(")");
+          //do Output.printString("(");
+          //do Output.printInt(rand1);
+          //do Output.printString(",");
+          //do Output.printInt(rand2);
+          //do Output.printString(",");
+          //do Output.printInt(rand3);
+          //do Output.printString(")");
 
           let ps1 = Player.new(settings, playerNames[i],rand1, rand2, rand3, playerLength,0);
           do OM.registerPlayer(ps1);
@@ -332,23 +332,24 @@ class GameEngine {
         let cleanCreation = false;
 
         while (~(cleanCreation)){
-          do Output.printString("G");
-          do Output.printInt(i);
+          //do Output.printString("G");
+          //do Output.printInt(i);
           let rand3 = mx.random(5,maxGravitySinkSize) +10; // gravity
           let rand1 = mx.random(rand3,maxX- (rand3*settings.getworldResolutionX()) );
           let rand2 = mx.random(rand3,maxY- (rand3*settings.getworldResolutionY()) );
           let gs1 = GravitySink.new(settings, rand1, rand2, rand3, rand3);
-          do Output.printString("(");
-          do Output.printInt(rand1);
-          do Output.printString(",");
-          do Output.printInt(rand2);
-          do Output.printString(",");
-          do Output.printInt(rand3);
-          do Output.printString(")");
+          //do Output.printString("(");
+          //do Output.printInt(rand1);
+          //do Output.printString(",");
+          //do Output.printInt(rand2);
+          //do Output.printString(",");
+          //do Output.printInt(rand3);
+          //do Output.printString(")");
           do OM.registerGravitySink(gs1);
 
           if ( ~(px.detectCollision(false)) ){
             let cleanCreation=true;
+            let totalGravity=totalGravity-(rand3+10);
           } else {
             do OM.unregisterGravitySink(gs1);
             do gs1.dispose();

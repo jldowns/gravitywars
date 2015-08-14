@@ -15,6 +15,7 @@ class Settings {
 
   field int maxObjects;
   field int maxGravitySinks;
+  field int maxGravitySinkSize;
   field int maxPlayers;
   field int maxBullets;
   field int debounceSetting; // the bigger the less sensative
@@ -40,6 +41,11 @@ class Settings {
   field char increasePower, decreasePower;
   field char shoot, quit;
 
+  // game-to-game settings.
+  // these variables can be changed by the program
+  field int numberOfPlayers;
+  field int universeGravity;
+
   constructor Settings new() {
     // Set all global game settings here!
     let screenBoundTop=20;
@@ -57,10 +63,11 @@ class Settings {
     let physicsTimeStepModifier = 10;
 
     let maxObjects = 20;
-    let maxGravitySinks = 5;
+    let maxGravitySinks = 8;
     let maxPlayers = 3;
     let maxBullets = 1;
     let debounceSetting = 10;
+    let maxGravitySinkSize=30;
 
     let playerSpritePointAngle = 15; // the point of the player sprite will be twice this, or 30 degrees
     let playerSpriteSideLength = 10;
@@ -78,6 +85,10 @@ class Settings {
 
     let playerStartingPower = 300;
     let playerStartingBullets=1;
+
+    // game-to-game settings
+    let numberOfPlayers=2;
+    let universeGravity=200;
 
     // Keybindings
     let jump          = 74;  // J
@@ -138,12 +149,18 @@ class Settings {
   method int getSpaceFriction() { return spaceFriction; }
   method int getBulletRadius() { return bulletRadius; }
   method int getDebounceSetting(){return debounceSetting;}
+  method int getMaxGravitySinkSize(){return maxGravitySinkSize;}
 
   method int getBulletActivationAge(){return bulletActivationAge;}
   method int getBulletMass(){ return bulletMass; }
 
   method int getPlayerStartingPower(){ return playerStartingPower; }
   method int getPlayerStartingBullets(){ return playerStartingBullets; }
+
+  method int getUniverseGravity(){return universeGravity;}
+  method void setUniverseGravity(int ug){let universeGravity=ug; return;}
+  method int getNumberOfPlayers(){return numberOfPlayers;}
+  method void setNumberOfPlayers(int ug){let numberOfPlayers=ug; return;}
 
 
   method int getDesiredAction (char key) {
