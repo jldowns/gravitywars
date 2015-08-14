@@ -192,7 +192,8 @@ class GameEngine {
   method void changePower(int powerDelta, int powerRemaining) {
     let powerSetting = powerSetting + powerDelta;
     if (powerSetting>powerRemaining) { let powerSetting=powerRemaining;}
-    if (powerSetting<0) { let powerSetting=0;}
+    if (powerSetting<settings.getMinPowerSetting()) { let powerSetting=settings.getMinPowerSetting();}
+    if (powerSetting>settings.getMaxPowerSetting()) { let powerSetting=settings.getMaxPowerSetting();}
     let forceNextRedraw[2]=true;
     return;
   }
