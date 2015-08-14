@@ -183,7 +183,7 @@ class PXEngine {
         let y2=att2.getPy();
         let r2=att2.getRadius();
 
-        let dist = __getDistance__(x1,y1,x2,y2,r1+r2);
+        let dist = getDistance(x1,y1,x2,y2,r1+r2);
         if (dist < (r1+r2)) {
           let collisionOccured=true;
 
@@ -243,32 +243,46 @@ class PXEngine {
     return collisionOccured;
   }
 
-  method int __getDistance__(int x1,int y1,int x2,int y2, int envelope) {
+  method int getDistance(int x1,int y1,int x2,int y2, int envelope) {
     // gets the distance between two cartesian coordinates.
     // To prevent overflows when squaring large numbers, we only
     // calculate the actual distance if the two points are close to the
     // envelope
-    var int i;
+    var int ratio;
+
     let x1 = Math.abs(x1-x2);
     let y1 = Math.abs(y1-y2);
+    // now x1 and y1 are the x and y components of the distance
 
-    // to avoid arithmetic overflows
+
+    // convert to pixel space, since that's what units our radii are in.
     let x1 = x1 / settings.getworldResolutionX();
     let y1 = y1 / settings.getworldResolutionY();
 
+
+
     // To avoid overflow, we divide by ten until our calculations
     // can be done in 15 bits and then remultiply after the calculation
-    let i=1;
-    while ( ((x1*x1)>10000) | ((x1*x1)<0) |
-            ((y1*y1)>10000) | ((y1*y1)<0) |
-            ((x1*x1+y1*y1)>10000) | ((x1*x1+y1*y1)<0) ){
-      let x1 = x1/10;
-      let y1 = y1/10;
-      let i=i+10;
+    let ratio=1;
+
+    // the biggest distances we can calculate are 128 so the function
+    // scales down the request
+    while ( (x1>128) | (y1>128) )
+    {
+      let x1 = x1/2;
+      let y1 = y1/2;
+      let ratio = ratio*2.8;
     }
 
+    //do Output.printString("<");
+    //do Output.printInt(x1);
+    //do Output.printString(",");
+    //do Output.printInt(y1);
+    //do Output.printString(">");
+
     let x1 = Math.sqrt( (x1*x1) + (y1*y1) );
-    let x1=x1*i;
+    // now x1 has the total distance calculation
+    let x1=x1*ratio;
 
     return x1;
   }
@@ -294,7 +308,7 @@ class PXEngine {
       let y2=currentAttributes.getPy();
       let m2 = currentAttributes.getMass();
       // if the distance between two objects is > 10000 then it's negligable
-      let d= __getDistance__(x1,y1,x2,y2,1000);
+      let d= getDistance(x1,y1,x2,y2,1000);
 
       // Universal gravitational formula: F=(m1*m2)/d
       let f = (m1*m2)/d;
