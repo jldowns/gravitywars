@@ -190,6 +190,10 @@ class PXEngine {
             let collisionOccured=true;
 
             if (executeKill) {
+              // add velocities together to make cooler explosions. (but not for gravity sinks)
+              if (~(att1.getType()=2) & ~(att2.getType()=2) ) {
+                do att2.setVelocity( att1.getVx() + att2.getVx(), att1.getVy() + att2.getVy() );
+              }
               // dont kill gravity sinks
               if (~(att1.getType()=2)) { do att1.setIsDead(true); }
               if (~(att2.getType()=2)) { do att2.setIsDead(true); }
