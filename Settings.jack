@@ -58,7 +58,7 @@ class Settings {
 
     let maxObjects = 20;
     let maxGravitySinks = 5;
-    let maxPlayers = 2;
+    let maxPlayers = 3;
     let maxBullets = 1;
     let debounceSetting = 10;
 

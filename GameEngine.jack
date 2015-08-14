@@ -283,9 +283,11 @@ class GameEngine {
       var Array playerNames;
       var GravitySink gs1, gs2, gs3, gs4, gs5;
 
-      let playerNames=Array.new(2);
+      let playerNames=Array.new(4);
       let playerNames[0]="Ash";
       let playerNames[1]="Cloud";
+      let playerNames[2]="Red";
+      let playerNames[3]="Blue";
 
       let maxX = (settings.getscreenSizeX()*settings.getworldResolutionX())-1;
       let maxY = (settings.getscreenSizeY()*settings.getworldResolutionY())-1;

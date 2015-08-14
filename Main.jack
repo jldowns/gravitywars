@@ -27,27 +27,20 @@ class Main {
     let px = PXEngine.new(settings, mx, OM);
     let myGame = GameEngine.new(settings, gx, px, mx, OM);
 
-    //while(true) {
-    //  //do Output.printInt(settings.getscreenSizeX()*settings.getworldResolutionX());
-    //
-    ////let foo=Keyboard.readInt("Mod: ");
-    ////let bar=Keyboard.readInt("Mod: ");
-    //do Sys.wait(50);
-    //do Output.printInt(mx.random(0,28000)/1000);
-    //do Output.printString("  ");
-    //
-    //}
-
-
+    // menu screen
     do gx.doIntro();
 
-    do myGame.generateUniverse(settings, OM, 200,30, 2);
+    // generate a random world
+    do myGame.generateUniverse(settings, OM, 200,30, 3);
 
+    // main game loop
     let playerTurn=0;
     while (OM.playersStillAlive()>1)
     {
       let fooPlayer=OM.getPlayer(playerTurn);
-      do myGame.takeTurn(fooPlayer);
+      if (~fooPlayer.getIsDead()) {
+        do myGame.takeTurn(fooPlayer);
+      }
       let playerTurn=playerTurn+1;
       if (playerTurn > (settings.getMaxPlayers()-1)) { let playerTurn=0;}
     }

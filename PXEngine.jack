@@ -169,7 +169,7 @@ class PXEngine {
     let collisionOccured = false;
 
     // iterate throuh all objects.
-    while (~(att1=0)) {
+    while (~(att1=0) ) {
       let x1=att1.getPx();
       let y1=att1.getPy();
       let r1=att1.getRadius();
@@ -178,18 +178,22 @@ class PXEngine {
       let att2 = OM.getAttributes(j);
 
       // check against all other objects (skipping itself)
+      // also, skip dead objects.
       while( ~(att2=0) & ~(j=i) ) {
         let x2=att2.getPx();
         let y2=att2.getPy();
         let r2=att2.getRadius();
 
-        let dist = getDistance(x1,y1,x2,y2,r1+r2);
-        if (dist < (r1+r2)) {
-          let collisionOccured=true;
+        if ( ~(att1.getIsDead()) & ~(att2.getIsDead()) ) {
+          let dist = getDistance(x1,y1,x2,y2,r1+r2);
+          if (dist < (r1+r2)) {
+            let collisionOccured=true;
 
-          if (executeKill) {
-            do att1.setIsDead(true);
-            do att2.setIsDead(true);
+            if (executeKill) {
+              // dont kill gravity sinks
+              if (~(att1.getType()=2)) { do att1.setIsDead(true); }
+              if (~(att2.getType()=2)) { do att2.setIsDead(true); }
+            }
           }
         }
 
@@ -208,30 +212,26 @@ class PXEngine {
       let y1=y1/res;
 
       let x2 = 0;
-      if ((x1-r1)<x2){
+      if ((x1-r1)<x2 & (~att1.getIsDead()) ){
         let collisionOccured=true;
-
         if (executeKill){ do att1.setIsDead(true); }
         }
 
       let x2 = settings.getscreenSizeX();
-      if ((x1+r1)>x2){
+      if ((x1+r1)>x2 & (~att1.getIsDead()) ){
         let collisionOccured=true;
-
         if (executeKill){ do att1.setIsDead(true); }
       }
 
       let y2 = 0;
-      if ((y1-r1)<y2){
+      if ((y1-r1)<y2 & (~att1.getIsDead()) ){
         let collisionOccured=true;
         if (executeKill){ do att1.setIsDead(true); }
       }
 
       let y2 = settings.getscreenSizeY();
-      if ((y1+r1)>y2){
+      if ((y1+r1)>y2 & (~att1.getIsDead()) ){
         let collisionOccured=true;
-
-
         if (executeKill){ do att1.setIsDead(true); }
       }
 
