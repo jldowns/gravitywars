@@ -269,13 +269,13 @@ class GameEngine {
       let i=i+1;
       let fooAtt=OM.getAttributes(i);
       }
-      
+
     return;
   }
 
   method void generateUniverse(Settings settings, ObjectManager OM,
                                int totalGravity, int maxGravitySinkSize, int numberOfPlayers) {
-      var int playerLength;
+      var int playerLength, playerSpawnDistance;
       var int i;
       var bool cleanCreation;
       var Player ps1, ps2;
@@ -297,7 +297,7 @@ class GameEngine {
       let maxY = (settings.getscreenSizeY()*settings.getworldResolutionY())-1;
       let playerLength = settings.getPlayerSpriteSideLength()+1;
 
-      // create players
+      // create players.
       let i=0;
       while (i<numberOfPlayers) {
         let cleanCreation = false;
@@ -317,10 +317,12 @@ class GameEngine {
           //do Output.printInt(rand3);
           //do Output.printString(")");
 
+          let playerSpawnDistance = (settings.getscreenSizeX())/(numberOfPlayers);
+
           let ps1 = Player.new(settings, playerNames[i],rand1, rand2, rand3, playerLength,0);
           do OM.registerPlayer(ps1);
 
-          if ( ~(px.detectCollision(false)) ){
+          if ( (~(px.detectCollision(false))) & (~(px.withinDistanceOfAnotherPlayer(ps1,playerSpawnDistance))) ){
             let cleanCreation=true;
           } else {
             do OM.unregisterPlayer(ps1);

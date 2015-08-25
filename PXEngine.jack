@@ -206,7 +206,6 @@ class PXEngine {
         let att2=OM.getAttributes(j);
       } // next j
 
-
       // Now check if the object it outside the game bounds.
       // x1 and y1 are still the object from the outside loop.
       // x2 and y2 are now being overwritten to study the screen bounds.
@@ -245,6 +244,33 @@ class PXEngine {
     }
   //return false;
     return collisionOccured;
+  }
+
+  method bool withinDistanceOfAnotherPlayer(Player passedPlayer, int distance) {
+    var int i;
+    var bool isWithinDistance;
+    var Player comparisonPlayer;
+    var Attributes att1, att2;
+
+    let isWithinDistance = false;
+    let att1 = passedPlayer.getAttributes();
+
+    let i=0;
+    let comparisonPlayer = OM.getPlayer(i);
+
+    while (~(comparisonPlayer=0) & (~(comparisonPlayer = passedPlayer)))
+    {
+        let comparisonPlayer = OM.getPlayer(i);
+        let att2 = comparisonPlayer.getAttributes();
+        if ( getDistance( att1.getPx(), att1.getPy(),
+                          att2.getPx(), att2.getPy(),distance+1 ) < distance ) {
+          let isWithinDistance = true;
+
+        }
+        let i=i+1;
+        let comparisonPlayer = OM.getPlayer(i);
+    }
+      return isWithinDistance;
   }
 
   method int getDistance(int x1,int y1,int x2,int y2, int envelope) {

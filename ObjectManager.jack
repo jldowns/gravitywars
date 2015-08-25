@@ -237,21 +237,6 @@ class ObjectManager {
     return stillAlive;
 }
 
-  //method PlayerSprite getPlayerSprite(int i) {
-  //  // returns a PlayerSprite from the Player at the list at array index i.
-  //  // returns zero if empty or if outside array bounds
-  //  var Player tempPlayer;
-  //  var PlayerSprite returnPS;
-  //
-  //  let tempPlayer = getPlayer(i);
-  //  if (tempPlayer=0) {
-  //    let returnPS = 0;
-  //  } else {
-  //    let returnPS = tempPlayer.getSprite();
-  //  }
-  //  return returnPS;
-  //}
-
 
   method GravitySink getGravitySink(int i) {
     // returns a GravitySink from the list at array index i.

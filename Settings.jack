@@ -81,7 +81,7 @@ class Settings {
     let minPowerSetting=5;
     let maxPowerSetting=120;
 
-    let playerStartingPower = 300;
+    let playerStartingPower = 200;
     let playerStartingBullets=1;
 
     // game-to-game settings
