@@ -253,39 +253,23 @@ class GameEngine {
   }
 
   method void doTheExposions() {
-    var int i, streakSize;
+    var int i;
     var Attributes fooAtt;
 
     let fooAtt=OM.getAttributes(i);
-    let streakSize = 10; // this is how many physics steps the explosion will last
 
     // explode everything that needs exploding
-    while (streakSize>0) {
       while ( ~(fooAtt=0) ) {
         if( ~(fooAtt.getType()=2) & fooAtt.getIsDead() & ~(fooAtt.getExploded())){
             do gx.drawExplosion( (fooAtt.getPx()/settings.getworldResolutionX())+settings.getScreenBoundLeft(),
                                  (fooAtt.getPy()/settings.getworldResolutionY())+settings.getScreenBoundTop(),
                                   10 );
+            do fooAtt.setExploded(true);
         }
       let i=i+1;
       let fooAtt=OM.getAttributes(i);
       }
-//do Output.printString("exploded");
-      let streakSize=streakSize-1;
-      do px.stepForward(settings.getTimeStep());
-      //do Sys.wait(settings.getTimeStep());
-      let i=0;
-      let fooAtt=OM.getAttributes(i);
-    }
-
-    // let the program know that we're done exploding everything
-    while ( ~(fooAtt=0) ) {
-      do fooAtt.setExploded(true);
-      let i=i+1;
-      let fooAtt=OM.getAttributes(i);
-      }
-
-
+      
     return;
   }
 

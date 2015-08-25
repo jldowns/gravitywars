@@ -46,7 +46,7 @@ class Main {
         do myGame.takeTurn(fooPlayer);
       }
       let playerTurn=playerTurn+1;
-      if (playerTurn > (settings.getMaxPlayers()-1)) { let playerTurn=0;}
+      if (OM.getPlayer(playerTurn) = 0) { let playerTurn=0;}
     }
 
 

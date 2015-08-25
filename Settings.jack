@@ -13,7 +13,6 @@ class Settings {
 
   field int bannerLeftX, bannerRightX;
 
-  field int maxObjects;
   field int maxGravitySinks;
   field int maxGravitySinkSize;
   field int maxPlayers;
@@ -62,9 +61,8 @@ class Settings {
     let timeStep = 10;
     let physicsTimeStepModifier = 10;
 
-    let maxObjects = 20;
     let maxGravitySinks = 8;
-    let maxPlayers = 3;
+    let maxPlayers = 4;
     let maxBullets = 1;
     let debounceSetting = 10;
     let maxGravitySinkSize=30;
@@ -74,8 +72,8 @@ class Settings {
     let bulletRadius = 2;
 
     let thrusterAcceleration = 25;
-    let rotationSensativity = 2;
-    let powerSensativity = 2;
+    let rotationSensativity = 4;
+    let powerSensativity = 3;
     let spaceFriction = 9; // never let this equal zero!
     let bulletActivationAge = 100;
     let bulletMass=10;
@@ -116,11 +114,6 @@ class Settings {
 
   method int getTimeStep() { return timeStep; }
   method int getphysicsTimeStepModifier() { return physicsTimeStepModifier; }
-
-  method int getMaxObjects() { return maxObjects; }
-  method void setMaxObjects(int newMax) {
-    let maxObjects = newMax;
-    return; }
 
   method int getMaxGravitySinks() { return maxGravitySinks; }
   method void setMaxGravitySinks(int newMax) {
