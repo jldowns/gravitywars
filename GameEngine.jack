@@ -228,6 +228,7 @@ class GameEngine {
     }
     if (forceNextRedraw[3]|forceNextRedraw[0]) {
       do gx.drawScreenEdges();
+      do gx.drawInstructions();
     }
     if (forceNextRedraw[2]|forceNextRedraw[0]) {
       let powerRemaining=currentPlayer.getPowerRemaining();
