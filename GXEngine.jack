@@ -159,7 +159,7 @@ class GXEngine {
     var int upperLeftX, upperLeftY;
 
     let upperLeftX = 42;
-    let upperLeftY = 5;
+    let upperLeftY = 4;
 
     do Output.moveCursor(upperLeftY, upperLeftX);
     do Output.printString("Left/Right:");
@@ -177,6 +177,10 @@ class GXEngine {
     do Output.printString("J:");
     do Output.moveCursor(upperLeftY + 10, upperLeftX);
     do Output.printString("  Execute HyperJump");
+    do Output.moveCursor(upperLeftY + 12, upperLeftX);
+    do Output.printString("Q:");
+    do Output.moveCursor(upperLeftY + 13, upperLeftX);
+    do Output.printString("  End Turn");
 
 
 
