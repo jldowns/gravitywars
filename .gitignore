@@ -2,6 +2,7 @@
 
 ### Jack ###
 *.vm
+*.mov
 
 ### OSX ###
 .DS_Store
